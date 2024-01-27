@@ -1,0 +1,1 @@
+### Test AdonisJS 6
