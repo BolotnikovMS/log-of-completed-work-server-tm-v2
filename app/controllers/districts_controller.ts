@@ -1,37 +1,49 @@
+import District from '#models/district'
+import DistrictService from '#services/district_service'
+import { districtValidator } from '#validators/district'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DistrictsController {
-  async index({}: HttpContext) {
-    return 'Hello districts'
-  }
+  async index({ request, response }: HttpContext) {
+    const districts = await DistrictService.getDistricts(request)
 
-  /**
-   * Display form to create a new record
-   */
-  async create({}: HttpContext) {}
+    return response.status(200).json(districts)
+  }
 
   /**
    * Handle form submission for the create action
    */
-  async store({ request }: HttpContext) {}
+  async store({ request, response }: HttpContext) {
+    const validatedData = await request.validateUsing(districtValidator)
+    const district = await District.create({ userId: 1, ...validatedData })
+
+    return response.status(201).json(district)
+  }
 
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
-
-  /**
-   * Edit individual record
-   */
-  async edit({ params }: HttpContext) {}
+  // async getSubstations({ params, request, response }: HttpContext) {}
 
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request }: HttpContext) {}
+  async update({ params, request, response }: HttpContext) {
+    const district = await District.findOrFail(params.id)
+    const validatedData = await request.validateUsing(districtValidator)
+    const updDistrict = await district.merge(validatedData).save()
+
+    return response.status(200).json(updDistrict)
+  }
 
   /**
    * Delete record
    */
-  async destroy({ params }: HttpContext) {}
+  async destroy({ params, response }: HttpContext) {
+    const district = await District.findOrFail(params.id)
+
+    await district.delete()
+
+    return response.status(204)
+  }
 }
