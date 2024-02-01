@@ -7,6 +7,6 @@ export interface IQueryParams {
   sort: string
   order: OrderByEnums
   search: string
-  active: boolean
+  active: string
   limit: number
 }
