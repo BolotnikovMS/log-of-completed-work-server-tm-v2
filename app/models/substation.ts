@@ -1,10 +1,14 @@
-import { BaseModel, belongsTo, column, computed, hasMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 
+import ChannelType from '#models/channel_type'
+import CompletedWork from '#models/completed_work'
+import District from '#models/district'
+import GsmOperator from '#models/gsm_operator'
+import HeadController from '#models/head_controller'
+import TypeKp from '#models/type_kp'
+import VoltageClass from '#models/voltage_class'
 import { DateTime } from 'luxon'
-import CompletedWork from './completed_work.js'
-import District from './district.js'
-import VoltageClass from './voltage_class.js'
 
 export default class Substation extends BaseModel {
   @column({ isPrimary: true })
@@ -45,6 +49,11 @@ export default class Substation extends BaseModel {
   @column()
   declare name: string
 
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  declare rdu: boolean
+
   @column()
   declare mainChannelIp: string
 
@@ -78,4 +87,40 @@ export default class Substation extends BaseModel {
     foreignKey: 'voltageClassesId',
   })
   declare voltage_class: BelongsTo<typeof VoltageClass>
+
+  @hasOne(() => TypeKp, {
+    localKey: 'typeKpId',
+    foreignKey: 'id',
+  })
+  declare type_kp: HasOne<typeof TypeKp>
+
+  @hasOne(() => HeadController, {
+    localKey: 'headControllerId',
+    foreignKey: 'id',
+  })
+  declare head_controller: HasOne<typeof HeadController>
+
+  @hasOne(() => ChannelType, {
+    localKey: 'mainChannelId',
+    foreignKey: 'id',
+  })
+  declare main_channel: HasOne<typeof ChannelType>
+
+  @hasOne(() => ChannelType, {
+    localKey: 'backupChannelId',
+    foreignKey: 'id',
+  })
+  declare backup_channel: HasOne<typeof ChannelType>
+
+  @hasOne(() => ChannelType, {
+    localKey: 'additionalChannelId',
+    foreignKey: 'id',
+  })
+  declare additional_channel: HasOne<typeof ChannelType>
+
+  @hasOne(() => GsmOperator, {
+    localKey: 'gsmId',
+    foreignKey: 'id',
+  })
+  declare gsm: HasOne<typeof GsmOperator>
 }
