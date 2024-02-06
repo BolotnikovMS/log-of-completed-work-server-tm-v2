@@ -1,5 +1,6 @@
 import District from '#models/district'
 import DistrictService from '#services/district_service'
+import SubstationService from '#services/substation_service'
 import { districtValidator } from '#validators/district'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -8,6 +9,13 @@ export default class DistrictsController {
     const districts = await DistrictService.getDistricts(request)
 
     return response.status(200).json(districts)
+  }
+
+  async getSubstations({ params, request, response }: HttpContext) {
+    const district = await District.findOrFail(params.id)
+    const substations = await SubstationService.getSubstations(request, district.id)
+
+    return response.status(200).json(substations)
   }
 
   /**
