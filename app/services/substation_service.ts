@@ -17,15 +17,24 @@ export default class SubstationService {
   static async getSubstation(params: Record<string, any>): Promise<Substation> {
     const substation = await Substation.findOrFail(params.id)
 
+    if (substation.additionalChannelId) {
+      await substation.load('additional_channel')
+    }
+
+    if (substation.backupChannelId) {
+      await substation.load('backup_channel')
+    }
+
+    if (substation.gsmId) {
+      await substation.load('gsm')
+    }
+
     await substation.load('district')
     await substation.load('voltage_class')
     await substation.load('type_kp')
     await substation.load('works')
     await substation.load('head_controller')
     await substation.load('main_channel')
-    await substation.load('backup_channel')
-    await substation.load('additional_channel')
-    await substation.load('gsm')
 
     return substation
   }
