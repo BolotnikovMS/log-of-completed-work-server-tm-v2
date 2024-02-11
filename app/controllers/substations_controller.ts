@@ -10,6 +10,12 @@ export default class SubstationsController {
     return response.status(200).json(substations)
   }
 
+  async getSubstation({ params, response }: HttpContext) {
+    const substation = await SubstationService.getSubstation(params)
+
+    return response.status(200).json(substation)
+  }
+
   async store({ request, response }: HttpContext) {
     const validatedData = await request.validateUsing(substationValidator)
     const substation = await Substation.create({ userId: 1, ...validatedData })
