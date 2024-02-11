@@ -26,7 +26,7 @@ export default class extends BaseSchema {
         .index()
         .unsigned()
         .references('id')
-        .inTable('types_kps')
+        .inTable('type_kps')
       table
         .integer('head_controller_id', 11)
         .notNullable()
