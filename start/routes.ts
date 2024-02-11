@@ -79,6 +79,7 @@ router
       .group(() => {
         router.get('/', [SubstationsController, 'index'])
         router.post('/', [SubstationsController, 'store'])
+        router.get('/:id', [SubstationsController, 'getSubstation'])
         router.patch('/:id', [SubstationsController, 'update'])
         router.delete('/:id', [SubstationsController, 'destroy'])
       })
