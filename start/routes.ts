@@ -16,6 +16,8 @@ const HeadsController = () => import('#controllers/heads_controller')
 const TypesKpsController = () => import('#controllers/types_kps_controller')
 const VoltageClassesController = () => import('#controllers/voltage_classes_controller')
 
+const AuthController = () => import('#controllers/auth_controller')
+
 import router from '@adonisjs/core/services/router'
 
 router.get('/', async () => {
@@ -26,6 +28,11 @@ router.get('/', async () => {
 
 router
   .group(() => {
+    router.group(() => {
+      router.post('/login', [AuthController, 'login'])
+      router.get('/logout', [AuthController, 'logout'])
+      router.post('/create-account', [AuthController, 'register'])
+    })
     router
       .group(() => {
         router.get('/', [DistrictsController, 'index'])
