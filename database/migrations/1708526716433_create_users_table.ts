@@ -1,4 +1,5 @@
 import { RolesEnum } from '#enums/roles'
+import hash from '@adonisjs/core/services/hash'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
@@ -26,6 +27,20 @@ export default class extends BaseSchema {
 
       table.timestamp('created_at').notNullable()
       table.timestamp('updated_at').nullable()
+    })
+
+    this.defer(async (db) => {
+      await db.table(this.tableName).insert({
+        username: 'Admin',
+        surname: 'Admin',
+        name: 'Admin',
+        patronymic: 'Admin',
+        position: 'Admin',
+        role_id: RolesEnum.ADMIN,
+        email: 'admin@worktm.ru',
+        password: await hash.make('12345678'),
+        created_at: Date.now(),
+      })
     })
   }
 
