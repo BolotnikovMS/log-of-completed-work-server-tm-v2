@@ -1,6 +1,7 @@
 import { RolesEnum } from '#enums/roles'
 import hash from '@adonisjs/core/services/hash'
 import { BaseSchema } from '@adonisjs/lucid/schema'
+import { DateTime } from 'luxon'
 
 export default class extends BaseSchema {
   protected tableName = 'users'
@@ -25,8 +26,8 @@ export default class extends BaseSchema {
         .inTable('roles')
         .defaultTo(RolesEnum.USER)
 
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('created_at', { useTz: true })
+      table.timestamp('updated_at', { useTz: true })
     })
 
     this.defer(async (db) => {
@@ -39,7 +40,7 @@ export default class extends BaseSchema {
         role_id: RolesEnum.ADMIN,
         email: 'admin@worktm.ru',
         password: await hash.make('12345678'),
-        created_at: Date.now(),
+        created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
       })
     })
   }
