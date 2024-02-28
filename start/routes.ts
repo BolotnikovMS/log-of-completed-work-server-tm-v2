@@ -19,6 +19,7 @@ const VoltageClassesController = () => import('#controllers/voltage_classes_cont
 const AuthController = () => import('#controllers/auth_controller')
 
 import router from '@adonisjs/core/services/router'
+import { middleware } from './kernel.js'
 
 router.get('/', async () => {
   return {
@@ -42,6 +43,7 @@ router
         router.delete('/:id', [DistrictsController, 'destroy'])
       })
       .prefix('/districts')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [VoltageClassesController, 'index'])
