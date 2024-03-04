@@ -50,7 +50,7 @@ export default class AuthController {
 
       await User.create(validatedData)
 
-      return response.status(201).json({ message: 'User create!' })
+      return response.status(201).json('Пользователь создан!')
     } catch (error) {
       console.log(error)
       return response.status(422).json(error.messages)
