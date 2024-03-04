@@ -1,8 +1,8 @@
-import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
-import hash from '@adonisjs/core/services/hash'
 import { loginValidator } from '#validators/login'
 import { registerValidator } from '#validators/registrer'
+import type { HttpContext } from '@adonisjs/core/http'
+import hash from '@adonisjs/core/services/hash'
 
 export default class AuthController {
   async login({ response, request }: HttpContext) {
@@ -38,9 +38,9 @@ export default class AuthController {
 
       return response.status(200).json({ revoke: true })
     } catch (error) {
-      console.log(error)
+      const message = 'Вы не авторизованны!'
 
-      return response.status(401).json(error)
+      return response.status(401).json(message)
     }
   }
 
@@ -53,7 +53,7 @@ export default class AuthController {
       return response.status(201).json({ message: 'User create!' })
     } catch (error) {
       console.log(error)
-      return response.status(422).json(error)
+      return response.status(422).json(error.messages)
     }
   }
 }
