@@ -17,11 +17,33 @@ export default class AuthController {
         return response.status(401).json('Неверные учетные данные!')
       }
 
+      await user.load('role')
+
+      // {
+      //   id: 1,
+      //   username: 'Admin',
+      //   email: 'admin@worktm.ru',
+      //   role: { name: 'Admin' },
+      //   fullName: 'Admin Admin Admin',
+      //   shortName: 'Admin A.A.'
+      // }
       const token = await User.accessTokens.create(user, ['*'], { expiresIn: '30 days' })
+      const userSerialize = user.serialize({
+        fields: { pick: ['id', 'username', 'fullName', 'shortName', 'email'] },
+        relations: {
+          role: {
+            fields: {
+              pick: ['name'],
+            },
+          },
+        },
+      })
+      console.log(userSerialize)
 
       return {
+        ...userSerialize,
         type: 'bearer',
-        value: token.value?.release(),
+        token: token.value?.release(),
       }
     } catch (error) {
       console.log(error)
