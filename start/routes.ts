@@ -52,6 +52,7 @@ router
         router.delete('/:id', [VoltageClassesController, 'destroy'])
       })
       .prefix('/voltage-classes')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [TypesKpsController, 'index'])
@@ -60,6 +61,7 @@ router
         router.delete('/:id', [TypesKpsController, 'destroy'])
       })
       .prefix('/types-kp')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [HeadsController, 'index'])
@@ -68,6 +70,7 @@ router
         router.delete('/:id', [HeadsController, 'destroy'])
       })
       .prefix('/head-controllers')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [ChannelTypesController, 'index'])
@@ -76,6 +79,7 @@ router
         router.delete('/:id', [ChannelTypesController, 'destroy'])
       })
       .prefix('/channel-types')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [GsmOperatorsController, 'index'])
@@ -84,6 +88,7 @@ router
         router.delete('/:id', [GsmOperatorsController, 'destroy'])
       })
       .prefix('/gsm-operators')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [SubstationsController, 'index'])
@@ -93,6 +98,7 @@ router
         router.delete('/:id', [SubstationsController, 'destroy'])
       })
       .prefix('/substations')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [CompletedWorksController, 'index'])
@@ -101,5 +107,6 @@ router
         router.delete('/:id', [CompletedWorksController, 'destroy'])
       })
       .prefix('/completed-works')
+      .use([middleware.auth()])
   })
   .prefix('/api/v1.0/')
