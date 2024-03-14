@@ -48,7 +48,7 @@ export default class AuthController {
     } catch (error) {
       console.log(error)
 
-      return response.status(404).json('Пользователя с такими данными не существует!')
+      return response.status(401).json('Неверный username или пароль!')
     }
   }
 
