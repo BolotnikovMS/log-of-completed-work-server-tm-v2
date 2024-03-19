@@ -52,17 +52,36 @@ export default class AuthController {
     }
   }
 
+  async profile({ response, auth }: HttpContext) {
+    const user = await auth.authenticate()
+
+    await user.load('role')
+    // console.log(user.serialize())
+    const userSerialize = await user.serialize({
+      fields: {
+        omit: ['password', 'updatedAt'],
+      },
+      relations: {
+        role: {
+          fields: {
+            omit: ['createdAt', 'updatedAt'],
+          },
+        },
+      },
+    })
+
+    return response.status(200).json(userSerialize)
+  }
+
   async logout({ response, auth }: HttpContext) {
     try {
       const user = await auth.use('api').authenticate()
 
       await User.accessTokens.delete(user, user.currentAccessToken.identifier)
 
-      return response.status(200).json({ revoke: true })
+      return response.status(200).json({ message: 'Вы успешно вышли из системы!' })
     } catch (error) {
-      const message = 'Вы не авторизованны!'
-
-      return response.status(401).json(message)
+      return response.status(401).json('Вы не авторизованны!')
     }
   }
 
