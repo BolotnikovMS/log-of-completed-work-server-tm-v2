@@ -21,9 +21,10 @@ export default class DistrictsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
+    const { user } = auth
     const validatedData = await request.validateUsing(districtValidator)
-    const district = await District.create({ userId: 1, ...validatedData })
+    const district = await District.create({ userId: user?.id, ...validatedData })
 
     return response.status(201).json(district)
   }

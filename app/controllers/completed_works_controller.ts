@@ -16,9 +16,10 @@ export default class CompletedWorksController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
+    const { user } = auth
     const validatedData = request.validateUsing(completedWorkValidator)
-    const completedWork = await CompletedWork.create({ userId: 1, ...validatedData })
+    const completedWork = await CompletedWork.create({ userId: user?.id, ...validatedData })
 
     return response.status(201).json(completedWork)
   }
@@ -34,9 +35,7 @@ export default class CompletedWorksController {
   async update({ params, request, response }: HttpContext) {
     const completedWork = await CompletedWork.findOrFail(params.id)
     const validatedData = await request.validateUsing(completedWorkValidator)
-    const updCompletedWork = await completedWork
-      .merge({ workProducerId: 1, ...validatedData })
-      .save()
+    const updCompletedWork = await completedWork.merge({ ...validatedData }).save()
 
     return response.status(200).json(updCompletedWork)
   }

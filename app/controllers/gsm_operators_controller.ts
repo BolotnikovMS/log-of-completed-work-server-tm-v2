@@ -16,9 +16,10 @@ export default class GsmOperatorsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
+    const { user } = auth
     const validatedData = await request.validateUsing(gsmOperatorValidator)
-    const gsmOperator = await GsmOperator.create({ userId: 1, ...validatedData })
+    const gsmOperator = await GsmOperator.create({ userId: user?.id, ...validatedData })
 
     return response.status(201).json(gsmOperator)
   }

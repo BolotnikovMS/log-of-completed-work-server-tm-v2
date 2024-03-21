@@ -16,9 +16,10 @@ export default class VoltageClassesController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
+    const { user } = auth
     const validatedData = await request.validateUsing(voltageClassValidator)
-    const voltageClass = await VoltageClass.create({ userId: 1, ...validatedData })
+    const voltageClass = await VoltageClass.create({ userId: user?.id, ...validatedData })
 
     return response.status(201).json(voltageClass)
   }

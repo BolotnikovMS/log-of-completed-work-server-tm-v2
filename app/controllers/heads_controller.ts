@@ -1,7 +1,7 @@
 import HeadController from '#models/head_controller'
 import { HeadControllersService } from '#services/head_controller_service'
-import type { HttpContext } from '@adonisjs/core/http'
 import { headControllerValidator } from '#validators/head_controller'
+import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HeadsController {
   /**
@@ -16,9 +16,10 @@ export default class HeadsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
+    const { user } = auth
     const validatedData = await request.validateUsing(headControllerValidator)
-    const newHeadController = await HeadController.create({ userId: 1, ...validatedData })
+    const newHeadController = await HeadController.create({ userId: user?.id, ...validatedData })
 
     return response.status(201).json(newHeadController)
   }

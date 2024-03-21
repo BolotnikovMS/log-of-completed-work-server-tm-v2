@@ -16,9 +16,10 @@ export default class TypesKpsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
+    const { user } = auth
     const validatedData = await request.validateUsing(typeKpValidator)
-    const typeKp = await TypeKp.create({ userId: 1, ...validatedData })
+    const typeKp = await TypeKp.create({ userId: user?.id, ...validatedData })
 
     return response.status(201).json(typeKp)
   }
