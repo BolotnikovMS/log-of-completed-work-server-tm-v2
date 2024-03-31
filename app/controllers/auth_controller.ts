@@ -33,7 +33,6 @@ export default class AuthController {
           },
         },
       })
-      // console.log(userSerialize)
 
       return {
         user: userSerialize,
