@@ -21,7 +21,8 @@
       "#start/*": ["./start/*.js"],
       "#config/*": ["./config/*.js"],
       "#enums/*": ["./app/enums/*.js"],
-      "#interfaces/*": ["./app/interfaces/*.js"]
+      "#interfaces/*": ["./app/interfaces/*.js"],
+      "#helpers/*": ["./app/helpers/*.js"]
     }
   }
 }
