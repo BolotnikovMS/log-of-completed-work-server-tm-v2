@@ -1,4 +1,6 @@
+import { accessErrorMessages } from '#helpers/access_error_messages'
 import Substation from '#models/substation'
+import SubstationPolicy from '#policies/substation_policy'
 import SubstationService from '#services/substation_service'
 import { substationValidator } from '#validators/substation'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -16,7 +18,11 @@ export default class SubstationsController {
     return response.status(200).json(substation)
   }
 
-  async store({ request, response, auth }: HttpContext) {
+  async store({ request, response, auth, bouncer }: HttpContext) {
+    if (await bouncer.with(SubstationPolicy).denies('create')) {
+      return response.status(403).json({ message: accessErrorMessages.create })
+    }
+
     const { user } = auth
     const validatedData = await request.validateUsing(substationValidator)
     const substation = await Substation.create({ userId: user?.id, ...validatedData })
@@ -24,7 +30,11 @@ export default class SubstationsController {
     return response.status(201).json(substation)
   }
 
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(SubstationPolicy).denies('edit')) {
+      return response.status(403).json({ message: accessErrorMessages.edit })
+    }
+
     const substation = await Substation.findOrFail(params.id)
     const validatedData = await request.validateUsing(substationValidator)
     const updDistrict = await substation.merge(validatedData).save()
@@ -32,7 +42,11 @@ export default class SubstationsController {
     return response.status(200).json(updDistrict)
   }
 
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, bouncer }: HttpContext) {
+    if (await bouncer.with(SubstationPolicy).denies('delete')) {
+      return response.status(403).json({ message: accessErrorMessages.delete })
+    }
+
     const substation = await Substation.findOrFail(params.id)
 
     await substation.related('works').query().delete()

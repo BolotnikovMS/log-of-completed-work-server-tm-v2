@@ -1,4 +1,6 @@
+import { accessErrorMessages } from '#helpers/access_error_messages'
 import GsmOperator from '#models/gsm_operator'
+import GsmOperatorPolicy from '#policies/gsm_operator_policy'
 import GsmOperatorService from '#services/gsm_operator_service'
 import { gsmOperatorValidator } from '#validators/gsm_operator'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -16,7 +18,11 @@ export default class GsmOperatorsController {
   /**
    * Handle form submission for the create action
    */
-  async store({ request, response, auth }: HttpContext) {
+  async store({ request, response, auth, bouncer }: HttpContext) {
+    if (await bouncer.with(GsmOperatorPolicy).denies('create')) {
+      return response.status(403).json({ message: accessErrorMessages.create })
+    }
+
     const { user } = auth
     const validatedData = await request.validateUsing(gsmOperatorValidator)
     const gsmOperator = await GsmOperator.create({ userId: user?.id, ...validatedData })
@@ -27,7 +33,11 @@ export default class GsmOperatorsController {
   /**
    * Handle form submission for the edit action
    */
-  async update({ params, request, response }: HttpContext) {
+  async update({ params, request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(GsmOperatorPolicy).denies('edit')) {
+      return response.status(403).json({ message: accessErrorMessages.edit })
+    }
+
     const gsmOperator = await GsmOperator.findOrFail(params.id)
     const validatedData = await request.validateUsing(gsmOperatorValidator)
     const updGsmOperator = await gsmOperator.merge(validatedData).save()
@@ -38,7 +48,11 @@ export default class GsmOperatorsController {
   /**
    * Delete record
    */
-  async destroy({ params, response }: HttpContext) {
+  async destroy({ params, response, bouncer }: HttpContext) {
+    if (await bouncer.with(GsmOperatorPolicy).denies('delete')) {
+      return response.status(403).json({ message: accessErrorMessages.delete })
+    }
+
     const gsmOperator = await GsmOperator.findOrFail(params.id)
 
     await gsmOperator.delete()
