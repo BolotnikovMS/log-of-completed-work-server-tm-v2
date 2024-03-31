@@ -12,4 +12,13 @@
 |
 */
 
-export const policies = {}
+export const policies = {
+  VoltageClassPolicy: () => import('#policies/voltage_class_policy'),
+  TypeKpPolicy: () => import('#policies/type_kp_policy'),
+  HeadControllerPolicy: () => import('#policies/head_controller_policy'),
+  GsmOperatorPolicy: () => import('#policies/gsm_operator_policy'),
+  CompletedWorkPolicy: () => import('#policies/completed_work_policy'),
+  ChannelTypePolicy: () => import('#policies/channel_type_policy'),
+  SubstationPolicy: () => import('#policies/substation_policy'),
+  DistrictPolicy: () => import('#policies/district_policy'),
+}
