@@ -1,8 +1,8 @@
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 
+import Substation from '#models/substation'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
-import Substation from '#models/substation'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
@@ -23,8 +23,8 @@ export default class CompletedWork extends BaseModel {
   @column()
   declare note: string | null
 
-  @column.dateTime()
-  declare dateCompletion: DateTime
+  @column()
+  declare dateCompletion: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
