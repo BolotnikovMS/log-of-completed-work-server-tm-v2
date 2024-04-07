@@ -24,8 +24,15 @@ export default class CompletedWorksController {
     }
 
     const { user } = auth
-    const validatedData = request.validateUsing(completedWorkValidator)
-    const completedWork = await CompletedWork.create({ userId: user?.id, ...validatedData })
+    const validatedData = await request.validateUsing(completedWorkValidator)
+    console.log('validatedData: ', validatedData)
+    const completedWork = await CompletedWork.create({
+      userId: user?.id,
+      substationId: validatedData.substationId,
+      description: validatedData.description,
+      workProducerId: validatedData.workProducerId,
+      dateCompletion: validatedData.dateCompletion,
+    })
 
     return response.status(201).json(completedWork)
   }
