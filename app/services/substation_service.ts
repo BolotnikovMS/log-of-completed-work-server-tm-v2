@@ -1,9 +1,16 @@
 import Substation from '#models/substation'
 import { Request } from '@adonisjs/core/http'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
 export default class SubstationService {
-  static async getSubstations(req: Request, districtId?: number): Promise<Substation[]> {
+  static async getSubstations(
+    req: Request,
+    districtId?: number
+  ): Promise<{
+    meta: any
+    data: ModelObject[]
+  }> {
     const { active, sort, order, page, limit } = req.qs() as IQueryParams
     const substations = await Substation.query()
       // .if(active, (query) => query.where('active', '=', ActiveEnum[active]))
@@ -12,7 +19,20 @@ export default class SubstationService {
       .preload('voltage_class')
       .paginate(page, limit)
 
-    return substations
+    const substationSerialize = substations.serialize({
+      fields: {
+        omit: ['createdAt', 'updatedAt'],
+      },
+      relations: {
+        voltage_class: {
+          fields: {
+            pick: ['name'],
+          },
+        },
+      },
+    })
+
+    return substationSerialize
   }
   static async getSubstation(params: Record<string, any>): Promise<Substation> {
     const substation = await Substation.findOrFail(params.id)
