@@ -1,6 +1,5 @@
 import User from '#models/user'
 import { loginValidator } from '#validators/login'
-import { registerValidator } from '#validators/registrer'
 import type { HttpContext } from '@adonisjs/core/http'
 import hash from '@adonisjs/core/services/hash'
 import DB from '@adonisjs/lucid/services/db'
@@ -83,19 +82,6 @@ export default class AuthController {
       return response.status(200).json({ message: 'Вы успешно вышли из системы!' })
     } catch (error) {
       return response.status(401).json('Вы не авторизованны!')
-    }
-  }
-
-  async register({ request, response }: HttpContext) {
-    try {
-      const validatedData = await request.validateUsing(registerValidator)
-
-      await User.create(validatedData)
-
-      return response.status(201).json('Пользователь создан!')
-    } catch (error) {
-      console.log(error)
-      return response.status(422).json(error.messages)
     }
   }
 }
