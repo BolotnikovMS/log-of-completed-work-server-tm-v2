@@ -34,12 +34,12 @@ router
     router.group(() => {
       router.post('/login', [AuthController, 'login'])
       router.get('/logout', [AuthController, 'logout'])
-      router.post('/create-account', [AuthController, 'register'])
       router.get('/profile', [AuthController, 'profile']).use([middleware.auth()])
     })
     router
       .group(() => {
         router.get('/', [UsersController, 'index'])
+        router.post('/create-account', [UsersController, 'createUserAccount'])
       })
       .prefix('/users')
       .use([middleware.auth()])
