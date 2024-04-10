@@ -13,6 +13,7 @@
 */
 
 export const policies = {
+  UserPolicy: () => import('#policies/user_policy'),
   VoltageClassPolicy: () => import('#policies/voltage_class_policy'),
   TypeKpPolicy: () => import('#policies/type_kp_policy'),
   HeadControllerPolicy: () => import('#policies/head_controller_policy'),
