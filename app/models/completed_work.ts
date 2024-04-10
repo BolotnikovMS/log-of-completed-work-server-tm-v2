@@ -3,6 +3,7 @@ import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import Substation from '#models/substation'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
+import User from './user.js'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
@@ -23,8 +24,10 @@ export default class CompletedWork extends BaseModel {
   @column()
   declare note: string | null
 
-  @column()
-  declare dateCompletion: string
+  @column({
+    prepare: (value: Date) => DateTime.expandFormat(value.toLocaleDateString()),
+  })
+  declare dateCompletion: DateTime | Date
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -34,4 +37,7 @@ export default class CompletedWork extends BaseModel {
 
   @belongsTo(() => Substation)
   declare substation: BelongsTo<typeof Substation>
+
+  @belongsTo(() => User)
+  declare work_producer: BelongsTo<typeof User>
 }
