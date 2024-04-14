@@ -7,6 +7,7 @@ export default class UserService {
     const { active, page, limit } = req.qs() as IQueryParams
     const users = await User.query()
       .if(active, (query) => query.where('active', active))
+      .preload('role')
       .paginate(page, limit)
 
     return users
