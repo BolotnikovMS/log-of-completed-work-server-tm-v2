@@ -20,7 +20,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column()
   declare roleId: number
 
-  @column()
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
   declare active: boolean
 
   @column()
