@@ -1,6 +1,7 @@
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import User from '#models/user'
 import UserPolicy from '#policies/user_policy'
+import RoleService from '#services/role_service'
 import UserService from '#services/user_service'
 import { registerValidator } from '#validators/registrer'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -13,6 +14,16 @@ export default class UsersController {
     const users = await UserService.getUsers(request)
 
     return response.status(200).json(users)
+  }
+
+  async getRoles({ request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(UserPolicy).denies('viewRoles')) {
+      return response.status(403).json({ message: accessErrorMessages.view })
+    }
+
+    const roles = await RoleService.getRoles()
+
+    return response.status(200).json(roles)
   }
 
   /**
