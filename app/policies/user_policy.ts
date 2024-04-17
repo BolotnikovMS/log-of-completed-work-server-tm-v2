@@ -15,4 +15,8 @@ export default class UserPolicy extends BasePolicy {
   delete(user: User): AuthorizerResponse {
     return user.roleId === RolesEnum.ADMIN
   }
+
+  viewRoles(user: User): AuthorizerResponse {
+    return user.roleId === RolesEnum.ADMIN
+  }
 }
