@@ -39,6 +39,7 @@ router
     router
       .group(() => {
         router.get('/', [UsersController, 'index'])
+        router.get('/roles', [UsersController, 'getRoles'])
         router.post('/create-account', [UsersController, 'createUserAccount'])
       })
       .prefix('/users')
