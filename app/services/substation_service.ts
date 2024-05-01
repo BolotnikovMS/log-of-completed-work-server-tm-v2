@@ -11,9 +11,8 @@ export default class SubstationService {
     meta: any
     data: ModelObject[]
   }> {
-    const { active, sort, order, page, limit } = req.qs() as IQueryParams
+    const { sort, order, page, limit = 200 } = req.qs() as IQueryParams
     const substations = await Substation.query()
-      // .if(active, (query) => query.where('active', '=', ActiveEnum[active]))
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(districtId, (query) => query.where('district_id', '=', districtId!))
       .preload('voltage_class')
