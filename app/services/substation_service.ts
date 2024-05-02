@@ -3,6 +3,7 @@ import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
+
 export default class SubstationService {
   static async getSubstations(
     req: Request,
@@ -11,10 +12,12 @@ export default class SubstationService {
     meta: any
     data: ModelObject[]
   }> {
-    const { sort, order, page, limit = 200 } = req.qs() as IQueryParams
+    const { sort, order, page, limit = 200, search } = req.qs() as IQueryParams
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(districtId, (query) => query.where('district_id', '=', districtId!))
+      // !! Попробовать создать в таблице столбец в котором будет наименование в нижнем регистре
+      .if(search, (query) => query.whereLike('name', `%${search}%`))
       .preload('voltage_class')
       .paginate(page, limit)
 
