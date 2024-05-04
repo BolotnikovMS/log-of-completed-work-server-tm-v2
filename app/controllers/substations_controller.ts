@@ -1,4 +1,5 @@
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { transliterate } from '#helpers/transliterate'
 import Substation from '#models/substation'
 import SubstationPolicy from '#policies/substation_policy'
 import SubstationService from '#services/substation_service'
@@ -25,7 +26,11 @@ export default class SubstationsController {
 
     const { user } = auth
     const validatedData = await request.validateUsing(substationValidator)
-    const substation = await Substation.create({ userId: user?.id, ...validatedData })
+    const substation = await Substation.create({
+      userId: user?.id,
+      nameSearch: transliterate(validatedData.name),
+      ...validatedData,
+    })
 
     return response.status(201).json(substation)
   }
@@ -37,7 +42,9 @@ export default class SubstationsController {
 
     const substation = await Substation.findOrFail(params.id)
     const validatedData = await request.validateUsing(substationValidator)
-    const updDistrict = await substation.merge(validatedData).save()
+    const updDistrict = await substation
+      .merge({ nameSearch: transliterate(validatedData.name), ...validatedData })
+      .save()
 
     return response.status(200).json(updDistrict)
   }
