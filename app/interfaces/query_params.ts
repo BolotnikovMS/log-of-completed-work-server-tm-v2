@@ -9,5 +9,5 @@ export interface IQueryParams {
   search: string
   active: string
   limit: number
-  substation: number
+  substation: string
 }
