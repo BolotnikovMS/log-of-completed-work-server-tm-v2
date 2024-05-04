@@ -49,6 +49,9 @@ export default class Substation extends BaseModel {
   @column()
   declare name: string
 
+  @column()
+  declare nameSearch: string
+
   @column({
     consume: (value: string): boolean => Boolean(value),
   })
