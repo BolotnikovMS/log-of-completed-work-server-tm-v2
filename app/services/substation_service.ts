@@ -16,8 +16,7 @@ export default class SubstationService {
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(districtId, (query) => query.where('district_id', '=', districtId!))
-      // !! Попробовать создать в таблице столбец в котором будет наименование в нижнем регистре
-      .if(search, (query) => query.whereLike('name', `%${search}%`))
+      .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
       .preload('voltage_class')
       .paginate(page, limit)
 
