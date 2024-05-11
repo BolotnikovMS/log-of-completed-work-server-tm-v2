@@ -9,19 +9,20 @@ export default class FilesServices {
     const validateData = await req.validateUsing(fileValidator)
 
     validateData?.file.forEach(async (fileItem) => {
-      const fileName = `${new Date().getTime()}${randomStr()}.${fileItem.extname}`
+      const newFileName = `${new Date().getTime()}${randomStr()}.${fileItem.extname}`
 
       await File.create({
         userId: userId || 1,
         substationId: 1,
-        filePath: `/uploads/files/${validateData.typeFile}/${fileName}`,
+        filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
+        clientName: fileItem.clientName,
         typeFile: validateData.typeFile,
         extname: fileItem.extname,
         size: +(fileItem.size / 1024).toFixed(3),
       })
 
       await fileItem.move(`tmp/uploads/files/${validateData.typeFile}`, {
-        name: fileName,
+        name: newFileName,
         overwrite: true,
       })
     })
