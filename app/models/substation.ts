@@ -4,6 +4,7 @@ import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations
 import ChannelType from '#models/channel_type'
 import CompletedWork from '#models/completed_work'
 import District from '#models/district'
+import File from '#models/file'
 import GsmOperator from '#models/gsm_operator'
 import HeadController from '#models/head_controller'
 import TypeKp from '#models/type_kp'
@@ -126,4 +127,7 @@ export default class Substation extends BaseModel {
     foreignKey: 'id',
   })
   declare gsm: HasOne<typeof GsmOperator>
+
+  @hasMany(() => File)
+  declare files: HasMany<typeof File>
 }
