@@ -57,6 +57,7 @@ export default class extends BaseSchema {
       table.integer('gsm_id', 11).index().unsigned().references('id').inTable('gsm_operators')
       table.boolean('active').defaultTo(true)
       table.string('name', 250).notNullable()
+      table.string('name_search', 250)
       table.string('slug', 250)
       table.boolean('rdu').defaultTo(false)
       table.string('main_channel_ip').nullable()
