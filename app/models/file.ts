@@ -1,7 +1,8 @@
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import { DateTime } from 'luxon'
+
 import Substation from '#models/substation'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 export default class File extends BaseModel {
   @column({ isPrimary: true })
@@ -15,6 +16,9 @@ export default class File extends BaseModel {
 
   @column()
   declare filePath: string
+
+  @column()
+  declare clientName: string
 
   @column()
   declare typeFile: string

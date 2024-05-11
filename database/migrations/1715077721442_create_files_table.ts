@@ -21,6 +21,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('substations')
       table.string('file_path').notNullable()
+      table.string('client_name').notNullable()
       table.string('type_file').notNullable()
       table.string('extname')
       table.integer('size')
