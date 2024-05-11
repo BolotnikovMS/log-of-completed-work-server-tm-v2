@@ -56,6 +56,7 @@ export default class SubstationService {
     await substation.load('works')
     await substation.load('head_controller')
     await substation.load('main_channel')
+    await substation.load('files')
 
     return substation
   }
