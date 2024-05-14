@@ -27,6 +27,25 @@ export default class FilesServices {
       })
     })
 
+    // if (validateData.file) {
+    //   const currentFile = validateData.file
+    //   const newFileName = `${new Date().getTime()}${randomStr()}.${currentFile.extname}`
+    //   await File.create({
+    //     userId: userId || 1,
+    //     substationId: 1,
+    //     filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
+    //     clientName: currentFile.clientName,
+    //     typeFile: validateData.typeFile,
+    //     extname: currentFile.extname,
+    //     size: +(currentFile.size / 1024).toFixed(3),
+    //   })
+
+    //   await currentFile.move(`tmp/uploads/files/${validateData.typeFile}`, {
+    //     name: newFileName,
+    //     overwrite: true,
+    //   })
+    // }
+
     return 'File uploaded!'
   }
   static async removeFile(id: number): Promise<string> {
