@@ -15,10 +15,9 @@ const GsmOperatorsController = () => import('#controllers/gsm_operators_controll
 const HeadsController = () => import('#controllers/heads_controller')
 const TypesKpsController = () => import('#controllers/types_kps_controller')
 const VoltageClassesController = () => import('#controllers/voltage_classes_controller')
-
 const AuthController = () => import('#controllers/auth_controller')
-
 const UsersController = () => import('#controllers/users_controller')
+const FilesController = () => import('#controllers/files_controller')
 
 import router from '@adonisjs/core/services/router'
 import { middleware } from './kernel.js'
@@ -36,6 +35,8 @@ router
       router.get('/logout', [AuthController, 'logout'])
       router.get('/profile', [AuthController, 'profile']).use([middleware.auth()])
     })
+    router.post('/upload', [FilesController, 'upload'])
+    router.delete('/delete/:id', [FilesController, 'destroy'])
     router
       .group(() => {
         router.get('/', [UsersController, 'index'])
