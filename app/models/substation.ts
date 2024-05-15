@@ -128,6 +128,13 @@ export default class Substation extends BaseModel {
   })
   declare gsm: HasOne<typeof GsmOperator>
 
-  @hasMany(() => File)
-  declare files: HasMany<typeof File>
+  @hasMany(() => File, {
+    onQuery: (query) => query.where('type_file', '=', 'photo_ps'),
+  })
+  declare files_photos_ps: HasMany<typeof File>
+
+  @hasMany(() => File, {
+    onQuery: (query) => query.where('type_file', '=', 'backup'),
+  })
+  declare files_backups: HasMany<typeof File>
 }
