@@ -1,8 +1,8 @@
-import Substation from '#models/substation'
-import { Request } from '@adonisjs/core/http'
+import { IQueryParams } from '../interfaces/query_params.js'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import { OrderByEnums } from '../enums/sort.js'
-import { IQueryParams } from '../interfaces/query_params.js'
+import { Request } from '@adonisjs/core/http'
+import Substation from '#models/substation'
 
 export default class SubstationService {
   static async getSubstations(
@@ -56,7 +56,8 @@ export default class SubstationService {
     await substation.load('works')
     await substation.load('head_controller')
     await substation.load('main_channel')
-    await substation.load('files')
+    await substation.load('files_photos_ps')
+    await substation.load('files_backups')
 
     console.log(substation.serialize())
 
