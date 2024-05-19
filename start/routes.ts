@@ -35,8 +35,14 @@ router
       router.get('/logout', [AuthController, 'logout'])
       router.get('/profile', [AuthController, 'profile']).use([middleware.auth()])
     })
-    router.post('/upload', [FilesController, 'upload'])
-    router.delete('/delete/:id', [FilesController, 'destroy'])
+    router
+      .group(() => {
+        router.post('/upload', [FilesController, 'upload'])
+        router.get('/download/:id', [FilesController, 'download'])
+        router.delete('/:id', [FilesController, 'destroy'])
+      })
+      .prefix('/files')
+      .use([middleware.auth()])
     router
       .group(() => {
         router.get('/', [UsersController, 'index'])
