@@ -12,8 +12,8 @@ export default class FilesServices {
       const newFileName = `${new Date().getTime()}${randomStr()}.${fileItem.extname}`
 
       await File.create({
-        userId: userId || 1,
-        substationId: 1,
+        userId: userId,
+        substationId: validateData.substationId,
         filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
         clientName: fileItem.clientName,
         typeFile: validateData.typeFile,
