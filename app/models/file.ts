@@ -1,7 +1,6 @@
-import { BaseModel, belongsTo, column, computed } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 
 import Substation from '#models/substation'
-import app from '@adonisjs/core/services/app'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
@@ -35,11 +34,6 @@ export default class File extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-
-  @computed()
-  get urlDownloadFile() {
-    return app.tmpPath(this.filePath)
-  }
 
   @belongsTo(() => Substation)
   declare substation: BelongsTo<typeof Substation>
