@@ -38,6 +38,7 @@ router
     router
       .group(() => {
         router.post('/upload', [FilesController, 'upload'])
+        router.get('/images', [FilesController, 'getImages'])
         router.get('/download/:id', [FilesController, 'download'])
         router.delete('/:id', [FilesController, 'destroy'])
       })
