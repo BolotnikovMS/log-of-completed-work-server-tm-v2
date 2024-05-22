@@ -59,6 +59,7 @@
     "@adonisjs/cors": "^2.2.1",
     "@adonisjs/drive": "^2.3.0",
     "@adonisjs/lucid": "^20.4.0",
+    "@adonisjs/static": "^1.1.1",
     "@poppinss/utils": "^6.7.2",
     "@vinejs/vine": "^1.8.0",
     "better-sqlite3": "^9.4.3",
