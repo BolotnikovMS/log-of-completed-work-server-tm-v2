@@ -1,7 +1,8 @@
-import { randomStr } from '#helpers/random_str'
 import File from '#models/file'
 import { fileValidator } from '#validators/file'
+import { cuid } from '@adonisjs/core/helpers'
 import { Request } from '@adonisjs/core/http'
+import app from '@adonisjs/core/services/app'
 import { unlink } from 'node:fs/promises'
 
 export default class FilesServices {
@@ -9,7 +10,7 @@ export default class FilesServices {
     const validateData = await req.validateUsing(fileValidator)
 
     validateData?.file.forEach(async (fileItem) => {
-      const newFileName = `${new Date().getTime()}${randomStr()}.${fileItem.extname}`
+      const newFileName = `${cuid()}.${fileItem.extname}`
 
       await File.create({
         userId: userId,
@@ -21,7 +22,7 @@ export default class FilesServices {
         size: +(fileItem.size / 1024).toFixed(3),
       })
 
-      await fileItem.move(`tmp/uploads/files/${validateData.typeFile}`, {
+      await fileItem.move(app.publicPath(`uploads/files/${validateData.typeFile}`), {
         name: newFileName,
         overwrite: true,
       })
@@ -52,9 +53,10 @@ export default class FilesServices {
     const file = await File.findOrFail(id)
 
     try {
-      await unlink(`./tmp${file.filePath}`)
+      await unlink(`./public/${file.filePath}`)
     } catch (err) {
       console.log(err)
+      throw new Error(err)
     }
 
     await file.delete()
