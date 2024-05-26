@@ -2,7 +2,6 @@
 node_modules
 build
 tmp
-public/
 
 # Secrets
 .env
@@ -24,3 +23,5 @@ yarn-error.log
 
 # Platform specific
 .DS_Store
+public
+public/
