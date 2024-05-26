@@ -1,8 +1,8 @@
-import User from '#models/user'
-import { loginValidator } from '#validators/login'
-import type { HttpContext } from '@adonisjs/core/http'
-import hash from '@adonisjs/core/services/hash'
 import DB from '@adonisjs/lucid/services/db'
+import type { HttpContext } from '@adonisjs/core/http'
+import User from '#models/user'
+import hash from '@adonisjs/core/services/hash'
+import { loginValidator } from '#validators/login'
 
 export default class AuthController {
   async login({ response, request }: HttpContext) {
@@ -44,7 +44,7 @@ export default class AuthController {
     } catch (error) {
       console.log(error)
 
-      return response.status(401).json('Неверный username или пароль!')
+      return response.status(401).json('Учетная запись заблокирована!')
     }
   }
 
