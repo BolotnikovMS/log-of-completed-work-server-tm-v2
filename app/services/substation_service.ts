@@ -58,6 +58,7 @@ export default class SubstationService {
     await substation.load('main_channel')
     await substation.load('files_photos_ps')
     await substation.load('files_backups')
+    await substation.load('other_files')
 
     // console.log(substation.serialize())
 
