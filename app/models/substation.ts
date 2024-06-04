@@ -137,4 +137,9 @@ export default class Substation extends BaseModel {
     onQuery: (query) => query.where('type_file', '=', 'backup'),
   })
   declare files_backups: HasMany<typeof File>
+
+  @hasMany(() => File, {
+    onQuery: (query) => query.where('type_file', '=', 'other_files'),
+  })
+  declare other_files: HasMany<typeof File>
 }
