@@ -10,10 +10,10 @@ export default class AuthController {
       const { username, password } = await request.validateUsing(loginValidator)
       const user = await User.query().whereLike('username', username).firstOrFail()
 
-      if (!user.active) return response.status(401).json('Учетная запись заблокирована!')
+      if (!user.active) return response.status(400).json('Учетная запись заблокирована!')
 
       if (!(await hash.verify(user.password, password)))
-        return response.status(401).json('Неверные учетные данные!')
+        return response.status(400).json('Неверные учетные данные!')
 
       await user.load('role')
       await DB.from('auth_access_tokens').where('tokenable_id', user.id).delete()
