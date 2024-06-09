@@ -17,11 +17,6 @@ type TOptions = {
  */
 
 async function unique(value: unknown, options: TOptions, field: FieldContext) {
-  /**
-   * We do not want to deal with non-string
-   * values. The "string" rule will handle the
-   * the validation.
-   */
   if (typeof value !== 'string') {
     return
   }
