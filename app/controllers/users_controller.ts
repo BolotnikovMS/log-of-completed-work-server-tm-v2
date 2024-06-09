@@ -16,7 +16,7 @@ export default class UsersController {
     return response.status(200).json(users)
   }
 
-  async getRoles({ request, response, bouncer }: HttpContext) {
+  async getRoles({ response, bouncer }: HttpContext) {
     if (await bouncer.with(UserPolicy).denies('viewRoles')) {
       return response.status(403).json({ message: accessErrorMessages.view })
     }
@@ -49,7 +49,7 @@ export default class UsersController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  // async show({ params }: HttpContext) {}
 
   /**
    * Handle form submission for the edit action
