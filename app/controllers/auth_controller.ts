@@ -7,21 +7,18 @@ import { loginValidator } from '#validators/login'
 export default class AuthController {
   async login({ response, request }: HttpContext) {
     try {
-      const validatedData = await request.validateUsing(loginValidator)
-      const user = await User.query()
-        .where('username', '=', validatedData.username)
-        .where('active', '=', true)
-        .firstOrFail()
+      const { username, password } = await request.validateUsing(loginValidator)
+      const user = await User.query().whereLike('username', username).firstOrFail()
 
-      if (!(await hash.verify(user.password, validatedData.password))) {
+      if (!user.active) return response.status(401).json('Учетная запись заблокирована!')
+
+      if (!(await hash.verify(user.password, password)))
         return response.status(401).json('Неверные учетные данные!')
-      }
 
       await user.load('role')
       await DB.from('auth_access_tokens').where('tokenable_id', user.id).delete()
 
       const token = await User.accessTokens.create(user, ['*'], { expiresIn: '10 days' })
-      // response.cookie('access_token', token.value?.release())
       const userSerialize = user.serialize({
         fields: { pick: ['id', 'username', 'fullName', 'shortName', 'email'] },
         relations: {
@@ -33,6 +30,7 @@ export default class AuthController {
         },
       })
 
+      // response.cookie('access_token', token.value?.release())
       return {
         user: userSerialize,
         token: {
@@ -41,14 +39,13 @@ export default class AuthController {
           expiresIn: token.expiresAt,
         },
       }
-    } catch (error) {
-      console.log(error)
-
-      return response.status(401).json('Учетная запись заблокирована!')
+    } catch (e) {
+      console.log(e)
+      return response.status(404).json('Пользователя с таким логином не существует!')
     }
   }
 
-  async profile({ response, request, auth }: HttpContext) {
+  async profile({ response, auth }: HttpContext) {
     const user = await auth.authenticate()
 
     await user.load('role')
