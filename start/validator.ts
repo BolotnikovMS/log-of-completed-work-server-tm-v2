@@ -8,6 +8,7 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'ipAddress': 'Поле с ip адресом должно быть формата xxx.xxx.xxx.xxx.',
   'date': 'Дата и время должны иметь формат: dd.mm.yyyy.',
   'unique': 'Поле {{ field }} должно быть уникальным.',
+  'password.confirmed': 'Поле: "пароля" и "подтверждение пароля" должны совпадать!',
 
   // Error message for the username field
   'username.required': 'Please choose a username for your account',
