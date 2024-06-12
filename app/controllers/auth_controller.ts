@@ -3,6 +3,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
 import hash from '@adonisjs/core/services/hash'
 import { loginValidator } from '#validators/login'
+import { changePasswordValidator } from '#validators/change_password'
 
 export default class AuthController {
   async login({ response, request }: HttpContext) {
@@ -67,6 +68,19 @@ export default class AuthController {
     })
 
     return response.status(200).json(userSerialize)
+  }
+
+  async changePassword({ request, response, auth }: HttpContext) {
+    const validatedData = await request.validateUsing(changePasswordValidator)
+    const user = await User.findOrFail(auth.user?.id)
+
+    if (user) {
+      await user.merge(validatedData).save()
+
+      return response.status(200).json('Пароль успешно изменен!')
+    } else {
+      return response.status(400).json('Ошибка при изменении пароля')
+    }
   }
 
   async logout({ response, auth }: HttpContext) {
