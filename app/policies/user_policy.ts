@@ -19,4 +19,8 @@ export default class UserPolicy extends BasePolicy {
   viewRoles(user: User): AuthorizerResponse {
     return user.roleId === RolesEnum.ADMIN
   }
+
+  resetPassword(user: User): AuthorizerResponse {
+    return user.roleId === RolesEnum.ADMIN
+  }
 }
