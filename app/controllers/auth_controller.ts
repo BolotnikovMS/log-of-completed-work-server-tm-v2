@@ -1,9 +1,9 @@
-import DB from '@adonisjs/lucid/services/db'
-import type { HttpContext } from '@adonisjs/core/http'
 import User from '#models/user'
-import hash from '@adonisjs/core/services/hash'
+import UserService from '#services/user_service'
 import { loginValidator } from '#validators/login'
-import { changePasswordValidator } from '#validators/change_password'
+import type { HttpContext } from '@adonisjs/core/http'
+import hash from '@adonisjs/core/services/hash'
+import DB from '@adonisjs/lucid/services/db'
 
 export default class AuthController {
   async login({ response, request }: HttpContext) {
@@ -71,13 +71,11 @@ export default class AuthController {
   }
 
   async changePassword({ request, response, auth }: HttpContext) {
-    const validatedData = await request.validateUsing(changePasswordValidator)
-    const user = await User.findOrFail(auth.user?.id)
+    const user = await auth.authenticate()
+    const changePassword = await UserService.changePassword(request, user.id)
 
-    if (user) {
-      await user.merge(validatedData).save()
-
-      return response.status(200).json('Пароль успешно изменен!')
+    if (changePassword) {
+      return response.status(200).json('Пароль пользователя успешно изменен!')
     } else {
       return response.status(400).json('Ошибка при изменении пароля')
     }

@@ -7,9 +7,6 @@ import { registerValidator } from '#validators/registrer'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
-  /**
-   * Display a list of resource
-   */
   async index({ request, response }: HttpContext) {
     const users = await UserService.getUsers(request)
 
@@ -26,9 +23,6 @@ export default class UsersController {
     return response.status(200).json(roles)
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async createUserAccount({ request, response, bouncer }: HttpContext) {
     if (await bouncer.with(UserPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
@@ -46,18 +40,17 @@ export default class UsersController {
     }
   }
 
-  /**
-   * Show individual record
-   */
-  // async show({ params }: HttpContext) {}
+  async resetUserPassword({ request, response, params, bouncer }: HttpContext) {
+    if (await bouncer.with(UserPolicy).denies('resetPassword')) {
+      return response.status(403).json({ message: accessErrorMessages.noRights })
+    }
 
-  /**
-   * Handle form submission for the edit action
-   */
-  // async update({ params, request }: HttpContext) {}
+    const resetPassword = await UserService.changePassword(request, params.id)
 
-  /**
-   * Delete record
-   */
-  // async destroy({ params }: HttpContext) {}
+    if (resetPassword) {
+      return response.status(200).json('Пароль пользователя успешно изменен!')
+    } else {
+      return response.status(400).json('Ошибка при изменении пароля')
+    }
+  }
 }
