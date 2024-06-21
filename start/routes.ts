@@ -49,6 +49,7 @@ router
         router.get('/', [UsersController, 'index'])
         router.get('/roles', [UsersController, 'getRoles'])
         router.post('/create-account', [UsersController, 'createUserAccount'])
+        router.patch('/reset-password/:id', [UsersController, 'resetUserPassword'])
       })
       .prefix('/users')
       .use([middleware.auth()])
