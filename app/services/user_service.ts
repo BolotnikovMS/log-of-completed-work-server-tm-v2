@@ -5,15 +5,20 @@ import { Request } from '@adonisjs/core/http'
 
 export default class UserService {
   static async getUsers(req: Request): Promise<User[]> {
-    const { active, page, limit } = req.qs() as IQueryParams
+    const { active, cleanUser, page, limit } = req.qs() as IQueryParams
     const users = await User.query()
-      .if(active, (query) => query.where('active', active))
+      .if(Boolean(active), (query) => query.where('active', '=', 1))
+      .if(Boolean(cleanUser), (query) => {
+        query.where((queryWhere) => {
+          queryWhere.where('active', '=', 1)
+          queryWhere.where('id', '!=', 1)
+        })
+      })
       .preload('role')
       .paginate(page, limit)
 
     return users
   }
-  static async getClearUsers(req: Request): Promise<User[]> { }
   static async changePassword(req: Request, userId: number): Promise<User> {
     const user = await User.findOrFail(userId)
     const validatedData = await req.validateUsing(changePasswordValidator)
