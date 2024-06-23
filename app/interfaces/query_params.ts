@@ -10,4 +10,5 @@ export interface IQueryParams {
   active: string
   limit: number
   substation: string
+  cleanUser: string
 }
