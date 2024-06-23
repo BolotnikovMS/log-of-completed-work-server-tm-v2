@@ -32,7 +32,8 @@
     "#config/*": "./config/*.js",
     "#enums/*": "./app/enums/*.js",
     "#interfaces/*": "./app/interfaces/*.js",
-    "#helpers/*": "./app/helpers/*.js"
+    "#helpers/*": "./app/helpers/*.js",
+    "#routes/*": "./start/routes/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.7.0",
