@@ -1,14 +1,15 @@
 import vine from '@vinejs/vine'
+import { dateText, numberCheck, text1000, text700Optional } from './fields_check.js'
 
 export const completedWorkValidator = vine.compile(
   vine.object({
     substationId: vine.number(),
-    description: vine.string().trim().minLength(2).maxLength(1000).escape(),
-    note: vine.string().trim().minLength(3).maxLength(700).optional(),
-    workProducerId: vine.number(),
+    description: text1000,
+    note: text700Optional,
+    workProducerId: numberCheck,
     // dateCompletion: vine.date({
     //   formats: 'DD.MM.YYYY',
     // }),
-    dateCompletion: vine.string(),
+    dateCompletion: dateText,
   })
 )

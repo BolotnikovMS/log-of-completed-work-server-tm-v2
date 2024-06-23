@@ -1,9 +1,10 @@
 import vine from '@vinejs/vine'
+import { arrFiles, numberCheck, typeFile } from './fields_check.js'
 
 export const fileValidator = vine.compile(
   vine.object({
-    substationId: vine.number(),
-    file: vine.array(vine.file()).notEmpty(),
-    typeFile: vine.string().in(['photo_ps', 'backup', 'other_files']),
+    substationId: numberCheck,
+    file: arrFiles,
+    typeFile: typeFile,
   })
 )

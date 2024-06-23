@@ -1,23 +1,14 @@
 import vine from '@vinejs/vine'
-import { uniqueRule } from '../rules/unique.js'
+import { email, text20, text30, username } from './fields_check.js'
 
 export const registerValidator = vine.compile(
   vine.object({
-    username: vine
-      .string()
-      .trim()
-      .use(uniqueRule({ table: 'users', column: 'username', caseInsensitive: true }))
-      .minLength(2)
-      .maxLength(30),
-    surname: vine.string().trim().minLength(2).maxLength(20),
-    name: vine.string().trim().minLength(2).maxLength(20),
-    patronymic: vine.string().trim().minLength(2).maxLength(20),
-    position: vine.string().trim().minLength(2).maxLength(30).escape(),
-    email: vine
-      .string()
-      .trim()
-      .email()
-      .use(uniqueRule({ table: 'users', column: 'email', caseInsensitive: true })),
+    username: username,
+    surname: text20,
+    name: text20,
+    patronymic: text20,
+    position: text30,
+    email: email,
     password: vine.string().minLength(6),
   })
 )

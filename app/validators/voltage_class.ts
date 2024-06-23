@@ -1,7 +1,8 @@
 import vine from '@vinejs/vine'
+import { text140 } from './fields_check.js'
 
 export const voltageClassValidator = vine.compile(
   vine.object({
-    name: vine.string().trim().minLength(2).maxLength(20),
+    name: text140,
   })
 )
