@@ -7,20 +7,18 @@
 |
 */
 
-const DistrictsController = () => import('#controllers/districts_controller')
-const SubstationsController = () => import('#controllers/substations_controller')
-const ChannelTypesController = () => import('#controllers/channel_types_controller')
-const CompletedWorksController = () => import('#controllers/completed_works_controller')
-const GsmOperatorsController = () => import('#controllers/gsm_operators_controller')
-const HeadsController = () => import('#controllers/heads_controller')
-const TypesKpsController = () => import('#controllers/types_kps_controller')
-const VoltageClassesController = () => import('#controllers/voltage_classes_controller')
-const AuthController = () => import('#controllers/auth_controller')
-const UsersController = () => import('#controllers/users_controller')
-const FilesController = () => import('#controllers/files_controller')
-
+import { authRoutes } from '#routes/api/v1/auth'
+import { channelTypesRoutes } from '#routes/api/v1/channel_types'
+import { completedWorksRoutes } from '#routes/api/v1/completed_works'
+import { districtsRoutes } from '#routes/api/v1/districts'
+import { filesRoutes } from '#routes/api/v1/files'
+import { gsmOperatorsRoutes } from '#routes/api/v1/gsm_operators'
+import { headControllersRoutes } from '#routes/api/v1/head_controllers'
+import { substationsRoutes } from '#routes/api/v1/substations'
+import { typesKpRoutes } from '#routes/api/v1/types_kp'
+import { usersRoutes } from '#routes/api/v1/users'
+import { voltageClassesRoutes } from '#routes/api/v1/voltage_classes'
 import router from '@adonisjs/core/services/router'
-import { middleware } from './kernel.js'
 
 router.get('/', async () => {
   return {
@@ -28,104 +26,14 @@ router.get('/', async () => {
   }
 })
 
-router
-  .group(() => {
-    router.group(() => {
-      router.post('/login', [AuthController, 'login'])
-      router.get('/logout', [AuthController, 'logout'])
-      router.get('/profile', [AuthController, 'profile']).use([middleware.auth()])
-      router.patch('/change-password', [AuthController, 'changePassword']).use([middleware.auth()])
-    })
-    router
-      .group(() => {
-        router.post('/upload', [FilesController, 'upload'])
-        router.get('/download/:id', [FilesController, 'download'])
-        router.delete('/:id', [FilesController, 'destroy'])
-      })
-      .prefix('/files')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [UsersController, 'index'])
-        router.get('/roles', [UsersController, 'getRoles'])
-        router.post('/create-account', [UsersController, 'createUserAccount'])
-        router.patch('/reset-password/:id', [UsersController, 'resetUserPassword'])
-      })
-      .prefix('/users')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [DistrictsController, 'index'])
-        router.post('/', [DistrictsController, 'store'])
-        router.get('/:id/substations', [DistrictsController, 'getSubstations'])
-        router.patch('/:id', [DistrictsController, 'update'])
-        router.delete('/:id', [DistrictsController, 'destroy'])
-      })
-      .prefix('/districts')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [VoltageClassesController, 'index'])
-        router.post('/', [VoltageClassesController, 'store'])
-        router.patch('/:id', [VoltageClassesController, 'update'])
-        router.delete('/:id', [VoltageClassesController, 'destroy'])
-      })
-      .prefix('/voltage-classes')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [TypesKpsController, 'index'])
-        router.post('/', [TypesKpsController, 'store'])
-        router.patch('/:id', [TypesKpsController, 'update'])
-        router.delete('/:id', [TypesKpsController, 'destroy'])
-      })
-      .prefix('/types-kp')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [HeadsController, 'index'])
-        router.post('/', [HeadsController, 'store'])
-        router.patch('/:id', [HeadsController, 'update'])
-        router.delete('/:id', [HeadsController, 'destroy'])
-      })
-      .prefix('/head-controllers')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [ChannelTypesController, 'index'])
-        router.post('/', [ChannelTypesController, 'store'])
-        router.patch('/:id', [ChannelTypesController, 'update'])
-        router.delete('/:id', [ChannelTypesController, 'destroy'])
-      })
-      .prefix('/channel-types')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [GsmOperatorsController, 'index'])
-        router.post('/', [GsmOperatorsController, 'store'])
-        router.patch('/:id', [GsmOperatorsController, 'update'])
-        router.delete('/:id', [GsmOperatorsController, 'destroy'])
-      })
-      .prefix('/gsm-operators')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [SubstationsController, 'index'])
-        router.post('/', [SubstationsController, 'store'])
-        router.get('/:id', [SubstationsController, 'getSubstation'])
-        router.patch('/:id', [SubstationsController, 'update'])
-        router.delete('/:id', [SubstationsController, 'destroy'])
-      })
-      .prefix('/substations')
-      .use([middleware.auth()])
-    router
-      .group(() => {
-        router.get('/', [CompletedWorksController, 'index'])
-        router.post('/', [CompletedWorksController, 'store'])
-        router.patch('/:id', [CompletedWorksController, 'update'])
-        router.delete('/:id', [CompletedWorksController, 'destroy'])
-      })
-      .prefix('/completed-works')
-      .use([middleware.auth()])
-  })
-  .prefix('/api/v1.0/')
+authRoutes.prefix('/api/v1.0/')
+filesRoutes.prefix('/api/v1.0/')
+usersRoutes.prefix('/api/v1.0/')
+districtsRoutes.prefix('/api/v1.0/')
+voltageClassesRoutes.prefix('/api/v1.0/')
+typesKpRoutes.prefix('/api/v1.0/')
+headControllersRoutes.prefix('/api/v1.0/')
+channelTypesRoutes.prefix('/api/v1.0/')
+gsmOperatorsRoutes.prefix('/api/v1.0/')
+completedWorksRoutes.prefix('/api/v1.0/')
+substationsRoutes.prefix('/api/v1.0/')
