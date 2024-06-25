@@ -59,10 +59,10 @@ export default class Substation extends BaseModel {
   declare rdu: boolean
 
   @column()
-  declare mainChannelIp: string
+  declare mainChannelIp: string | null
 
   @column()
-  declare backupChannelIp: string
+  declare backupChannelIp: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
