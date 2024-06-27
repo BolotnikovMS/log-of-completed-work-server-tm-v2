@@ -4,7 +4,7 @@ import Substation from '#models/substation'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import string from '@poppinss/utils/string'
 import { DateTime } from 'luxon'
-import User from './user.js'
+import User from '#models/user'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
