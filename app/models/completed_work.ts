@@ -49,6 +49,12 @@ export default class CompletedWork extends BaseModel {
   @belongsTo(() => Substation)
   declare substation: BelongsTo<typeof Substation>
 
-  @belongsTo(() => User)
+  @belongsTo(() => User, {
+    localKey: 'id',
+    foreignKey: 'workProducerId',
+  })
   declare work_producer: BelongsTo<typeof User>
+
+  @belongsTo(() => User)
+  declare author: BelongsTo<typeof User>
 }
