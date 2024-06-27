@@ -15,6 +15,7 @@ export default class CompletedWorkService {
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .preload('substation', (query) => query.preload('voltage_class'))
       .preload('work_producer')
+      .preload('author')
       .paginate(page, limit)
 
     const worksSerialize = works.serialize({
@@ -35,6 +36,11 @@ export default class CompletedWorkService {
           },
         },
         work_producer: {
+          fields: {
+            pick: ['id', 'shortName'],
+          },
+        },
+        author: {
           fields: {
             pick: ['id', 'shortName'],
           },
