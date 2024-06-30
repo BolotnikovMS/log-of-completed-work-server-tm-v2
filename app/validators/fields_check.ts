@@ -8,6 +8,7 @@ export const text700Optional = vine
   .trim()
   .minLength(3)
   .maxLength(700)
+  .escape()
   .optional()
   .nullable()
 export const text180 = vine.string().trim().minLength(2).maxLength(180).escape()
