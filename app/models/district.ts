@@ -1,3 +1,4 @@
+import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 
 import { DateTime } from 'luxon'
@@ -9,10 +10,14 @@ export default class District extends BaseModel {
   @column()
   declare userId: number
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
   declare name: string
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
   declare shortName: string
 
   @column.dateTime({ autoCreate: true })

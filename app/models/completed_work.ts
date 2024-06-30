@@ -5,6 +5,7 @@ import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import string from '@poppinss/utils/string'
 import { DateTime } from 'luxon'
 import User from '#models/user'
+import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
@@ -19,10 +20,14 @@ export default class CompletedWork extends BaseModel {
   @column()
   declare workProducerId: number
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
   declare description: string
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
   declare note: string | null
 
   // @column({
