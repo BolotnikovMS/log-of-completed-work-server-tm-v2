@@ -21,7 +21,7 @@ export default class AuthController {
 
       const token = await User.accessTokens.create(user, ['*'], { expiresIn: '10 days' })
       const userSerialize = user.serialize({
-        fields: { pick: ['id', 'username', 'fullName', 'shortName', 'email'] },
+        fields: { pick: ['id', 'username', 'fullName', 'shortName', 'email', 'position'] },
         relations: {
           role: {
             fields: {
