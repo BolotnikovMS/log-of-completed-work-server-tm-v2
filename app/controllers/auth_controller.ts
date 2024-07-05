@@ -42,12 +42,18 @@ export default class AuthController {
       }
     } catch (e) {
       console.log(e)
-      return response.status(404).json('Пользователя с таким логином не существует!')
+      return response.status(404).json('Неверные учетные данные!')
     }
   }
 
   async profile({ response, auth }: HttpContext) {
     const user = await auth.authenticate()
+
+    if (!user.active) {
+      await User.accessTokens.delete(user, user.currentAccessToken.identifier)
+
+      return response.status(401).json('Учетная запись заблокирована!')
+    }
 
     await user.load('role')
     // console.log(user.serialize())
@@ -72,6 +78,11 @@ export default class AuthController {
 
   async changePassword({ request, response, auth }: HttpContext) {
     const user = await auth.authenticate()
+
+    if (!user.active) {
+      return response.status(401).json('Учетная запись заблокирована!')
+    }
+
     const changePassword = await UserService.changePassword(request, user.id)
 
     if (changePassword) {
