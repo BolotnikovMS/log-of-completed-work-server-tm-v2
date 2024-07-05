@@ -20,6 +20,13 @@ export default class AuthMiddleware {
     } = {}
   ) {
     await ctx.auth.authenticateUsing(options.guards, { loginRoute: this.redirectTo })
+
+    const user = await ctx.auth.authenticate()
+
+    if (!user.active) {
+      return ctx.response.status(401).json('Учетная запись заблокирована!')
+    }
+
     return next()
   }
 }
