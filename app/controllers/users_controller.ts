@@ -3,6 +3,7 @@ import User from '#models/user'
 import UserPolicy from '#policies/user_policy'
 import RoleService from '#services/role_service'
 import UserService from '#services/user_service'
+import { blockUserAccountValidator } from '#validators/block_user_account'
 import { registerValidator } from '#validators/registrer'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -52,5 +53,18 @@ export default class UsersController {
     } else {
       return response.status(400).json('Ошибка при изменении пароля')
     }
+  }
+
+  async blockUserAccount({ request, response, params, bouncer }: HttpContext) {
+    if (await bouncer.with(UserPolicy).denies('blockAccount')) {
+      return response.status(403).json({ message: accessErrorMessages.noRights })
+    }
+
+    const user = await User.findOrFail(params.id)
+    const validatedData = await request.validateUsing(blockUserAccountValidator)
+
+    await user.merge(validatedData).save()
+
+    return response.status(200).json('Статус УЗ пользователя успешно изменен!')
   }
 }
