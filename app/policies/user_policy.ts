@@ -23,4 +23,8 @@ export default class UserPolicy extends BasePolicy {
   resetPassword(user: User): AuthorizerResponse {
     return user.roleId === RolesEnum.ADMIN
   }
+
+  blockAccount(user: User): AuthorizerResponse {
+    return user.roleId === RolesEnum.ADMIN
+  }
 }
