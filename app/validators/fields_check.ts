@@ -32,4 +32,5 @@ export const email = vine
   .email()
   .use(uniqueRule({ table: 'users', column: 'email', caseInsensitive: true }))
 export const booleanCheckOptional = vine.boolean().optional()
+export const booleanCheck = vine.boolean()
 export const ipOptional = vine.string().ipAddress(4).optional().nullable()
