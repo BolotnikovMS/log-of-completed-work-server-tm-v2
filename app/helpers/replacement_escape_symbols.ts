@@ -2,7 +2,8 @@
  * Возвращает принимаемый текст после замены экранированных символов.
  * @param {string} text Текст, где есть экранированные символы.
  * @returns {string} Текст после замены.
- */
+*/
+
 export const replacementEscapeSymbols = (text: string | null): string | null => {
   if (text === null) return null
 
