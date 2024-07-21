@@ -36,7 +36,7 @@ export default class CompletedWorksController {
   /**
    * Show individual record
    */
-  async show({ params }: HttpContext) {}
+  async show({ params }: HttpContext) { }
 
   /**
    * Handle form submission for the edit action
@@ -47,7 +47,6 @@ export default class CompletedWorksController {
     if (await bouncer.with(CompletedWorkPolicy).denies('edit', completedWork)) {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
-
     const validatedData = await request.validateUsing(completedWorkValidator)
     const updCompletedWork = await completedWork.merge({ ...validatedData }).save()
 
