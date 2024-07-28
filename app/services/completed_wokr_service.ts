@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import CompletedWork from '#models/completed_work'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
@@ -9,8 +10,21 @@ export default class CompletedWorkService {
     meta: any
     data: ModelObject[]
   }> {
-    const { sort = 'createdAt', order = 'desc', page, limit, substation } = req.qs() as IQueryParams
+    const {
+      sort = 'createdAt',
+      order = 'desc',
+      page,
+      limit,
+      substation,
+      dateStart,
+      dateEnd,
+      executor,
+    } = req.qs() as IQueryParams
     const works = await CompletedWork.query()
+      .if(dateStart && dateEnd, (query) =>
+        query.whereBetween('dateCompletion', [dateStart, dateEnd])
+      )
+      .if(executor, query => query.where('workProducerId', '=', executor))
       .if(substation, (query) => query.where('substationId', '=', substation))
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .preload('substation', (query) => query.preload('voltage_class'))
@@ -46,6 +60,7 @@ export default class CompletedWorkService {
           },
         },
       },
+      // eslint-disable-next-line prettier/prettier
     })
 
     return worksSerialize
