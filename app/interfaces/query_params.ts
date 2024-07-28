@@ -11,4 +11,7 @@ export interface IQueryParams {
   limit: number
   substation: string
   cleanUser: string
+  dateStart: string
+  dateEnd: string
+  executor: string
 }
