@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import CompletedWork from '#models/completed_work'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
@@ -60,7 +59,6 @@ export default class CompletedWorkService {
           },
         },
       },
-      // eslint-disable-next-line prettier/prettier
     })
 
     return worksSerialize
