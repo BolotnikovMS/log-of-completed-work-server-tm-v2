@@ -10,7 +10,7 @@ export default class CompletedWorkService {
     data: ModelObject[]
   }> {
     const {
-      sort = 'createdAt',
+      sort = 'dateCompletion',
       order = 'desc',
       page,
       limit,
