@@ -1,11 +1,10 @@
-import { BaseModel, belongsTo, column, computed } from '@adonisjs/lucid/orm'
-
+import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import Substation from '#models/substation'
+import User from '#models/user'
+import { BaseModel, belongsTo, column, computed } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import string from '@poppinss/utils/string'
 import { DateTime } from 'luxon'
-import User from '#models/user'
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
@@ -30,15 +29,10 @@ export default class CompletedWork extends BaseModel {
   })
   declare note: string | null
 
-  // @column({
-  //   prepare: (value: Date) => {
-  //     console.log(value)
-  //     return DateTime.expandFormat(value.toLocaleDateString())
-  //   },
-  // })
-  // declare dateCompletion: DateTime
   @column()
-  declare dateCompletion: string
+  declare dateCompletion: DateTime
+  // @column()
+  // declare dateCompletion: string
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
