@@ -34,11 +34,6 @@ export default class CompletedWorksController {
   }
 
   /**
-   * Show individual record
-   */
-  async show({ params }: HttpContext) { }
-
-  /**
    * Handle form submission for the edit action
    */
   async update({ params, request, response, bouncer }: HttpContext) {
@@ -66,5 +61,13 @@ export default class CompletedWorksController {
     await completedWork.delete()
 
     return response.status(204)
+  }
+
+  async downloadExcel({ request, response }: HttpContext) {
+    const buffer = await CompletedWorkService.downloadExcelFile(request)
+
+    response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.header('Content-Disposition', 'attachment; filename=example.xlsx')
+    response.send(buffer)
   }
 }
