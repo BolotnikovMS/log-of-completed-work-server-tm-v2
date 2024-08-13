@@ -65,7 +65,7 @@ export default class CompletedWorkService {
 
     return worksSerialize
   }
-  static async downloadExcelFile(req: Request): Promise<ExcelJS.Buffer> {
+  static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const works = await this.getCompletedWorks(req)
     const transformData = transformDataCompletedWork(works.data)
     const workbook = new ExcelJS.Workbook()

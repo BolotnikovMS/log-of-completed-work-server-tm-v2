@@ -64,7 +64,7 @@ export default class CompletedWorksController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const buffer = await CompletedWorkService.downloadExcelFile(request)
+    const buffer = await CompletedWorkService.createExcelFile(request)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
