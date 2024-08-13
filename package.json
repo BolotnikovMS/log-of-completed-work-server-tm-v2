@@ -64,6 +64,7 @@
     "@poppinss/utils": "^6.7.3",
     "@vinejs/vine": "^2.1.0",
     "better-sqlite3": "^11.0.0",
+    "exceljs": "^4.4.0",
     "luxon": "^3.4.4",
     "npm-check-updates": "^16.14.20",
     "reflect-metadata": "^0.2.2"
