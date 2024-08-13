@@ -1,6 +1,8 @@
+import { transformDataCompletedWork } from '#helpers/transform_completed_work_data'
 import CompletedWork from '#models/completed_work'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
+import ExcelJS from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
 
@@ -62,5 +64,36 @@ export default class CompletedWorkService {
     })
 
     return worksSerialize
+  }
+  static async downloadExcelFile(req: Request): Promise<ExcelJS.Buffer> {
+    const works = await this.getCompletedWorks(req)
+    const transformData = transformDataCompletedWork(works.data)
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Sheet 1')
+
+    worksheet.columns = [
+      { header: 'Автор записи', key: 'author', width: 18 },
+      { header: 'Выполнил', key: 'workProducer', width: 18 },
+      { header: 'Дата выполнения', key: 'dateCompletion', width: 16 },
+      { header: 'ПС', key: 'substation', width: 26 },
+      { header: 'Описание', key: 'description', width: 50 },
+      { header: 'Примечания', key: 'note', width: 50 },
+    ]
+    transformData.forEach((work, i) => {
+      const row = worksheet.getRow(i + 2)
+
+      Object.keys(work).forEach((key, iCel) => {
+        row.getCell(iCel + 1).value = work[key]
+      })
+    })
+    const descrCol = worksheet.getColumn('description')
+    const noteCol = worksheet.getColumn('note')
+
+    descrCol.eachCell(cell => cell.alignment = { wrapText: true })
+    noteCol.eachCell(cell => cell.alignment = { wrapText: true })
+
+    const buffer = await workbook.xlsx.writeBuffer()
+
+    return buffer
   }
 }
