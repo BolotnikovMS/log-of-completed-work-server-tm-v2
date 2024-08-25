@@ -12,11 +12,13 @@ export default class SubstationService {
     meta: any
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = 200, search } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController } = req.qs() as IQueryParams
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(districtId, (query) => query.where('district_id', '=', districtId!))
       .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
+      .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
+      .if(headController, (query) => query.where('head_controller_id', '=', headController))
       .preload('voltage_class')
       .paginate(page, limit)
 
