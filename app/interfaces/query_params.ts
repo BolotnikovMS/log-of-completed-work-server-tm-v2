@@ -14,4 +14,6 @@ export interface IQueryParams {
   dateStart: string
   dateEnd: string
   executor: string
+  typeKp: string
+  headController: string
 }
