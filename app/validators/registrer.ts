@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { email, text20, text30, username } from './fields_check.js'
+import { email, numberCheck, text20, text30, username } from './fields_check.js'
 
 export const registerValidator = vine.compile(
   vine.object({
@@ -10,5 +10,6 @@ export const registerValidator = vine.compile(
     position: text30,
     email: email,
     password: vine.string().minLength(6),
+    roleId: numberCheck,
   })
 )
