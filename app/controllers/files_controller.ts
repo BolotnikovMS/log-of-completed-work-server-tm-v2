@@ -1,8 +1,7 @@
-import * as fs from 'node:fs'
-
 import File from '#models/file'
 import FilesServices from '#services/file_upload_service'
 import type { HttpContext } from '@adonisjs/core/http'
+import * as fs from 'node:fs'
 
 export default class FilesController {
   async upload({ request, response, auth }: HttpContext) {
@@ -38,7 +37,7 @@ export default class FilesController {
     const file = await File.findOrFail(params.id)
 
     if (fs.existsSync(`public${file.filePath}`)) {
-      return response.status(200).attachment(`public${file.filePath}`, file.clientName)
+      return response.status(200).download(`public${file.filePath}`)
     }
 
     return response.status(400).json({ messages: 'Download error!' })
