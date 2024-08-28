@@ -4,6 +4,7 @@ import { cuid } from '@adonisjs/core/helpers'
 import { Request } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import { unlink } from 'node:fs/promises'
+import path from 'node:path'
 
 export default class FilesServices {
   static async uploadFile(req: Request, userId: number | undefined): Promise<string> {
@@ -51,9 +52,11 @@ export default class FilesServices {
   }
   static async removeFile(id: number): Promise<string> {
     const file = await File.findOrFail(id)
+    const filePath = path.join(app.publicPath(), file.filePath)
 
     try {
-      await unlink(`public${file.filePath}`)
+      // await unlink(`public${file.filePath}`)
+      await unlink(filePath)
     } catch (err) {
       console.log(err)
       throw new Error(err)

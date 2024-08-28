@@ -37,17 +37,10 @@ export default class FilesController {
 
   async download({ response, params }: HttpContext) {
     const file = await File.findOrFail(params.id)
+    const filePath = path.join(app.publicPath(), file.filePath)
 
-
-    console.log(app.publicPath())
-    const test = path.join(app.publicPath(), file.filePath)
-    const test2 = path.normalize(test)
-    console.log(test2)
-    // const filePath = path.join(app.appRoot, 'pubilic', file.filePath)
-    // console.log(filePath)
-
-    if (fs.existsSync(test)) {
-      return response.status(200).download(test)
+    if (fs.existsSync(filePath)) {
+      return response.status(200).download(filePath)
     }
 
     return response.status(400).json({ messages: 'Download error!' })
