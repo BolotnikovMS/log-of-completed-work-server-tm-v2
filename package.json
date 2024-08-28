@@ -6,12 +6,13 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "node bin/server.js",
-    "build": "node ace build",
+    "build": "node ace build --ignore-ts-errors && npm run copy:env",
     "dev": "node ace serve --watch",
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "copy:env": "cpx .env build/"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
@@ -47,6 +48,7 @@
     "@swc/core": "^1.7.14",
     "@types/luxon": "^3.4.2",
     "@types/node": "^22.5.0",
+    "cpx": "^1.5.0",
     "eslint": "^9.9.0",
     "pino-pretty": "^11.2.2",
     "prettier": "^3.3.3",
