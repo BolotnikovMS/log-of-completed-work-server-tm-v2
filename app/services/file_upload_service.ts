@@ -53,7 +53,7 @@ export default class FilesServices {
     const file = await File.findOrFail(id)
 
     try {
-      await unlink(`./public/${file.filePath}`)
+      await unlink(`./public${file.filePath}`)
     } catch (err) {
       console.log(err)
       throw new Error(err)
