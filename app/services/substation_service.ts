@@ -1,6 +1,8 @@
+import { transformDataSubstations } from '#helpers/transform_substations_data'
 import Substation from '#models/substation'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
+import ExcelJS from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
 
@@ -148,5 +150,97 @@ export default class SubstationService {
     })
 
     return substationSerialize
+  }
+
+  static async getSubstationsForReport(
+    req: Request,
+  ): Promise<ModelObject[]> {
+    const { sort = 'name', order = 'asc', search, typeKp, headController } = req.qs() as IQueryParams
+    const substations = await Substation.query()
+      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
+      .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
+      .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
+      .if(headController, (query) => query.where('head_controller_id', '=', headController))
+      .preload('voltage_class')
+      .preload('district')
+      .preload('type_kp')
+      .preload('head_controller')
+      .preload('main_channel')
+
+    const substationSerialize = substations.map(substation => substation.serialize({
+      fields: {
+        omit: ['createdAt', 'updatedAt'],
+      },
+      relations: {
+        voltage_class: {
+          fields: {
+            pick: ['name'],
+          },
+        },
+        district: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        type_kp: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        head_controller: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        main_channel: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        backup_channel: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        additional_channel: {
+          fields: {
+            pick: ['name']
+          }
+        }
+      },
+    }))
+
+    return substationSerialize
+  }
+  static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
+    const substations = await this.getSubstationsForReport(req)
+    const transformData = transformDataSubstations(substations)
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Sheet 1')
+
+    worksheet.columns = [
+      { header: 'Район/ГП/УС', key: 'district', width: 20 },
+      { header: 'Подстанция', key: 'fullNameSubstation', width: 25 },
+      { header: 'РДУ', key: 'rdu', width: 12 },
+      { header: 'Тип КП', key: 'typeKp', width: 17 },
+      { header: 'Головной контроллер', key: 'headeController', width: 20 },
+      { header: 'Основно канал', key: 'mainChannel', width: 20 },
+      // { header: 'Резервный канал', key: 'backupChannel', width: 20 },
+      // { header: 'Дополнительный канал', key: 'additionalChannel', width: 20 },
+      { header: 'IP основного канала', key: 'mainChannelIp', width: 19 },
+      { header: 'IP резервного канала', key: 'backupChannelIp', width: 19 },
+      // { header: 'GSM', key: 'gsm', width: 17 },
+    ]
+    transformData.forEach((work, i) => {
+      const row = worksheet.getRow(i + 2)
+
+      Object.keys(work).forEach((key, iCel) => {
+        row.getCell(iCel + 1).value = work[key]
+      })
+    })
+
+    const buffer = await workbook.xlsx.writeBuffer()
+
+    return buffer
   }
 }

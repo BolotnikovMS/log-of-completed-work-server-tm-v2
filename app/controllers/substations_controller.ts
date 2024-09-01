@@ -61,4 +61,12 @@ export default class SubstationsController {
 
     return response.status(204)
   }
+
+  async downloadSubstationsExcel({ request, response }: HttpContext) {
+    const buffer = await SubstationService.createExcelFile(request)
+
+    response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.header('Content-Disposition', 'attachment; filename=example.xlsx')
+    response.send(buffer)
+  }
 }
