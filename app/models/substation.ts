@@ -71,11 +71,6 @@ export default class Substation extends BaseModel {
   declare updatedAt: DateTime
 
   @computed()
-  get numberCompletedWorks() {
-    return this.works?.length
-  }
-
-  @computed()
   get fullNameSubstation() {
     return `ПС ${this.voltage_class?.name} кВ ${this.name}`
   }

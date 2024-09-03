@@ -102,7 +102,7 @@ export default class SubstationService {
     await substation.load('district')
     await substation.load('voltage_class')
     await substation.load('type_kp')
-    await substation.load('works')
+    await substation.loadCount('works', (query) => query.count('*').as('numberCompletedWorks'))
     await substation.load('head_controller')
     await substation.load('main_channel')
     await substation.load('files_photos_ps', (query) => query.preload('author'))
@@ -194,7 +194,7 @@ export default class SubstationService {
       },
     })
 
-    return substationSerialize
+    return { ...substationSerialize, numberCompletedWorks: substation.$extras.numberCompletedWorks }
   }
 
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
