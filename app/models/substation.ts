@@ -39,13 +39,13 @@ export default class Substation extends BaseModel {
   declare mainChannelId: number
 
   @column()
-  declare backupChannelId: number | null
+  declare backupChannelId: number
 
   @column()
-  declare additionalChannelId: number | null
+  declare additionalChannelId: number
 
   @column()
-  declare gsmId: number | null
+  declare gsmId: number
 
   @column()
   declare name: string

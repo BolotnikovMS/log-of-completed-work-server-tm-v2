@@ -3,7 +3,6 @@ import {
   booleanCheckOptional,
   ipOptional,
   numberCheck,
-  numberOptional,
   text240,
 } from './fields_check.js'
 
@@ -15,9 +14,9 @@ export const substationValidator = vine.compile(
     typeKpId: numberCheck,
     headControllerId: numberCheck,
     mainChannelId: numberCheck,
-    backupChannelId: numberOptional,
-    additionalChannelId: numberOptional,
-    gsmId: numberOptional,
+    backupChannelId: numberCheck,
+    additionalChannelId: numberCheck,
+    gsmId: numberCheck,
     name: text240,
     rdu: booleanCheckOptional,
     mainChannelIp: ipOptional,
