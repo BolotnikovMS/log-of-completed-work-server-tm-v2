@@ -14,14 +14,24 @@ export default class SubstationService {
     meta: any
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController, mainChannel, backupChannel, district } = req.qs() as IQueryParams
+    const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .if(districtId, (query) => query.where('district_id', '=', districtId!))
+      .if(districtValue, (query) => query.where('district_id', '=', districtValue!))
       .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
       .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
       .if(headController, (query) => query.where('head_controller_id', '=', headController))
+      .if(mainChannel, (query) => query.where('main_channel_id', '=', mainChannel))
+      .if(backupChannel, (query) => query.where('backup_channel_id', '=', backupChannel))
       .preload('voltage_class')
+      .preload('district')
+      .preload('type_kp')
+      .preload('head_controller')
+      .preload('main_channel')
+      .preload('backup_channel')
+      .preload('additional_channel')
+      .preload('gsm')
       .paginate(page, limit)
 
     const substationSerialize = substations.serialize({
@@ -34,6 +44,41 @@ export default class SubstationService {
             pick: ['name'],
           },
         },
+        district: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        type_kp: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        head_controller: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        main_channel: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        backup_channel: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        additional_channel: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        gsm: {
+          fields: {
+            pick: ['name']
+          }
+        }
       },
     })
 
@@ -152,69 +197,9 @@ export default class SubstationService {
     return substationSerialize
   }
 
-  static async getSubstationsForReport(
-    req: Request,
-  ): Promise<ModelObject[]> {
-    const { sort = 'name', order = 'asc', search, typeKp, headController } = req.qs() as IQueryParams
-    const substations = await Substation.query()
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
-      .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
-      .if(headController, (query) => query.where('head_controller_id', '=', headController))
-      .preload('voltage_class')
-      .preload('district')
-      .preload('type_kp')
-      .preload('head_controller')
-      .preload('main_channel')
-
-    const substationSerialize = substations.map(substation => substation.serialize({
-      fields: {
-        omit: ['createdAt', 'updatedAt'],
-      },
-      relations: {
-        voltage_class: {
-          fields: {
-            pick: ['name'],
-          },
-        },
-        district: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        type_kp: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        head_controller: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        main_channel: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        backup_channel: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        additional_channel: {
-          fields: {
-            pick: ['name']
-          }
-        }
-      },
-    }))
-
-    return substationSerialize
-  }
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
-    const substations = await this.getSubstationsForReport(req)
-    const transformData = transformDataSubstations(substations)
+    const substations = await this.getSubstations(req)
+    const transformData = transformDataSubstations(substations.data)
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -225,11 +210,11 @@ export default class SubstationService {
       { header: 'Тип КП', key: 'typeKp', width: 17 },
       { header: 'Головной контроллер', key: 'headeController', width: 20 },
       { header: 'Основно канал', key: 'mainChannel', width: 20 },
-      // { header: 'Резервный канал', key: 'backupChannel', width: 20 },
-      // { header: 'Дополнительный канал', key: 'additionalChannel', width: 20 },
+      { header: 'Резервный канал', key: 'backupChannel', width: 20 },
+      { header: 'Дополнительный канал', key: 'additionalChannel', width: 20 },
       { header: 'IP основного канала', key: 'mainChannelIp', width: 19 },
       { header: 'IP резервного канала', key: 'backupChannelIp', width: 19 },
-      // { header: 'GSM', key: 'gsm', width: 17 },
+      { header: 'GSM', key: 'gsm', width: 17 },
     ]
     transformData.forEach((work, i) => {
       const row = worksheet.getRow(i + 2)

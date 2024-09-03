@@ -16,4 +16,7 @@ export interface IQueryParams {
   executor: string
   typeKp: string
   headController: string
+  mainChannel: string
+  backupChannel: string
+  district: string
 }
