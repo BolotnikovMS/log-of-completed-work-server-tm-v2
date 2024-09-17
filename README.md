@@ -60,6 +60,7 @@ curl -X POST http://127.0.0.1:3333/api/v1.0/login
 curl -X GET http://127.0.0.1:3333/api/v1.0/completed-works
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
+[Больше маршрутов для запросов](https://github.com/BolotnikovMS/log-of-completed-work-server-tm-v2/tree/5c00bf8b5c8182483cc022be3b0cb0edb53eebc2/start/routes/api/v1)
 
 ## <a name="frontend-link"></a>Frontend: [⬆️](#nav)
 
