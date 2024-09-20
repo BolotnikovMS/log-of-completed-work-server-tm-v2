@@ -27,4 +27,8 @@ export default class UserPolicy extends BasePolicy {
   blockAccount(user: User): AuthorizerResponse {
     return user.roleId === RolesEnum.ADMIN
   }
+
+  changeRole(user: User): AuthorizerResponse {
+    return user.roleId === RolesEnum.ADMIN
+  }
 }
