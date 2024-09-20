@@ -4,6 +4,7 @@ import UserPolicy from '#policies/user_policy'
 import RoleService from '#services/role_service'
 import UserService from '#services/user_service'
 import { blockUserAccountValidator } from '#validators/block_user_account'
+import { changeUserRole } from '#validators/change_user_role'
 import { registerValidator } from '#validators/registrer'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -66,5 +67,18 @@ export default class UsersController {
     await user.merge(validatedData).save()
 
     return response.status(200).json('Статус УЗ пользователя успешно изменен!')
+  }
+
+  async changeRole({ request, response, params, bouncer }: HttpContext) {
+    if (await bouncer.with(UserPolicy).denies('changeRole')) {
+      return response.status(403).json({ message: accessErrorMessages.noRights })
+    }
+
+    const user = await User.findOrFail(params.id)
+    const validatedData = await request.validateUsing(changeUserRole)
+
+    await user.merge(validatedData).save()
+
+    return response.status(200).json('Роль пользователя изменена!')
   }
 }
