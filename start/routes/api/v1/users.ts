@@ -9,6 +9,7 @@ export const usersRoutes = router
     router.post('/create-account', [UsersController, 'createUserAccount'])
     router.patch('/reset-password/:id', [UsersController, 'resetUserPassword'])
     router.patch('/block-user-account/:id', [UsersController, 'blockUserAccount'])
+    router.patch('/change-role/:id', [UsersController, 'changeRole'])
   })
   .prefix('/users')
   .use([middleware.auth()])
