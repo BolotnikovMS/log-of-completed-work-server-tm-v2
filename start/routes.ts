@@ -1,15 +1,7 @@
-/*
-|--------------------------------------------------------------------------
-| Routes file
-|--------------------------------------------------------------------------
-|
-| The routes file is used for defining the HTTP routes.
-|
-*/
-
 import { authRoutes } from '#routes/api/v1/auth'
 import { channelTypesRoutes } from '#routes/api/v1/channel_types'
 import { completedWorksRoutes } from '#routes/api/v1/completed_works'
+import { dashboardRoutes } from '#routes/api/v1/dashboard'
 import { districtsRoutes } from '#routes/api/v1/districts'
 import { filesRoutes } from '#routes/api/v1/files'
 import { gsmOperatorsRoutes } from '#routes/api/v1/gsm_operators'
@@ -37,3 +29,4 @@ channelTypesRoutes.prefix('/api/v1.0/')
 gsmOperatorsRoutes.prefix('/api/v1.0/')
 completedWorksRoutes.prefix('/api/v1.0/')
 substationsRoutes.prefix('/api/v1.0/')
+dashboardRoutes.prefix('/api/v1.0/')
