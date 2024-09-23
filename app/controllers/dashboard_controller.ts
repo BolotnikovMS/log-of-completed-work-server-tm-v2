@@ -7,4 +7,9 @@ export default class DashboardController {
 
     return response.status(200).json(typesKp)
   }
+  async statisticsCompletedWorksYears({ response }: HttpContext) {
+    const statisticCompletedWorks = await DashboardService.getCompletedWorksYear()
+
+    return response.status(200).json(statisticCompletedWorks)
+  }
 }
