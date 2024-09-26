@@ -1,6 +1,7 @@
 import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-
+import Substation from '#models/substation'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
 export default class District extends BaseModel {
@@ -25,4 +26,7 @@ export default class District extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => Substation)
+  declare substations: HasMany<typeof Substation>
 }
