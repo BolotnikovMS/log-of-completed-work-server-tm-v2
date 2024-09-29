@@ -32,6 +32,7 @@ export default class SubstationService {
       .preload('backup_channel')
       .preload('additional_channel')
       .preload('gsm')
+      .preload('channels', query => query.preload('channel_category').preload('channel_type'))
       .paginate(page, limit)
 
     const substationSerialize = substations.serialize({
