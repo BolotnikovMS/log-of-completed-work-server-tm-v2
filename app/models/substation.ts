@@ -1,6 +1,4 @@
-import { BaseModel, belongsTo, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
-
+import Channel from '#models/channel'
 import ChannelType from '#models/channel_type'
 import CompletedWork from '#models/completed_work'
 import District from '#models/district'
@@ -9,6 +7,8 @@ import GsmOperator from '#models/gsm_operator'
 import HeadController from '#models/head_controller'
 import TypeKp from '#models/type_kp'
 import VoltageClass from '#models/voltage_class'
+import { BaseModel, belongsTo, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
 export default class Substation extends BaseModel {
@@ -137,4 +137,7 @@ export default class Substation extends BaseModel {
     onQuery: (query) => query.where('type_file', '=', 'other_files'),
   })
   declare other_files: HasMany<typeof File>
+
+  @hasMany(() => Channel)
+  declare channels: HasMany<typeof Channel>
 }
