@@ -13,6 +13,9 @@
 */
 
 export const policies = {
+  ChannelCategoryPolicy: () => import('#policies/channel_category_policy'),
+  ChannelPolicy: () => import('#policies/channel_policy'),
+  ModemPolicy: () => import('#policies/modem_policy'),
   UserPolicy: () => import('#policies/user_policy'),
   VoltageClassPolicy: () => import('#policies/voltage_class_policy'),
   TypeKpPolicy: () => import('#policies/type_kp_policy'),
