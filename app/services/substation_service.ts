@@ -109,6 +109,7 @@ export default class SubstationService {
     await substation.load('files_photos_ps', (query) => query.preload('author'))
     await substation.load('files_backups', (query) => query.preload('author'))
     await substation.load('other_files', (query) => query.preload('author'))
+    await substation.load('channels', query => query.preload('channel_category').preload('channel_type'))
 
     // console.log(substation.serialize())
     const substationSerialize = substation.serialize({
@@ -155,6 +156,23 @@ export default class SubstationService {
           fields: {
             pick: ['id', 'name'],
           },
+        },
+        channels: {
+          fields: {
+            omit: ['createdAt', 'updatedAt'],
+          },
+          relations: {
+            channel_category: {
+              fields: {
+                pick: ['id', 'name'],
+              }
+            },
+            channel_type: {
+              fields: {
+                pick: ['id', 'name'],
+              }
+            }
+          }
         },
         files_backups: {
           fields: {
