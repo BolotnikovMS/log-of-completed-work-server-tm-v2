@@ -47,4 +47,12 @@ export default class ChannelsController {
 
     return response.status(204)
   }
+
+  async downloadExcel({ request, response }: HttpContext) {
+    const buffer = await ChannelService.createExcelFile(request)
+
+    response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.header('Content-Disposition', 'attachment; filename=example.xlsx')
+    response.send(buffer)
+  }
 }
