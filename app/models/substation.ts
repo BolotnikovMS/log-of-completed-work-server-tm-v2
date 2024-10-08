@@ -1,9 +1,7 @@
 import Channel from '#models/channel'
-import ChannelType from '#models/channel_type'
 import CompletedWork from '#models/completed_work'
 import District from '#models/district'
 import File from '#models/file'
-import GsmOperator from '#models/gsm_operator'
 import HeadController from '#models/head_controller'
 import TypeKp from '#models/type_kp'
 import VoltageClass from '#models/voltage_class'
@@ -36,18 +34,6 @@ export default class Substation extends BaseModel {
   declare headControllerId: number
 
   @column()
-  declare mainChannelId: number
-
-  @column()
-  declare backupChannelId: number
-
-  @column()
-  declare additionalChannelId: number
-
-  @column()
-  declare gsmId: number
-
-  @column()
   declare name: string
 
   @column()
@@ -57,12 +43,6 @@ export default class Substation extends BaseModel {
     consume: (value: string): boolean => Boolean(value),
   })
   declare rdu: boolean
-
-  @column()
-  declare mainChannelIp: string | null
-
-  @column()
-  declare backupChannelIp: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
@@ -98,30 +78,6 @@ export default class Substation extends BaseModel {
     foreignKey: 'id',
   })
   declare head_controller: HasOne<typeof HeadController>
-
-  @hasOne(() => ChannelType, {
-    localKey: 'mainChannelId',
-    foreignKey: 'id',
-  })
-  declare main_channel: HasOne<typeof ChannelType>
-
-  @hasOne(() => ChannelType, {
-    localKey: 'backupChannelId',
-    foreignKey: 'id',
-  })
-  declare backup_channel: HasOne<typeof ChannelType>
-
-  @hasOne(() => ChannelType, {
-    localKey: 'additionalChannelId',
-    foreignKey: 'id',
-  })
-  declare additional_channel: HasOne<typeof ChannelType>
-
-  @hasOne(() => GsmOperator, {
-    localKey: 'gsmId',
-    foreignKey: 'id',
-  })
-  declare gsm: HasOne<typeof GsmOperator>
 
   @hasMany(() => File, {
     onQuery: (query) => query.where('type_file', '=', 'photo_ps'),

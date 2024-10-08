@@ -28,10 +28,6 @@ export default class SubstationService {
       .preload('district')
       .preload('type_kp')
       .preload('head_controller')
-      .preload('main_channel')
-      .preload('backup_channel')
-      .preload('additional_channel')
-      .preload('gsm')
       .preload('channels', query => query.preload('channel_category').preload('channel_type'))
       .paginate(page, limit)
 
@@ -65,21 +61,6 @@ export default class SubstationService {
             pick: ['name']
           }
         },
-        backup_channel: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        additional_channel: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        gsm: {
-          fields: {
-            pick: ['name']
-          }
-        }
       },
     })
 
@@ -88,24 +69,11 @@ export default class SubstationService {
   static async getSubstation(params: Record<string, any>): Promise<ModelObject> {
     const substation = await Substation.findOrFail(params.id)
 
-    if (substation.additionalChannelId) {
-      await substation.load('additional_channel')
-    }
-
-    if (substation.backupChannelId) {
-      await substation.load('backup_channel')
-    }
-
-    if (substation.gsmId) {
-      await substation.load('gsm')
-    }
-
     await substation.load('district')
     await substation.load('voltage_class')
     await substation.load('type_kp')
     await substation.loadCount('works', (query) => query.count('*').as('numberCompletedWorks'))
     await substation.load('head_controller')
-    await substation.load('main_channel')
     await substation.load('files_photos_ps', (query) => query.preload('author'))
     await substation.load('files_backups', (query) => query.preload('author'))
     await substation.load('other_files', (query) => query.preload('author'))
@@ -133,26 +101,6 @@ export default class SubstationService {
           },
         },
         head_controller: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        main_channel: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        backup_channel: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        additional_channel: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        gsm: {
           fields: {
             pick: ['id', 'name'],
           },
