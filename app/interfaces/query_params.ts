@@ -20,4 +20,5 @@ export interface IQueryParams {
   backupChannel: string
   district: string
   channelType: string
+  channelCategory: string
 }
