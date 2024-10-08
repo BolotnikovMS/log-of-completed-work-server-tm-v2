@@ -7,11 +7,12 @@ import ExcelJS from 'exceljs'
 
 export default class ChannelService {
   static async getChannels(req: Request) {
-    const { sort, order, page, limit, substation, channelType } = req.qs() as IQueryParams
+    const { sort, order, page, limit, substation, channelType, channelCategory } = req.qs() as IQueryParams
     const channels = await Channel.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(substation, (query) => query.where('substationId', '=', substation))
       .if(channelType, (query) => query.where('channelTypeId', '=', channelType))
+      .if(channelCategory, (query) => query.where('channelCategoryId', '=', channelCategory))
       .preload('substation', query => query.preload('voltage_class'))
       .preload('channel_category')
       .preload('channel_type')
