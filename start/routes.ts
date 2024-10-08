@@ -2,13 +2,13 @@ import { authRoutes } from '#routes/api/v1/auth'
 import { channelRoutes } from '#routes/api/v1/channel'
 import { channelCategoriesRoutes } from '#routes/api/v1/channel_categories'
 import { channelTypesRoutes } from '#routes/api/v1/channel_types'
+import { channelingEquipmentsRoutes } from '#routes/api/v1/channeling_equipments'
 import { completedWorksRoutes } from '#routes/api/v1/completed_works'
 import { dashboardRoutes } from '#routes/api/v1/dashboard'
 import { districtsRoutes } from '#routes/api/v1/districts'
 import { filesRoutes } from '#routes/api/v1/files'
 import { gsmOperatorsRoutes } from '#routes/api/v1/gsm_operators'
 import { headControllersRoutes } from '#routes/api/v1/head_controllers'
-import { modemsRoutes } from '#routes/api/v1/modems'
 import { substationsRoutes } from '#routes/api/v1/substations'
 import { typesKpRoutes } from '#routes/api/v1/types_kp'
 import { usersRoutes } from '#routes/api/v1/users'
@@ -33,6 +33,6 @@ gsmOperatorsRoutes.prefix('/api/v1.0/')
 completedWorksRoutes.prefix('/api/v1.0/')
 substationsRoutes.prefix('/api/v1.0/')
 dashboardRoutes.prefix('/api/v1.0/')
-modemsRoutes.prefix('/api/v1.0/')
 channelCategoriesRoutes.prefix('/api/v1.0/')
 channelRoutes.prefix('/api/v1.0/')
+channelingEquipmentsRoutes.prefix('/api/v1.0/')
