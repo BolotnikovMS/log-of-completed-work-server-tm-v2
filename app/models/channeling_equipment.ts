@@ -1,8 +1,9 @@
 import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import Channel from '#models/channel'
 import ChannelType from '#models/channel_type'
 import User from '#models/user'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
 export default class ChannelingEquipment extends BaseModel {
@@ -31,4 +32,7 @@ export default class ChannelingEquipment extends BaseModel {
 
   @belongsTo(() => ChannelType)
   declare channel_type: BelongsTo<typeof ChannelType>
+
+  @hasMany(() => Channel)
+  declare channels: HasMany<typeof Channel>
 }
