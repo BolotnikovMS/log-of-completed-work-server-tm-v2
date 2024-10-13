@@ -13,6 +13,6 @@ export default class ChannelPolicy extends BasePolicy {
   }
 
   delete(user: User): AuthorizerResponse {
-    return user.roleId === RolesEnum.ADMIN
+    return user.roleId === RolesEnum.MODERATOR
   }
 }
