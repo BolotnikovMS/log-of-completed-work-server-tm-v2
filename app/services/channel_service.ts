@@ -3,7 +3,7 @@ import { transformDataChannels } from '#helpers/transform_channel_data'
 import { IQueryParams } from '#interfaces/query_params'
 import Channel from '#models/channel'
 import { Request } from '@adonisjs/core/http'
-import ExcelJS from 'exceljs'
+import ExcelJS, { Cell } from 'exceljs'
 
 export default class ChannelService {
   static async getChannels(req: Request) {
@@ -16,6 +16,8 @@ export default class ChannelService {
       .preload('substation', query => query.preload('voltage_class'))
       .preload('channel_category')
       .preload('channel_type')
+      .preload('channel_equipment')
+      .preload('gsm_operator')
       .paginate(page, limit)
 
     const channelsSerialize = channels.serialize({
@@ -44,6 +46,16 @@ export default class ChannelService {
               }
             }
           }
+        },
+        channel_equipment: {
+          fields: {
+            pick: ['name']
+          }
+        },
+        gsm_operator: {
+          fields: {
+            pick: ['name']
+          }
         }
       }
     })
@@ -60,15 +72,26 @@ export default class ChannelService {
       { header: 'Объект', key: 'substation', width: 26 },
       { header: 'Категория канала', key: 'channelCategory', width: 20 },
       { header: 'Тип канала', key: 'channelType', width: 20 },
+      { header: 'Тип оборудования', key: 'channelEquipment', width: 20 },
+      { header: 'GSM оператор', key: 'gsmOperator', width: 20 },
       { header: 'IP адрес', key: 'ipAddress', width: 20 },
       { header: 'Примечание', key: 'note', width: 50 },
     ]
 
-    transformData.forEach((channel, i) => {
-      const row = worksheet.getRow(i + 2)
+    worksheet.getRow(1).eachCell((cell: Cell) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
+      cell.font = { bold: true }
+    })
 
-      Object.keys(channel).forEach((key, iCel) => {
-        row.getCell(iCel + 1).value = channel[key]
+    transformData.forEach(channel => {
+      worksheet.addRow({
+        substation: channel.fullNameSubstation,
+        channelCategory: channel.channelCategory,
+        channelType: channel.channelType,
+        channelEquipment: channel.channelEquipment,
+        gsmOperator: channel.gsmOperator,
+        ipAddress: channel.ipAddress,
+        note: channel.note
       })
     })
 
