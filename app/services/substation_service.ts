@@ -2,7 +2,7 @@ import { transformDataSubstations } from '#helpers/transform_substations_data'
 import Substation from '#models/substation'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS from 'exceljs'
+import ExcelJS, { Cell, Row } from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
 
@@ -14,7 +14,7 @@ export default class SubstationService {
     meta: any
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController, mainChannel, backupChannel, district } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
@@ -22,13 +22,30 @@ export default class SubstationService {
       .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
       .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
       .if(headController, (query) => query.where('head_controller_id', '=', headController))
-      .if(mainChannel, (query) => query.where('main_channel_id', '=', mainChannel))
-      .if(backupChannel, (query) => query.where('backup_channel_id', '=', backupChannel))
+      .if(channelType || channelCategory, query => {
+        query.whereHas('channels', query => {
+          query
+            .where('channelTypeId', '=', channelType)
+            .orWhere('channelCategoryId', '=', channelCategory)
+        })
+      })
+      .if(channelType && channelCategory, query => {
+        query.whereHas('channels', query => {
+          query
+            .where('channelTypeId', '=', channelType)
+            .where('channelCategoryId', '=', channelCategory)
+        })
+      })
       .preload('voltage_class')
       .preload('district')
       .preload('type_kp')
       .preload('head_controller')
-      .preload('channels', query => query.preload('channel_category').preload('channel_type'))
+      .preload('channels', query => {
+        query
+          .preload('channel_category')
+          .preload('channel_type')
+          .preload('gsm_operator')
+      })
       .paginate(page, limit)
 
     const substationSerialize = substations.serialize({
@@ -56,11 +73,28 @@ export default class SubstationService {
             pick: ['name']
           }
         },
-        main_channel: {
+        channels: {
           fields: {
-            pick: ['name']
+            pick: ['id', 'ipAddress']
+          },
+          relations: {
+            channel_category: {
+              fields: {
+                pick: ['name']
+              }
+            },
+            channel_type: {
+              fields: {
+                pick: ['name']
+              }
+            },
+            gsm_operator: {
+              fields: {
+                pick: ['name']
+              }
+            }
           }
-        },
+        }
       },
     })
 
@@ -77,7 +111,7 @@ export default class SubstationService {
     await substation.load('files_photos_ps', (query) => query.preload('author'))
     await substation.load('files_backups', (query) => query.preload('author'))
     await substation.load('other_files', (query) => query.preload('author'))
-    await substation.load('channels', query => query.preload('channel_category').preload('channel_type'))
+    await substation.load('channels', query => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
 
     // console.log(substation.serialize())
     const substationSerialize = substation.serialize({
@@ -118,6 +152,16 @@ export default class SubstationService {
             channel_type: {
               fields: {
                 pick: ['id', 'name'],
+              }
+            },
+            channel_equipment: {
+              fields: {
+                pick: ['name']
+              }
+            },
+            gsm_operator: {
+              fields: {
+                pick: ['name']
               }
             }
           }
@@ -176,19 +220,49 @@ export default class SubstationService {
       { header: 'РДУ', key: 'rdu', width: 12 },
       { header: 'Тип КП', key: 'typeKp', width: 17 },
       { header: 'Головной контроллер', key: 'headeController', width: 20 },
-      { header: 'Основно канал', key: 'mainChannel', width: 20 },
-      { header: 'Резервный канал', key: 'backupChannel', width: 20 },
-      { header: 'Дополнительный канал', key: 'additionalChannel', width: 20 },
-      { header: 'IP основного канала', key: 'mainChannelIp', width: 19 },
-      { header: 'IP резервного канала', key: 'backupChannelIp', width: 19 },
-      { header: 'GSM', key: 'gsm', width: 17 },
+      { header: 'Категория канала', key: 'channelCategory', width: 20 },
+      { header: 'Тип канала', key: 'channelType', width: 20 },
+      { header: 'IP адрес канала', key: 'channelIp', width: 19 },
+      { header: 'GSM оператор', key: 'gsm', width: 17 },
     ]
-    transformData.forEach((work, i) => {
-      const row = worksheet.getRow(i + 2)
 
-      Object.keys(work).forEach((key, iCel) => {
-        row.getCell(iCel + 1).value = work[key]
-      })
+    worksheet.getRow(1).eachCell((cell: Cell) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
+      cell.font = { bold: true }
+    })
+
+    const applyStyles = (row: Row): void => row.eachCell(cell => cell.alignment = { vertical: 'middle', horizontal: 'center' })
+
+    transformData.forEach(substation => {
+      if (substation.channels && substation.channels.length > 0) {
+        substation.channels?.forEach(channel => {
+          const row = worksheet.addRow({
+            district: substation.district,
+            fullNameSubstation: substation.fullNameSubstation,
+            rdu: substation.rdu,
+            typeKp: substation.typeKp,
+            headeController: substation.headController,
+            channelCategory: channel.channelCategory,
+            channelType: channel.channelType,
+            channelIp: channel.ipAddress,
+            gsm: channel.gsm
+          })
+          applyStyles(row)
+        })
+      } else {
+        const row = worksheet.addRow({
+          district: substation.district,
+          fullNameSubstation: substation.fullNameSubstation,
+          rdu: substation.rdu,
+          typeKp: substation.typeKp,
+          headeController: substation.headController,
+          channelCategory: 'Нет',
+          channelType: 'Нет',
+          channelIp: 'Нет',
+          gsm: 'Нет'
+        })
+        applyStyles(row)
+      }
     })
 
     const buffer = await workbook.xlsx.writeBuffer()
