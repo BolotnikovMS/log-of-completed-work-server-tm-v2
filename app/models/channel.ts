@@ -1,6 +1,8 @@
 import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import ChannelCategory from '#models/channel_category'
 import ChannelType from '#models/channel_type'
+import ChannelingEquipment from '#models/channeling_equipment'
+import GsmOperator from '#models/gsm_operator'
 import Substation from '#models/substation'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
@@ -21,6 +23,12 @@ export default class Channel extends BaseModel {
 
   @column()
   declare channelTypeId: number
+
+  @column()
+  declare channelEquipmentId: number | null
+
+  @column()
+  declare gsmId: number | null
 
   @column({
     consume: (value: string): string | null => replacementEscapeSymbols(value),
@@ -46,4 +54,14 @@ export default class Channel extends BaseModel {
 
   @belongsTo(() => ChannelType)
   declare channel_type: BelongsTo<typeof ChannelType>
+
+  @belongsTo(() => ChannelingEquipment, {
+    foreignKey: 'channelEquipmentId'
+  })
+  declare channel_equipment: BelongsTo<typeof ChannelingEquipment>
+
+  @belongsTo(() => GsmOperator, {
+    foreignKey: 'gsmId'
+  })
+  declare gsm_operator: BelongsTo<typeof GsmOperator>
 }
