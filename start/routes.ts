@@ -11,6 +11,7 @@ import { gsmOperatorsRoutes } from '#routes/api/v1/gsm_operators'
 import { headControllersRoutes } from '#routes/api/v1/head_controllers'
 import { substationsRoutes } from '#routes/api/v1/substations'
 import { typesKpRoutes } from '#routes/api/v1/types_kp'
+import { typesWork } from '#routes/api/v1/types_work'
 import { usersRoutes } from '#routes/api/v1/users'
 import { voltageClassesRoutes } from '#routes/api/v1/voltage_classes'
 import router from '@adonisjs/core/services/router'
@@ -36,3 +37,4 @@ dashboardRoutes.prefix('/api/v1.0/')
 channelCategoriesRoutes.prefix('/api/v1.0/')
 channelRoutes.prefix('/api/v1.0/')
 channelingEquipmentsRoutes.prefix('/api/v1.0/')
+typesWork.prefix('/api/v1.0/')
