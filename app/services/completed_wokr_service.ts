@@ -20,6 +20,7 @@ export default class CompletedWorkService {
       dateStart,
       dateEnd,
       executor,
+      typeWork
     } = req.qs() as IQueryParams
     const works = await CompletedWork.query()
       .if(dateStart && dateEnd, (query) =>
@@ -28,19 +29,21 @@ export default class CompletedWorkService {
       .if(executor, query => query.where('workProducerId', '=', executor))
       .if(substation, (query) => query.where('substationId', '=', substation))
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
+      .if(typeWork, query => query.whereIn('typeWorkId', [...typeWork]))
       .preload('substation', (query) => query.preload('voltage_class'))
       .preload('work_producer')
       .preload('author')
+      .preload('type_work')
       .paginate(page, limit)
 
     const worksSerialize = works.serialize({
       fields: {
-        omit: ['createdAt', 'updatedAt', 'substationId', 'workProducerId'],
+        omit: ['createdAt', 'updatedAt'],
       },
       relations: {
         substation: {
           fields: {
-            pick: ['id', 'fullNameSubstation'],
+            pick: ['fullNameSubstation'],
           },
           relations: {
             voltage_class: {
@@ -52,14 +55,19 @@ export default class CompletedWorkService {
         },
         work_producer: {
           fields: {
-            pick: ['id', 'shortName'],
+            pick: ['shortName'],
           },
         },
         author: {
           fields: {
-            pick: ['id', 'shortName'],
+            pick: ['shortName'],
           },
         },
+        type_work: {
+          fields: {
+            pick: ['name']
+          }
+        }
       },
     })
 
@@ -74,6 +82,7 @@ export default class CompletedWorkService {
     worksheet.columns = [
       { header: 'Автор записи', key: 'author', width: 18 },
       { header: 'Выполнил', key: 'workProducer', width: 18 },
+      { header: 'Категория работ', key: 'typeWork', width: 26 },
       { header: 'Дата выполнения', key: 'dateCompletion', width: 16 },
       { header: 'ПС', key: 'substation', width: 26 },
       { header: 'Описание', key: 'description', width: 50 },

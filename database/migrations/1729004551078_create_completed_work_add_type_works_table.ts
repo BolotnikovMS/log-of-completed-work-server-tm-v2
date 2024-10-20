@@ -11,7 +11,7 @@ export default class extends BaseSchema {
         .index()
         .unsigned()
         .references('id')
-        .inTable('types_works')
+        .inTable('type_works')
         .defaultTo(1)
     })
   }

@@ -5,6 +5,7 @@ import { BaseModel, belongsTo, column, computed } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import string from '@poppinss/utils/string'
 import { DateTime } from 'luxon'
+import TypeWork from '#models/type_work'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
@@ -18,6 +19,9 @@ export default class CompletedWork extends BaseModel {
 
   @column()
   declare workProducerId: number
+
+  @column()
+  declare typeWorkId: number
 
   @column({
     consume: (value: string): string | null => replacementEscapeSymbols(value),
@@ -56,4 +60,10 @@ export default class CompletedWork extends BaseModel {
 
   @belongsTo(() => User)
   declare author: BelongsTo<typeof User>
+
+  @belongsTo(() => TypeWork, {
+    localKey: 'id',
+    foreignKey: 'typeWorkId'
+  })
+  declare type_work: BelongsTo<typeof TypeWork>
 }
