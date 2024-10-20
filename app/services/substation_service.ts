@@ -9,7 +9,8 @@ import { IQueryParams } from '../interfaces/query_params.js'
 export default class SubstationService {
   static async getSubstations(
     req: Request,
-    districtId?: number
+    districtId?: number,
+    withPreload: boolean = true
   ): Promise<{
     meta: any
     data: ModelObject[]
