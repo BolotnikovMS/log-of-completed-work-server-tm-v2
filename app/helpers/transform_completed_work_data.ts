@@ -3,7 +3,8 @@ import { ModelObject } from "@adonisjs/lucid/types/model"
 export interface ITransformedData {
   [key: string]: string | null
   author: string
-  work_producer: string
+  workProducer: string
+  typeWork: string,
   dateCompletion: string
   substation: string
   description: string
@@ -13,7 +14,8 @@ export interface ITransformedData {
 export const transformDataCompletedWork = (data: ModelObject[]): ITransformedData[] => {
   return data.map(work => ({
     author: work.author.shortName,
-    work_producer: work.work_producer.shortName,
+    workProducer: work.work_producer.shortName,
+    typeWork: work.type_work.name,
     dateCompletion: work.dateCompletion.split('-').reverse().join('.'),
     substation: work.substation && work.substation.fullNameSubstation,
     description: work.description,
