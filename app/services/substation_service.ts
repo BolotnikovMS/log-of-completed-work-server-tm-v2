@@ -109,9 +109,9 @@ export default class SubstationService {
     await substation.load('type_kp')
     await substation.loadCount('works', (query) => query.count('*').as('numberCompletedWorks'))
     await substation.load('head_controller')
-    await substation.load('files_photos_ps', (query) => query.preload('author'))
-    await substation.load('files_backups', (query) => query.preload('author'))
-    await substation.load('other_files', (query) => query.preload('author'))
+    await substation.load('files_photos_ps', (query) => query.preload('author').orderBy('createdAt', 'desc'))
+    await substation.load('files_backups', (query) => query.preload('author').orderBy('createdAt', 'desc'))
+    await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('channels', query => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
 
     // console.log(substation.serialize())
