@@ -16,9 +16,8 @@ export interface IQueryParams {
   executor: string
   typeKp: string
   headController: string
-  mainChannel: string // Удалить
-  backupChannel: string // удалить
   district: string
   channelType: string
   channelCategory: string
+  typeWork: string
 }
