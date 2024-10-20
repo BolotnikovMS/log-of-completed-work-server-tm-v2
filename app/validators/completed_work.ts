@@ -7,6 +7,7 @@ export const completedWorkValidator = vine.compile(
     description: text1000,
     note: text700Optional,
     workProducerId: numberCheck,
+    typeWorkId: numberCheck,
     // dateCompletion: vine.date({
     //   formats: 'DD.MM.YYYY',
     // }),
