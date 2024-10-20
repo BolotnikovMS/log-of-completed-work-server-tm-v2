@@ -5,14 +5,20 @@ import { typeWorkValidator } from '#validators/type_work'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class TypeWorkService {
-  static async getTypesWork(req: Request): Promise<TypeWork[]> {
+  static async getTypesWork(req: Request): Promise<{ meta: any; data: ModelObject[] }> {
     const { page, limit } = req.qs() as IQueryParams
     const typesWork = await TypeWork.query()
       .paginate(page, limit)
+    const typesWorkSerialize = typesWork.serialize({
+      fields: {
+        omit: ['createdAt', 'updatedAt']
+      }
+    })
 
-    return typesWork
+    return typesWorkSerialize
   }
 
   static async createTypeWork(req: Request, auth: Authenticator<Authenticators>): Promise<TypeWork> {
