@@ -2,7 +2,7 @@ import { BaseSchema } from '@adonisjs/lucid/schema'
 import { DateTime } from 'luxon'
 
 export default class extends BaseSchema {
-  protected tableName = 'types_works'
+  protected tableName = 'type_works'
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
@@ -38,7 +38,7 @@ export default class extends BaseSchema {
         },
         {
           user_id: 1,
-          name: 'Работы по инвестиционной программе',
+          name: 'Инвестиционная программа',
           created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
         },
       ])
