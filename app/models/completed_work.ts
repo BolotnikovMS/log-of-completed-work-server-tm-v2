@@ -1,11 +1,10 @@
 import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import Substation from '#models/substation'
-import User from '#models/user'
-import { BaseModel, belongsTo, column, computed } from '@adonisjs/lucid/orm'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import string from '@poppinss/utils/string'
-import { DateTime } from 'luxon'
 import TypeWork from '#models/type_work'
+import User from '#models/user'
+import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import type { BelongsTo } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 export default class CompletedWork extends BaseModel {
   @column({ isPrimary: true })
@@ -44,10 +43,10 @@ export default class CompletedWork extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @computed()
-  get shortText() {
-    return string.truncate(this.description, 90, { completeWords: true })
-  }
+  // @computed()
+  // get shortText() {
+  //   return string.truncate(this.description, 90, { completeWords: true })
+  // }
 
   @belongsTo(() => Substation)
   declare substation: BelongsTo<typeof Substation>
