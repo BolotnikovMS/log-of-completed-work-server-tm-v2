@@ -19,8 +19,11 @@ export default class UserService {
 
     return users
   }
-  static async changePassword(req: Request, userId: number): Promise<User> {
+  static async changePassword(req: Request, userId: number): Promise<User | boolean> {
     const user = await User.findOrFail(userId)
+
+    if (!user.active) return false
+
     const validatedData = await req.validateUsing(changePasswordValidator)
 
     return await user.merge(validatedData).save()

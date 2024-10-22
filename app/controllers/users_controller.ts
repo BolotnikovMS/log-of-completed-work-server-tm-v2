@@ -52,7 +52,7 @@ export default class UsersController {
     if (resetPassword) {
       return response.status(200).json('Пароль пользователя успешно изменен!')
     } else {
-      return response.status(400).json('Ошибка при изменении пароля')
+      return response.status(400).json({ message: 'Ошибка при изменении пароля!' })
     }
   }
 
@@ -75,6 +75,9 @@ export default class UsersController {
     }
 
     const user = await User.findOrFail(params.id)
+
+    if (!user.active) return response.status(400).json({ message: 'УЗ пользователя заблокирована!' })
+
     const validatedData = await request.validateUsing(changeUserRole)
 
     await user.merge(validatedData).save()
