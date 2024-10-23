@@ -14,6 +14,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('substations')
+        .onDelete('CASCADE')
       table
         .integer('work_producer_id', 11)
         .notNullable()
@@ -21,6 +22,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('users')
+        .onDelete('CASCADE')
       table.text('description').notNullable()
       table.string('note').nullable()
       table.dateTime('date_completion').notNullable()

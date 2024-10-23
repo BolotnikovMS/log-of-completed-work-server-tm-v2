@@ -14,6 +14,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('districts')
+        .onDelete('CASCADE')
       table
         .integer('voltage_classes_id', 11)
         .notNullable()
@@ -21,6 +22,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('voltage_classes')
+        .onDelete('CASCADE')
       table
         .integer('type_kp_id')
         .notNullable()
@@ -28,6 +30,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('type_kps')
+        .onDelete('CASCADE')
       table
         .integer('head_controller_id', 11)
         .notNullable()
@@ -35,6 +38,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('head_controllers')
+        .onDelete('CASCADE')
       table.boolean('active').defaultTo(true)
       table.string('name', 250).notNullable()
       table.string('name_search', 250)

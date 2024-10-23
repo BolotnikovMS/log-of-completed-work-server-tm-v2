@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('type_works')
         .defaultTo(1)
+        .onDelete('CASCADE')
     })
   }
 

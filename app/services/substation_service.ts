@@ -15,19 +15,18 @@ export default class SubstationService {
     meta: any
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(districtValue, (query) => query.where('district_id', '=', districtValue!))
-      .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
+      .if(search, (query) => query.whereILike('nameSearch', `%${search}%`))
       .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
       .if(headController, (query) => query.where('head_controller_id', '=', headController))
-      .if(channelType || channelCategory, query => {
+      .if(channelType, query => query.whereHas('channels', query => query.where('channelTypeId', '=', channelType)))
+      .if(channelCategory, query => {
         query.whereHas('channels', query => {
-          query
-            .where('channelTypeId', '=', channelType)
-            .orWhere('channelCategoryId', '=', channelCategory)
+          query.where('channelCategoryId', '=', channelCategory)
         })
       })
       .if(channelType && channelCategory, query => {

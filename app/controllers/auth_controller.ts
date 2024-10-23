@@ -9,7 +9,7 @@ export default class AuthController {
   async login({ response, request }: HttpContext) {
     try {
       const { username, password } = await request.validateUsing(loginValidator)
-      const user = await User.query().whereLike('username', username).firstOrFail()
+      const user = await User.query().whereILike('username', username).firstOrFail()
 
       if (!user.active) return response.status(400).json('Учетная запись заблокирована!')
 

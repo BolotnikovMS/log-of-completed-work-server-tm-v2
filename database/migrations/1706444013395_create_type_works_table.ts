@@ -13,6 +13,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('users')
+        .onDelete('CASCADE')
       table.string('name', 250).notNullable()
 
       table.timestamp('created_at')
