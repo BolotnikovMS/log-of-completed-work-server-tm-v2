@@ -1,3 +1,4 @@
+import TypeKpDto from '#dtos/type_kp'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import TypeKp from '#models/type_kp'
 import TypeKpPolicy from '#policies/type_kp_policy'
@@ -6,18 +7,13 @@ import { typeKpValidator } from '#validators/type_kp'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesKpsController {
-  /**
-   * Display a list of resource
-   */
   async index({ request, response }: HttpContext) {
-    const typesKps = await TypeKpService.getTypesKps(request)
+    const { meta, data } = await TypeKpService.getTypesKps(request)
+    const typesKps = { meta, data: data.map(typeKp => new TypeKpDto(typeKp as TypeKp)) }
 
     return response.status(200).json(typesKps)
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(TypeKpPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
@@ -30,9 +26,6 @@ export default class TypesKpsController {
     return response.status(201).json(typeKp)
   }
 
-  /**
-   * Handle form submission for the edit action
-   */
   async update({ params, request, response, bouncer }: HttpContext) {
     if (await bouncer.with(TypeKpPolicy).denies('edit')) {
       return response.status(403).json({ message: accessErrorMessages.edit })
@@ -45,9 +38,6 @@ export default class TypesKpsController {
     return response.status(200).json(updTypeKp)
   }
 
-  /**
-   * Delete record
-   */
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(TypeKpPolicy).denies('delete')) {
       return response.status(403).json({ message: accessErrorMessages.delete })

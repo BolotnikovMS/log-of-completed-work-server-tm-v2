@@ -1,3 +1,4 @@
+import VoltageClassDto from '#dtos/voltage_class'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import VoltageClass from '#models/voltage_class'
 import VoltageClassPolicy from '#policies/voltage_class_policy'
@@ -6,18 +7,13 @@ import { voltageClassValidator } from '#validators/voltage_class'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class VoltageClassesController {
-  /**
-   * Display a list of resource
-   */
   async index({ request, response }: HttpContext) {
-    const voltageClasses = await VoltageClassService.getVoltageClasses(request)
+    const { meta, data } = await VoltageClassService.getVoltageClasses(request)
+    const voltageClasses = { meta, data: data.map(voltageClass => new VoltageClassDto(voltageClass as VoltageClass)) }
 
     return response.status(200).json(voltageClasses)
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(VoltageClassPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
@@ -30,9 +26,6 @@ export default class VoltageClassesController {
     return response.status(201).json(voltageClass)
   }
 
-  /**
-   * Handle form submission for the edit action
-   */
   async update({ params, request, response, bouncer }: HttpContext) {
     if (await bouncer.with(VoltageClassPolicy).denies('edit')) {
       return response.status(403).json({ message: accessErrorMessages.edit })
@@ -45,9 +38,6 @@ export default class VoltageClassesController {
     return response.status(200).json(updVoltageClass)
   }
 
-  /**
-   * Delete record
-   */
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(VoltageClassPolicy).denies('delete')) {
       return response.status(403).json({ message: accessErrorMessages.delete })

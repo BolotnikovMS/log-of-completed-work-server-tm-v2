@@ -1,12 +1,15 @@
+import TypeWorkDto from '#dtos/type_work'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
+import TypeWork from '#models/type_work'
 import TypeWorkPolicy from '#policies/type_work_policy'
 import TypeWorkService from '#services/type_work_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesWorksController {
   async index({ request, response }: HttpContext) {
-    const typesWork = await TypeWorkService.getTypesWork(request)
+    const { meta, data } = await TypeWorkService.getTypesWork(request)
+    const typesWork = { meta, data: data.map(typeWork => new TypeWorkDto(typeWork as TypeWork)) }
 
     return response.status(200).json(typesWork)
   }

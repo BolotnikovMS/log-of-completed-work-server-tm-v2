@@ -1,3 +1,5 @@
+import SubstationDto from '#dtos/substation'
+import SubstationListDto from '#dtos/substation_lists'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { transliterate } from '#helpers/transliterate'
 import Substation from '#models/substation'
@@ -8,15 +10,16 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SubstationsController {
   async index({ request, response }: HttpContext) {
-    const substations = await SubstationService.getSubstations(request)
+    const { meta, data } = await SubstationService.getSubstations(request)
+    const substations = { meta, data: data.map(substation => new SubstationListDto(substation as Substation)) }
 
     return response.status(200).json(substations)
   }
 
   async getSubstation({ params, response }: HttpContext) {
-    const substation = await SubstationService.getSubstation(params)
+    const data = await SubstationService.getSubstation(params)
 
-    return response.status(200).json(substation)
+    return response.status(200).json({ ...new SubstationDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {

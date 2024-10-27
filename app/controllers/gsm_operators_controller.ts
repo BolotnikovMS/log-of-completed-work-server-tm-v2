@@ -1,3 +1,4 @@
+import GsmOperatorDto from '#dtos/gsm_operator'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import GsmOperator from '#models/gsm_operator'
 import GsmOperatorPolicy from '#policies/gsm_operator_policy'
@@ -10,7 +11,8 @@ export default class GsmOperatorsController {
    * Display a list of resource
    */
   async index({ request, response }: HttpContext) {
-    const gsmOperators = await GsmOperatorService.getGsmOperators(request)
+    const data = await GsmOperatorService.getGsmOperators(request)
+    const gsmOperators = data.map(gsm => new GsmOperatorDto(gsm))
 
     return response.status(200).json(gsmOperators)
   }

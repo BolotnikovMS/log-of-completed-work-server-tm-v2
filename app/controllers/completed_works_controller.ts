@@ -1,3 +1,4 @@
+import CompletedWorkDto from '#dtos/completed_work'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import CompletedWork from '#models/completed_work'
 import CompletedWorkPolicy from '#policies/completed_work_policy'
@@ -6,18 +7,13 @@ import { completedWorkValidator } from '#validators/completed_work'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CompletedWorksController {
-  /**
-   * Display a list of resource
-   */
   async index({ request, response }: HttpContext) {
-    const works = await CompletedWorkService.getCompletedWorks(request)
+    const { meta, data } = await CompletedWorkService.getCompletedWorks(request)
+    const works = { meta, data: data.map(work => new CompletedWorkDto(work as CompletedWork)) }
 
     return response.status(200).json(works)
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(CompletedWorkPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
@@ -33,9 +29,6 @@ export default class CompletedWorksController {
     return response.status(201).json(completedWork)
   }
 
-  /**
-   * Handle form submission for the edit action
-   */
   async update({ params, request, response, bouncer }: HttpContext) {
     const completedWork = await CompletedWork.findOrFail(params.id)
 
@@ -48,9 +41,6 @@ export default class CompletedWorksController {
     return response.status(200).json(updCompletedWork)
   }
 
-  /**
-   * Delete record
-   */
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(CompletedWorkPolicy).denies('delete')) {
       return response.status(403).json({ message: accessErrorMessages.delete })

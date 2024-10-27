@@ -1,5 +1,8 @@
+import DistrictDto from '#dtos/district'
+import SubstationListDto from '#dtos/substation_lists'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import District from '#models/district'
+import Substation from '#models/substation'
 import DistrictPolicy from '#policies/district_policy'
 import DistrictService from '#services/district_service'
 import SubstationService from '#services/substation_service'
@@ -11,14 +14,16 @@ export default class DistrictsController {
     // if (await bouncer.with(DistrictPolicy).denies('view')) {
     //   return response.status(403).json('У вас нету прав на просмотр!')
     // }
-    const districts = await DistrictService.getDistricts(request)
+    const { meta, data } = await DistrictService.getDistricts(request)
+    const districts = { meta, data: data.map(district => new DistrictDto(district as District)) }
 
     return response.status(200).json(districts)
   }
 
   async getSubstations({ params, request, response }: HttpContext) {
     const district = await District.findOrFail(params.id)
-    const substations = await SubstationService.getSubstations(request, district.id)
+    const { meta, data } = await SubstationService.getSubstations(request, district.id)
+    const substations = { meta, data: data.map(substation => new SubstationListDto(substation as Substation)) }
 
     return response.status(200).json(substations)
   }

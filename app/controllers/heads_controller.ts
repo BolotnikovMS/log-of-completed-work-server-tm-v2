@@ -1,3 +1,4 @@
+import HeadControllerDto from '#dtos/head_controller'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import HeadController from '#models/head_controller'
 import HeadControllerPolicy from '#policies/head_controller_policy'
@@ -6,18 +7,13 @@ import { headControllerValidator } from '#validators/head_controller'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HeadsController {
-  /**
-   * Display a list of resource
-   */
   async index({ request, response }: HttpContext) {
-    const headControllers = await HeadControllersService.getHeadControllers(request)
+    const { meta, data } = await HeadControllersService.getHeadControllers(request)
+    const headControllers = { meta, data: data.map(headController => new HeadControllerDto(headController as HeadController)) }
 
     return response.status(200).json(headControllers)
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(HeadControllerPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
@@ -30,9 +26,6 @@ export default class HeadsController {
     return response.status(201).json(newHeadController)
   }
 
-  /**
-   * Handle form submission for the edit action
-   */
   async update({ params, request, response, bouncer }: HttpContext) {
     if (await bouncer.with(HeadControllerPolicy).denies('edit')) {
       return response.status(403).json({ message: accessErrorMessages.edit })
@@ -45,9 +38,6 @@ export default class HeadsController {
     return response.status(200).json(updHeadController)
   }
 
-  /**
-   * Delete record
-   */
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(HeadControllerPolicy).denies('delete')) {
       return response.status(403).json({ message: accessErrorMessages.delete })

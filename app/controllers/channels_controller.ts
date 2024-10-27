@@ -1,3 +1,4 @@
+import ChannelDto from '#dtos/channel'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import Channel from '#models/channel'
 import ChannelPolicy from '#policies/channel_policy'
@@ -7,7 +8,8 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {
   async index({ request, response }: HttpContext) {
-    const channels = await ChannelService.getChannels(request)
+    const { meta, data } = await ChannelService.getChannels(request)
+    const channels = { meta, data: data.map(channel => new ChannelDto(channel as Channel)) }
 
     return response.status(200).json(channels)
   }

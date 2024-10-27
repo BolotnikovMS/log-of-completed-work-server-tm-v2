@@ -1,3 +1,4 @@
+import ChannelTypeDto from '#dtos/channel_type'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import ChannelType from '#models/channel_type'
 import ChannelTypePolicy from '#policies/channel_type_policy'
@@ -10,7 +11,8 @@ export default class ChannelTypesController {
    * Display a list of resource
    */
   async index({ request, response }: HttpContext) {
-    const channelTypes = await ChannelTypeService.getChannelTypes(request)
+    const { meta, data } = await ChannelTypeService.getChannelTypes(request)
+    const channelTypes = { meta, data: data.map(channelType => new ChannelTypeDto(channelType as ChannelType)) }
 
     return response.status(200).json(channelTypes)
   }
