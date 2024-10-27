@@ -9,7 +9,7 @@ export class HeadControllersService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { sort, order, limit, page } = req.qs() as IQueryParams
+    const { sort, order, limit = -1, page } = req.qs() as IQueryParams
     const headControllers = await HeadController.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .paginate(page, limit)

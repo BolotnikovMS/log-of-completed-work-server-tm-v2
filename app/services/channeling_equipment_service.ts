@@ -8,7 +8,7 @@ export default class ChannelingEquipmentService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { page, limit, channelType } = req.qs() as IQueryParams
+    const { page, limit = -1, channelType } = req.qs() as IQueryParams
     const channelingEquipments = await ChannelingEquipment.query()
       .if(channelType, (query) => query.where('channelTypeId', '=', channelType))
       .preload('channel_type')

@@ -9,7 +9,7 @@ export default class VoltageClassService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { sort, order, page, limit } = req.qs() as IQueryParams
+    const { sort, order, page, limit = -1 } = req.qs() as IQueryParams
     const voltageClasses = await VoltageClass.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .paginate(page, limit)

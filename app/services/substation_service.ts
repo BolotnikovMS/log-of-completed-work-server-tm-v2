@@ -14,7 +14,7 @@ export default class SubstationService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page = 1, limit, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = -1, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
