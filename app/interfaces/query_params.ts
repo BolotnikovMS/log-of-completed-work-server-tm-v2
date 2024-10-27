@@ -9,6 +9,7 @@ export interface IQueryParams {
   search: string
   active: string
   limit: number
+  offset: number
   substation: string
   cleanUser: string
   dateStart: string
