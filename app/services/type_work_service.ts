@@ -12,13 +12,8 @@ export default class TypeWorkService {
     const { page, limit } = req.qs() as IQueryParams
     const typesWork = await TypeWork.query()
       .paginate(page, limit)
-    const typesWorkSerialize = typesWork.serialize({
-      fields: {
-        omit: ['createdAt', 'updatedAt']
-      }
-    })
 
-    return typesWorkSerialize
+    return typesWork.serialize()
   }
 
   static async createTypeWork(req: Request, auth: Authenticator<Authenticators>): Promise<TypeWork> {

@@ -3,10 +3,11 @@ import { transformDataChannels } from '#helpers/transform_channel_data'
 import { IQueryParams } from '#interfaces/query_params'
 import Channel from '#models/channel'
 import { Request } from '@adonisjs/core/http'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell } from 'exceljs'
 
 export default class ChannelService {
-  static async getChannels(req: Request) {
+  static async getChannels(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
     const { sort, order, page, limit, substation, channelType, channelCategory } = req.qs() as IQueryParams
     const channels = await Channel.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
@@ -20,47 +21,7 @@ export default class ChannelService {
       .preload('gsm_operator')
       .paginate(page, limit)
 
-    const channelsSerialize = channels.serialize({
-      fields: {
-        omit: ['createdAt', 'updatedAt']
-      },
-      relations: {
-        channel_category: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        channel_type: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        substation: {
-          fields: {
-            pick: ['id', 'fullNameSubstation'],
-          },
-          relations: {
-            voltage_class: {
-              fields: {
-                pick: ['name']
-              }
-            }
-          }
-        },
-        channel_equipment: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        gsm_operator: {
-          fields: {
-            pick: ['name']
-          }
-        }
-      }
-    })
-
-    return channelsSerialize
+    return channels.serialize()
   }
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const channels = await this.getChannels(req)

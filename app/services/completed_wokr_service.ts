@@ -36,42 +36,7 @@ export default class CompletedWorkService {
       .preload('type_work')
       .paginate(page, limit)
 
-    const worksSerialize = works.serialize({
-      fields: {
-        omit: ['createdAt', 'updatedAt'],
-      },
-      relations: {
-        substation: {
-          fields: {
-            pick: ['fullNameSubstation'],
-          },
-          relations: {
-            voltage_class: {
-              fields: {
-                pick: ['name'],
-              },
-            },
-          },
-        },
-        work_producer: {
-          fields: {
-            pick: ['shortName'],
-          },
-        },
-        author: {
-          fields: {
-            pick: ['shortName'],
-          },
-        },
-        type_work: {
-          fields: {
-            pick: ['name']
-          }
-        }
-      },
-    })
-
-    return worksSerialize
+    return works.serialize()
   }
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const works = await this.getCompletedWorks(req)

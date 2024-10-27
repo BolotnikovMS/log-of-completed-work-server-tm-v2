@@ -10,12 +10,11 @@ export default class SubstationService {
   static async getSubstations(
     req: Request,
     districtId?: number,
-    withPreload: boolean = true
   ): Promise<{
-    meta: any
+    meta: any,
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = 200, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page = 1, limit, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
@@ -49,59 +48,9 @@ export default class SubstationService {
       })
       .paginate(page, limit)
 
-    const substationSerialize = substations.serialize({
-      fields: {
-        omit: ['createdAt', 'updatedAt'],
-      },
-      relations: {
-        voltage_class: {
-          fields: {
-            pick: ['name'],
-          },
-        },
-        district: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        type_kp: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        head_controller: {
-          fields: {
-            pick: ['name']
-          }
-        },
-        channels: {
-          fields: {
-            pick: ['id', 'ipAddress']
-          },
-          relations: {
-            channel_category: {
-              fields: {
-                pick: ['name']
-              }
-            },
-            channel_type: {
-              fields: {
-                pick: ['name']
-              }
-            },
-            gsm_operator: {
-              fields: {
-                pick: ['name']
-              }
-            }
-          }
-        }
-      },
-    })
-
-    return substationSerialize
+    return substations.serialize()
   }
-  static async getSubstation(params: Record<string, any>): Promise<ModelObject> {
+  static async getSubstation(params: Record<string, any>): Promise<{ substation: Substation, numberCompletedWorks: number }> {
     const substation = await Substation.findOrFail(params.id)
 
     await substation.load('district')
@@ -114,99 +63,7 @@ export default class SubstationService {
     await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('channels', query => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
 
-    // console.log(substation.serialize())
-    const substationSerialize = substation.serialize({
-      fields: {
-        omit: ['createdAt', 'updatedAt'],
-      },
-      relations: {
-        district: {
-          fields: {
-            pick: ['id', 'name', 'shortName'],
-          },
-        },
-        voltage_class: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        type_kp: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        head_controller: {
-          fields: {
-            pick: ['id', 'name'],
-          },
-        },
-        channels: {
-          fields: {
-            omit: ['createdAt', 'updatedAt'],
-          },
-          relations: {
-            channel_category: {
-              fields: {
-                pick: ['id', 'name'],
-              }
-            },
-            channel_type: {
-              fields: {
-                pick: ['id', 'name'],
-              }
-            },
-            channel_equipment: {
-              fields: {
-                pick: ['name']
-              }
-            },
-            gsm_operator: {
-              fields: {
-                pick: ['name']
-              }
-            }
-          }
-        },
-        files_backups: {
-          fields: {
-            pick: ['id', 'clientName', 'filePath', 'size', 'typeFile', 'createdAt'],
-          },
-          relations: {
-            author: {
-              fields: {
-                pick: ['id', 'shortName'],
-              },
-            },
-          },
-        },
-        files_photos_ps: {
-          fields: {
-            pick: ['id', 'clientName', 'filePath', 'size', 'typeFile', 'createdAt'],
-          },
-          relations: {
-            author: {
-              fields: {
-                pick: ['id', 'shortName'],
-              },
-            },
-          },
-        },
-        other_files: {
-          fields: {
-            pick: ['id', 'clientName', 'filePath', 'size', 'typeFile', 'createdAt'],
-          },
-          relations: {
-            author: {
-              fields: {
-                pick: ['id', 'shortName'],
-              },
-            },
-          },
-        },
-      },
-    })
-
-    return { ...substationSerialize, numberCompletedWorks: substation.$extras.numberCompletedWorks }
+    return { substation, numberCompletedWorks: substation.$extras.numberCompletedWorks }
   }
 
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
