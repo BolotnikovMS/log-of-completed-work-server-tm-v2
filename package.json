@@ -34,7 +34,8 @@
     "#enums/*": "./app/enums/*.js",
     "#interfaces/*": "./app/interfaces/*.js",
     "#helpers/*": "./app/helpers/*.js",
-    "#routes/*": "./start/routes/*.js"
+    "#routes/*": "./start/routes/*.js",
+    "#dtos/*": "./app/dtos/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
@@ -56,6 +57,7 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@adocasts.com/dto": "^0.0.6",
     "@adonisjs/auth": "^9.2.3",
     "@adonisjs/bouncer": "^3.1.3",
     "@adonisjs/core": "^6.14.1",

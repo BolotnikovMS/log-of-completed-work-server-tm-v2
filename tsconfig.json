@@ -63,6 +63,9 @@
       ],
       "#routes/*": [
         "./start/routes/*.js"
+      ],
+      "#dtos/*": [
+        "./app/dtos/*.js"
       ]
     }
   }
