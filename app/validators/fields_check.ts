@@ -3,6 +3,7 @@ import { uniqueRule } from '../rules/unique.js'
 
 export const text240 = vine.string().trim().minLength(2).maxLength(240).escape()
 export const text1000 = vine.string().trim().minLength(2).maxLength(1000).escape()
+export const text1000Optional = vine.string().trim().minLength(2).maxLength(1000).escape().optional().nullable()
 export const text700Optional = vine
   .string()
   .trim()
