@@ -1,5 +1,5 @@
+import ChannelDto from '#dtos/channel'
 import { OrderByEnums } from '#enums/sort'
-import { transformDataChannels } from '#helpers/transform_channel_data'
 import { IQueryParams } from '#interfaces/query_params'
 import Channel from '#models/channel'
 import { Request } from '@adonisjs/core/http'
@@ -25,7 +25,7 @@ export default class ChannelService {
   }
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const channels = await this.getChannels(req)
-    const transformData = transformDataChannels(channels.data)
+    const transformData = channels.data.map(channel => new ChannelDto(channel as Channel))
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -46,12 +46,12 @@ export default class ChannelService {
 
     transformData.forEach(channel => {
       worksheet.addRow({
-        substation: channel.fullNameSubstation,
-        channelCategory: channel.channelCategory,
-        channelType: channel.channelType,
-        channelEquipment: channel.channelEquipment,
-        gsmOperator: channel.gsmOperator,
-        ipAddress: channel.ipAddress,
+        substation: channel.substation,
+        channelCategory: channel.channel_category,
+        channelType: channel.channel_type,
+        channelEquipment: channel.channel_equipment ?? 'Не указан',
+        gsmOperator: channel.gsm ?? 'Не указан',
+        ipAddress: channel.ipAddress ?? 'Не указан',
         note: channel.note
       })
     })
