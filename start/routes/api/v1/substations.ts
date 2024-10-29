@@ -9,6 +9,7 @@ export const substationsRoutes = router
     router.get('/download-substations-excel', [SubstationsController, 'downloadSubstationsExcel'])
     router.get('/:id', [SubstationsController, 'getSubstation'])
     router.patch('/:id', [SubstationsController, 'update'])
+    router.patch('/:id/note', [SubstationsController, 'updateNote'])
     router.delete('/:id', [SubstationsController, 'destroy'])
   })
   .prefix('/substations')

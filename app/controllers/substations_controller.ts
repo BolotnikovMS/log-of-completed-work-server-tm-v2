@@ -2,6 +2,7 @@ import SubstationDto from '#dtos/substation'
 import SubstationListDto from '#dtos/substation_lists'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { transliterate } from '#helpers/transliterate'
+import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
 import SubstationPolicy from '#policies/substation_policy'
 import SubstationService from '#services/substation_service'
@@ -43,14 +44,23 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const substation = await Substation.findOrFail(params.id)
-    const validatedData = await request.validateUsing(substationValidator)
-    const updDistrict = await substation
-      .merge({ nameSearch: transliterate(validatedData.name), ...validatedData })
-      .save()
+    const substationParam = params as IParams
+    const updSubstation = await SubstationService.update(request, substationParam)
 
-    return response.status(200).json(updDistrict)
+    return response.status(200).json(updSubstation)
   }
+
+  async updateNote({ params, request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(SubstationPolicy).denies('edit')) {
+      return response.status(403).json({ message: accessErrorMessages.edit })
+    }
+
+    const substationParam = params as IParams
+    const updSubstation = await SubstationService.updateNote(request, substationParam)
+
+    return response.status(200).json(updSubstation)
+  }
+
 
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(SubstationPolicy).denies('delete')) {

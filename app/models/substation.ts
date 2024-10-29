@@ -1,3 +1,4 @@
+import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import Channel from '#models/channel'
 import CompletedWork from '#models/completed_work'
 import District from '#models/district'
@@ -43,6 +44,11 @@ export default class Substation extends BaseModel {
     consume: (value: string): boolean => Boolean(value),
   })
   declare rdu: boolean
+
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
+  declare note: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
