@@ -28,9 +28,9 @@ export default class CompletedWorkDto extends BaseModelDto {
     this.description = completedWork.description
     this.note = completedWork.note
     this.dateCompletion = completedWork.dateCompletion.toString()!
-    this.work_producer = completedWork.work_producer?.shortName ?? null
-    this.author = completedWork.author?.shortName ?? null
-    this.type_work = completedWork.type_work?.name ?? null
-    this.substation = completedWork.substation?.fullNameSubstation ?? null
+    this.work_producer = completedWork.work_producer?.shortName
+    this.author = completedWork.author?.shortName
+    this.type_work = completedWork.type_work?.name
+    this.substation = completedWork.substation?.fullNameSubstation 
   }
 }
