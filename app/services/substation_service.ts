@@ -1,5 +1,9 @@
-import { transformDataSubstations } from '#helpers/transform_substations_data'
+import SubstationDto from '#dtos/substation'
+import { transliterate } from '#helpers/transliterate'
+import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
+import { substationValidator } from '#validators/substation'
+import { substationNoteValidator } from '#validators/substation_note'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell, Row } from 'exceljs'
@@ -68,7 +72,7 @@ export default class SubstationService {
 
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const substations = await this.getSubstations(req)
-    const transformData = transformDataSubstations(substations.data)
+    const transformData = substations.data.map(substation => new SubstationDto(substation as Substation))
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -82,6 +86,7 @@ export default class SubstationService {
       { header: 'Тип канала', key: 'channelType', width: 20 },
       { header: 'IP адрес канала', key: 'channelIp', width: 19 },
       { header: 'GSM оператор', key: 'gsm', width: 17 },
+      { header: 'Примечание', key: 'note', width: 25 },
     ]
 
     worksheet.getRow(1).eachCell((cell: Cell) => {
@@ -98,12 +103,13 @@ export default class SubstationService {
             district: substation.district,
             fullNameSubstation: substation.fullNameSubstation,
             rdu: substation.rdu,
-            typeKp: substation.typeKp,
-            headeController: substation.headController,
-            channelCategory: channel.channelCategory,
-            channelType: channel.channelType,
-            channelIp: channel.ipAddress,
-            gsm: channel.gsm
+            typeKp: substation.type_kp ?? 'Не указан',
+            headeController: substation.head_controller ?? 'Не указан',
+            channelCategory: channel.channel_category ?? 'Не указан',
+            channelType: channel.channel_type ?? 'Не указан',
+            channelIp: channel.ipAddress ?? 'Не указан',
+            gsm: channel.gsm ?? 'Не указан',
+            note: substation.note
           })
           applyStyles(row)
         })
@@ -112,12 +118,13 @@ export default class SubstationService {
           district: substation.district,
           fullNameSubstation: substation.fullNameSubstation,
           rdu: substation.rdu,
-          typeKp: substation.typeKp,
-          headeController: substation.headController,
-          channelCategory: 'Нет',
-          channelType: 'Нет',
-          channelIp: 'Нет',
-          gsm: 'Нет'
+          typeKp: substation.type_kp ?? 'Не указан',
+          headeController: substation.head_controller ?? 'Не указан',
+          channelCategory: 'Не указан',
+          channelType: 'Не указан',
+          channelIp: 'Не указан',
+          gsm: 'Не указан',
+          note: substation.note
         })
         applyStyles(row)
       }
@@ -126,5 +133,23 @@ export default class SubstationService {
     const buffer = await workbook.xlsx.writeBuffer()
 
     return buffer
+  }
+
+  static async update(req: Request, params: IParams): Promise<Substation> {
+    const substation = await Substation.findOrFail(params.id)
+    const validatedData = await req.validateUsing(substationValidator)
+    const updSubstation = await substation
+      .merge({ nameSearch: transliterate(validatedData.name), ...validatedData })
+      .save()
+
+    return updSubstation
+  }
+
+  static async updateNote(req: Request, params: IParams): Promise<Substation> {
+    const substation = await Substation.findOrFail(params.id)
+    const validatedData = await req.validateUsing(substationNoteValidator)
+    const updSubstation = await substation.merge(validatedData).save()
+
+    return updSubstation
   }
 }
