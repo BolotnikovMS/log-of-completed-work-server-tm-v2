@@ -1,8 +1,8 @@
-import { transformDataCompletedWork } from '#helpers/transform_completed_work_data'
+import CompletedWorkDto from '#dtos/completed_work'
 import CompletedWork from '#models/completed_work'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS from 'exceljs'
+import ExcelJS, { Cell } from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
 
@@ -40,7 +40,7 @@ export default class CompletedWorkService {
   }
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const works = await this.getCompletedWorks(req)
-    const transformData = transformDataCompletedWork(works.data)
+    const transformData = works.data.map(work => new CompletedWorkDto(work as CompletedWork))
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -53,11 +53,20 @@ export default class CompletedWorkService {
       { header: 'Описание', key: 'description', width: 50 },
       { header: 'Примечания', key: 'note', width: 50 },
     ]
-    transformData.forEach((work, i) => {
-      const row = worksheet.getRow(i + 2)
+    worksheet.getRow(1).eachCell((cell: Cell) => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
+      cell.font = { bold: true }
+    })
 
-      Object.keys(work).forEach((key, iCel) => {
-        row.getCell(iCel + 1).value = work[key]
+    transformData.forEach(work => {
+      worksheet.addRow({
+        author: work.author,
+        workProducer: work.work_producer,
+        typeWork: work.type_work,
+        dateCompletion: work.dateCompletion.split('-').reverse().join('.'),
+        substation: work.substation,
+        description: work.description,
+        note: work.note,
       })
     })
     const descrCol = worksheet.getColumn('description')
