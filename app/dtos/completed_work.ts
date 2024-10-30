@@ -31,6 +31,6 @@ export default class CompletedWorkDto extends BaseModelDto {
     this.work_producer = completedWork.work_producer?.shortName
     this.author = completedWork.author?.shortName
     this.type_work = completedWork.type_work?.name
-    this.substation = completedWork.substation?.fullNameSubstation 
+    this.substation = completedWork.substation?.fullNameSubstation
   }
 }
