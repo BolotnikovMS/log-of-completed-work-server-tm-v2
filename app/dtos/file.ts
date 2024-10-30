@@ -13,6 +13,7 @@ export default class FileDto extends BaseModelDto {
   declare size: number
   declare createdAt: string
   declare substation: SubstationDto | null
+  declare author: string | null
 
   constructor(file?: File) {
     super()
@@ -29,5 +30,6 @@ export default class FileDto extends BaseModelDto {
     this.size = file.size
     this.createdAt = file.createdAt.toString()!
     this.substation = file.substation && new SubstationDto(file.substation)
+    this.author = file.author.shortName
   }
 }
