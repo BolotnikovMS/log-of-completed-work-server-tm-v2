@@ -1,4 +1,8 @@
+import { IParams } from '#interfaces/params'
 import District from '#models/district'
+import { districtValidator } from '#validators/district'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import { OrderByEnums } from '../enums/sort.js'
@@ -18,5 +22,29 @@ export default class DistrictService {
     // const total: number = districts.length
 
     return districts.serialize()
+  }
+
+  static async createDistrict(req: Request, auth: Authenticator<Authenticators>): Promise<District> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(districtValidator)
+    const district = await District.create({ userId: user?.id, ...validatedData })
+
+    return district
+  }
+
+  static async updateDistrict(req: Request, params: IParams): Promise<District> {
+    const district = await District.findOrFail(params.id)
+    const validatedData = await req.validateUsing(districtValidator)
+    const updDistrict = await district.merge(validatedData).save()
+
+    return updDistrict
+  }
+
+  static async deleteDistrict(params: IParams): Promise<void> {
+    const district = await District.findOrFail(params.id)
+
+    await district.delete()
+
+    return
   }
 }

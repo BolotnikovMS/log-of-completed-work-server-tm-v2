@@ -1,19 +1,16 @@
 import DistrictDto from '#dtos/district'
 import SubstationListDto from '#dtos/substation_lists'
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import District from '#models/district'
 import Substation from '#models/substation'
 import DistrictPolicy from '#policies/district_policy'
 import DistrictService from '#services/district_service'
 import SubstationService from '#services/substation_service'
-import { districtValidator } from '#validators/district'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DistrictsController {
-  async index({ request, response, bouncer }: HttpContext) {
-    // if (await bouncer.with(DistrictPolicy).denies('view')) {
-    //   return response.status(403).json('У вас нету прав на просмотр!')
-    // }
+  async index({ request, response }: HttpContext) {
     const { meta, data } = await DistrictService.getDistricts(request)
     const districts = { meta, data: data.map(district => new DistrictDto(district as District)) }
 
@@ -28,52 +25,35 @@ export default class DistrictsController {
     return response.status(200).json(substations)
   }
 
-  /**
-   * Handle form submission for the create action
-   */
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(DistrictPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(districtValidator)
-    const district = await District.create({ userId: user?.id, ...validatedData })
+    const district = await DistrictService.createDistrict(request, auth)
 
     return response.status(201).json(district)
   }
 
-  /**
-   * Show individual record
-   */
-  // async getSubstations({ params, request, response }: HttpContext) {}
-
-  /**
-   * Handle form submission for the edit action
-   */
   async update({ params, request, response, bouncer }: HttpContext) {
     if (await bouncer.with(DistrictPolicy).denies('edit')) {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const district = await District.findOrFail(params.id)
-    const validatedData = await request.validateUsing(districtValidator)
-    const updDistrict = await district.merge(validatedData).save()
+    const districtParams = params as IParams
+    const updDistrict = await DistrictService.updateDistrict(request, districtParams)
 
     return response.status(200).json(updDistrict)
   }
 
-  /**
-   * Delete record
-   */
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(DistrictPolicy).denies('delete')) {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const district = await District.findOrFail(params.id)
+    const districtParams = params as IParams
 
-    await district.delete()
+    await DistrictService.deleteDistrict(districtParams)
 
     return response.status(204)
   }
