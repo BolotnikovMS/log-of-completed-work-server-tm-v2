@@ -1,8 +1,12 @@
+import { OrderByEnums } from '#enums/sort'
+import { IParams } from '#interfaces/params'
+import { IQueryParams } from '#interfaces/query_params'
 import TypeKp from '#models/type_kp'
+import { typeKpValidator } from '#validators/type_kp'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import { OrderByEnums } from '../enums/sort.js'
-import { IQueryParams } from '../interfaces/query_params.js'
 
 export default class TypeKpService {
   static async getTypesKps(req: Request): Promise<{
@@ -15,5 +19,29 @@ export default class TypeKpService {
       .paginate(page, limit)
 
     return typesKps.serialize()
+  }
+
+  static async createTypeKp(req: Request, auth: Authenticator<Authenticators>): Promise<TypeKp> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(typeKpValidator)
+    const typeKp = await TypeKp.create({ userId: user?.id, ...validatedData })
+
+    return typeKp
+  }
+
+  static async updateTypeKp(req: Request, params: IParams): Promise<TypeKp> {
+    const typeKp = await TypeKp.findOrFail(params.id)
+    const validatedData = await req.validateUsing(typeKpValidator)
+    const updTypeKp = await typeKp.merge(validatedData).save()
+
+    return updTypeKp
+  }
+
+  static async deleteTypeKp(params: IParams): Promise<void> {
+    const typeKp = await TypeKp.findOrFail(params.id)
+
+    await typeKp.delete()
+
+    return
   }
 }

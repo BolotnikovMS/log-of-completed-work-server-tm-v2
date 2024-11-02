@@ -1,9 +1,9 @@
 import HeadControllerDto from '#dtos/head_controller'
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import HeadController from '#models/head_controller'
 import HeadControllerPolicy from '#policies/head_controller_policy'
 import { HeadControllersService } from '#services/head_controller_service'
-import { headControllerValidator } from '#validators/head_controller'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HeadsController {
@@ -19,9 +19,7 @@ export default class HeadsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(headControllerValidator)
-    const newHeadController = await HeadController.create({ userId: user?.id, ...validatedData })
+    const newHeadController = await HeadControllersService.createHeadController(request, auth)
 
     return response.status(201).json(newHeadController)
   }
@@ -31,9 +29,8 @@ export default class HeadsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const headController = await HeadController.findOrFail(params.id)
-    const validatedData = await request.validateUsing(headControllerValidator)
-    const updHeadController = await headController.merge(validatedData).save()
+    const headControllerParams = params as IParams
+    const updHeadController = await HeadControllersService.updateHeadController(request, headControllerParams)
 
     return response.status(200).json(updHeadController)
   }
@@ -43,9 +40,9 @@ export default class HeadsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const headController = await HeadController.findOrFail(params.id)
+    const headControllerParams = params as IParams
 
-    await headController.delete()
+    await HeadControllersService.deleteHeadController(headControllerParams)
 
     return response.status(204)
   }

@@ -5,8 +5,8 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import { OrderByEnums } from '../enums/sort.js'
-import { IQueryParams } from '../interfaces/query_params.js'
+import { OrderByEnums } from '#enums/sort'
+import { IQueryParams } from '#interfaces/query_params'
 
 export default class DistrictService {
   static async getDistricts(req: Request): Promise<{

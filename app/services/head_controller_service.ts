@@ -1,8 +1,12 @@
+import { OrderByEnums } from '#enums/sort'
+import { IParams } from '#interfaces/params'
+import { IQueryParams } from '#interfaces/query_params'
 import HeadController from '#models/head_controller'
+import { headControllerValidator } from '#validators/head_controller'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import { OrderByEnums } from '../enums/sort.js'
-import { IQueryParams } from '../interfaces/query_params.js'
 
 export class HeadControllersService {
   static async getHeadControllers(req: Request): Promise<{
@@ -15,5 +19,29 @@ export class HeadControllersService {
       .paginate(page, limit)
 
     return headControllers.serialize()
+  }
+
+  static async createHeadController(req: Request, auth: Authenticator<Authenticators>): Promise<HeadController> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(headControllerValidator)
+    const headController = await HeadController.create({ userId: user?.id, ...validatedData })
+
+    return headController
+  }
+
+  static async updateHeadController(req: Request, params: IParams): Promise<HeadController> {
+    const headController = await HeadController.findOrFail(params.id)
+    const validatedData = await req.validateUsing(headControllerValidator)
+    const updHeadController = await headController.merge(validatedData).save()
+
+    return updHeadController
+  }
+
+  static async deleteHeadController(params: IParams): Promise<void> {
+    const headController = await HeadController.findOrFail(params.id)
+
+    await headController.delete()
+
+    return
   }
 }

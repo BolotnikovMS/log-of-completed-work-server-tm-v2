@@ -1,11 +1,9 @@
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import User from '#models/user'
 import UserPolicy from '#policies/user_policy'
 import RoleService from '#services/role_service'
 import UserService from '#services/user_service'
-import { blockUserAccountValidator } from '#validators/block_user_account'
-import { changeUserRole } from '#validators/change_user_role'
-import { registerValidator } from '#validators/registrer'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
@@ -31,9 +29,7 @@ export default class UsersController {
     }
 
     try {
-      const validatedData = await request.validateUsing(registerValidator)
-
-      await User.create(validatedData)
+      await UserService.createUserAccount(request)
 
       return response.status(201).json('Аккаунт пользователя создан!')
     } catch (error) {
@@ -61,10 +57,9 @@ export default class UsersController {
       return response.status(403).json({ message: accessErrorMessages.noRights })
     }
 
-    const user = await User.findOrFail(params.id)
-    const validatedData = await request.validateUsing(blockUserAccountValidator)
+    const userParams = params as IParams
 
-    await user.merge(validatedData).save()
+    await UserService.blockUserAccount(request, userParams)
 
     return response.status(200).json('Статус УЗ пользователя успешно изменен!')
   }
@@ -74,13 +69,12 @@ export default class UsersController {
       return response.status(403).json({ message: accessErrorMessages.noRights })
     }
 
-    const user = await User.findOrFail(params.id)
+    const { id } = params as IParams
+    const user = await User.findOrFail(id)
 
     if (!user.active) return response.status(400).json({ message: 'УЗ пользователя заблокирована!' })
 
-    const validatedData = await request.validateUsing(changeUserRole)
-
-    await user.merge(validatedData).save()
+    await UserService.changeRole(request, user)
 
     return response.status(200).json('Роль пользователя изменена!')
   }

@@ -1,9 +1,9 @@
 import TypeKpDto from '#dtos/type_kp'
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import TypeKp from '#models/type_kp'
 import TypeKpPolicy from '#policies/type_kp_policy'
 import TypeKpService from '#services/type_kp_service'
-import { typeKpValidator } from '#validators/type_kp'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesKpsController {
@@ -19,9 +19,7 @@ export default class TypesKpsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(typeKpValidator)
-    const typeKp = await TypeKp.create({ userId: user?.id, ...validatedData })
+    const typeKp = await TypeKpService.createTypeKp(request, auth)
 
     return response.status(201).json(typeKp)
   }
@@ -31,9 +29,8 @@ export default class TypesKpsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const typeKp = await TypeKp.findOrFail(params.id)
-    const validatedData = await request.validateUsing(typeKpValidator)
-    const updTypeKp = await typeKp.merge(validatedData).save()
+    const typeKpParams = params as IParams
+    const updTypeKp = await TypeKpService.updateTypeKp(request, typeKpParams)
 
     return response.status(200).json(updTypeKp)
   }
@@ -43,9 +40,9 @@ export default class TypesKpsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const typeKp = await TypeKp.findOrFail(params.id)
+    const typeKpParams = params as IParams
 
-    await typeKp.delete()
+    await TypeKpService.deleteTypeKp(typeKpParams)
 
     return response.status(204)
   }

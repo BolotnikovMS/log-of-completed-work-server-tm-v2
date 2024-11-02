@@ -1,9 +1,9 @@
 import VoltageClassDto from '#dtos/voltage_class'
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import VoltageClass from '#models/voltage_class'
 import VoltageClassPolicy from '#policies/voltage_class_policy'
 import VoltageClassService from '#services/voltage_class_service'
-import { voltageClassValidator } from '#validators/voltage_class'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class VoltageClassesController {
@@ -19,9 +19,7 @@ export default class VoltageClassesController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(voltageClassValidator)
-    const voltageClass = await VoltageClass.create({ userId: user?.id, ...validatedData })
+    const voltageClass = await VoltageClassService.createDistrict(request, auth)
 
     return response.status(201).json(voltageClass)
   }
@@ -31,9 +29,8 @@ export default class VoltageClassesController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const voltageClass = await VoltageClass.findOrFail(params.id)
-    const validatedData = await request.validateUsing(voltageClassValidator)
-    const updVoltageClass = await voltageClass.merge(validatedData).save()
+    const voltageClassParams = params as IParams
+    const updVoltageClass = await VoltageClassService.updateDistrict(request, voltageClassParams)
 
     return response.status(200).json(updVoltageClass)
   }
@@ -43,9 +40,9 @@ export default class VoltageClassesController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const voltageClass = await VoltageClass.findOrFail(params.id)
+    const voltageClassParams = params as IParams
 
-    await voltageClass.delete()
+    await VoltageClassService.deleteDistrict(voltageClassParams)
 
     return response.status(204)
   }
