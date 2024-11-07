@@ -4,6 +4,8 @@ import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
 import { substationValidator } from '#validators/substation'
 import { substationNoteValidator } from '#validators/substation_note'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell, Row } from 'exceljs'
@@ -135,6 +137,18 @@ export default class SubstationService {
     return buffer
   }
 
+  static async createSubstation(req: Request, auth: Authenticator<Authenticators>): Promise<Substation> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(substationValidator)
+    const substation = await Substation.create({
+      userId: user?.id,
+      nameSearch: transliterate(validatedData.name),
+      ...validatedData,
+    })
+
+    return substation
+  }
+
   static async update(req: Request, params: IParams): Promise<Substation> {
     const substation = await Substation.findOrFail(params.id)
     const validatedData = await req.validateUsing(substationValidator)
@@ -151,5 +165,12 @@ export default class SubstationService {
     const updSubstation = await substation.merge(validatedData).save()
 
     return updSubstation
+  }
+
+  static async deleteSubstation(params: IParams): Promise<void> {
+    const substation = await Substation.findOrFail(params.id)
+
+    await substation.related('works').query().delete()
+    await substation.delete()
   }
 }

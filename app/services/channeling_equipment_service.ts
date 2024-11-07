@@ -1,5 +1,9 @@
+import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
 import ChannelingEquipment from '#models/channeling_equipment'
+import { channelingEquipmant } from '#validators/channeling_equipment'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 
@@ -15,5 +19,27 @@ export default class ChannelingEquipmentService {
       .paginate(page, limit)
 
     return channelingEquipments.serialize()
+  }
+
+  static async createChannelingEquipment(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelingEquipment> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(channelingEquipmant)
+    const equipment = await ChannelingEquipment.create({ userId: user?.id, ...validatedData })
+
+    return equipment
+  }
+
+  static async updateChannelingEquipment(req: Request, params: IParams): Promise<ChannelingEquipment> {
+    const equipment = await ChannelingEquipment.findOrFail(params.id)
+    const validatedData = await req.validateUsing(channelingEquipmant)
+    const updEquipment = await equipment.merge(validatedData).save()
+
+    return updEquipment
+  }
+
+  static async deleteChannelingEquipment(params: IParams): Promise<void> {
+    const equipment = await ChannelingEquipment.findOrFail(params.id)
+
+    await equipment.delete()
   }
 }

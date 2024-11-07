@@ -37,7 +37,5 @@ export default class GsmOperatorService {
     const gsmOperator = await GsmOperator.findOrFail(params.id)
 
     await gsmOperator.delete()
-    
-    return
   }
 }

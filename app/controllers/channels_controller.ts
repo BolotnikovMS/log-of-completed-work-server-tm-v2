@@ -1,5 +1,6 @@
 import ChannelDto from '#dtos/channel'
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import Channel from '#models/channel'
 import ChannelPolicy from '#policies/channel_policy'
 import ChannelService from '#services/channel_service'
@@ -19,9 +20,7 @@ export default class ChannelsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(channelValidator)
-    const channel = await Channel.create({ userId: user?.id, ...validatedData })
+    const channel = await ChannelService.createChannel(request, auth)
 
     return response.status(200).json(channel)
   }
@@ -31,9 +30,8 @@ export default class ChannelsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const channel = await Channel.findOrFail(params.id)
-    const validatedData = await request.validateUsing(channelValidator)
-    const updChannel = await channel.merge(validatedData).save()
+    const channelParams = params as IParams
+    const updChannel = await ChannelService.updateChannel(request, channelParams)
 
     return response.status(200).json(updChannel)
   }
@@ -43,9 +41,9 @@ export default class ChannelsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const channel = await Channel.findOrFail(params.id)
-
-    await channel.delete()
+    const channelParams = params as IParams
+    
+    await ChannelService.deleteChannel(channelParams)
 
     return response.status(204)
   }

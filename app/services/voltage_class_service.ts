@@ -41,7 +41,5 @@ export default class VoltageClassService {
     const voltageClass = await VoltageClass.findOrFail(params.id)
 
     await voltageClass.delete()
-
-    return
   }
 }

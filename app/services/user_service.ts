@@ -28,8 +28,6 @@ export default class UserService {
     const validatedData = await req.validateUsing(registerValidator)
 
     await User.create(validatedData)
-
-    return
   }
 
   static async changePassword(req: Request, userId: number): Promise<User | boolean> {
@@ -47,15 +45,11 @@ export default class UserService {
     const validatedData = await req.validateUsing(blockUserAccountValidator)
 
     await user.merge(validatedData).save()
-
-    return
   }
 
   static async changeRole(req: Request, user: User): Promise<void> {
     const validatedData = await req.validateUsing(changeUserRole)
 
     await user.merge(validatedData).save()
-
-    return
   }
 }

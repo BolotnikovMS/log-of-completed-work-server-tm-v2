@@ -1,10 +1,14 @@
 import CompletedWorkDto from '#dtos/completed_work'
+import { OrderByEnums } from '#enums/sort'
+import { IParams } from '#interfaces/params'
+import { IQueryParams } from '#interfaces/query_params'
 import CompletedWork from '#models/completed_work'
+import { completedWorkValidator } from '#validators/completed_work'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell } from 'exceljs'
-import { OrderByEnums } from '../enums/sort.js'
-import { IQueryParams } from '../interfaces/query_params.js'
 
 export default class CompletedWorkService {
   static async getCompletedWorks(req: Request): Promise<{
@@ -78,5 +82,22 @@ export default class CompletedWorkService {
     const buffer = await workbook.xlsx.writeBuffer()
 
     return buffer
+  }
+
+  static async createWork(req: Request, auth: Authenticator<Authenticators>): Promise<CompletedWork> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(completedWorkValidator)
+    const completedWork = await CompletedWork.create({
+      userId: user?.id,
+      ...validatedData,
+    })
+
+    return completedWork
+  }
+
+  static async deleteWork(params: IParams): Promise<void> {
+    const completedWork = await CompletedWork.findOrFail(params.id)
+
+    await completedWork.delete()
   }
 }

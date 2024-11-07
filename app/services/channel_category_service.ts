@@ -1,6 +1,10 @@
 import { OrderByEnums } from '#enums/sort'
+import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
 import ChannelCategory from '#models/channel_category'
+import { channelCategoryValidator } from '#validators/channel_category'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 
 export default class ChannelCategoryService {
@@ -11,5 +15,27 @@ export default class ChannelCategoryService {
       .paginate(page, limit)
 
     return channelCategories
+  }
+
+  static async createChannelCategory(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelCategory> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(channelCategoryValidator)
+    const channelCategory = await ChannelCategory.create({ userId: user?.id, ...validatedData })
+
+    return channelCategory
+  }
+
+  static async updateChannelCategory(req: Request, params: IParams): Promise<ChannelCategory> {
+    const channelCategory = await ChannelCategory.findOrFail(params.id)
+    const validatedData = await req.validateUsing(channelCategoryValidator)
+    const updChannelCategory = await channelCategory.merge(validatedData).save()
+
+    return updChannelCategory
+  }
+
+  static async deleteChannelCategory(params: IParams): Promise<void> {
+    const channelCategory = await ChannelCategory.findOrFail(params.id)
+
+    await channelCategory.delete()
   }
 }

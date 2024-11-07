@@ -41,7 +41,5 @@ export class HeadControllersService {
     const headController = await HeadController.findOrFail(params.id)
 
     await headController.delete()
-
-    return
   }
 }

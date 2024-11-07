@@ -1,8 +1,7 @@
 import { accessErrorMessages } from '#helpers/access_error_messages'
-import ChannelCategory from '#models/channel_category'
+import { IParams } from '#interfaces/params'
 import ChannelCategoryPolicy from '#policies/channel_category_policy'
 import ChannelCategoryService from '#services/channel_category_service'
-import { channelCategoryValidator } from '#validators/channel_category'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelCategoriesController {
@@ -17,9 +16,7 @@ export default class ChannelCategoriesController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(channelCategoryValidator)
-    const channelCategory = await ChannelCategory.create({ userId: user?.id, ...validatedData })
+    const channelCategory = await ChannelCategoryService.createChannelCategory(request, auth)
 
     return response.status(200).json(channelCategory)
 
@@ -30,9 +27,8 @@ export default class ChannelCategoriesController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const channelCategory = await ChannelCategory.findOrFail(params.id)
-    const validatedData = await request.validateUsing(channelCategoryValidator)
-    const updChannelCategory = await channelCategory.merge(validatedData).save()
+    const channelCategoryParams = params as IParams
+    const updChannelCategory = await ChannelCategoryService.updateChannelCategory(request, channelCategoryParams)
 
     return response.status(200).json(updChannelCategory)
   }
@@ -42,9 +38,9 @@ export default class ChannelCategoriesController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const channelCategory = await ChannelCategory.findOrFail(params.id)
+    const channelCategoryParams = params as IParams
 
-    await channelCategory.delete()
+    await ChannelCategoryService.deleteChannelCategory(channelCategoryParams)
 
     return response.status(204)
   }

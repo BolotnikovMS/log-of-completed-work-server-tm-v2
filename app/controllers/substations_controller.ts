@@ -1,12 +1,10 @@
 import SubstationDto from '#dtos/substation'
 import SubstationListDto from '#dtos/substation_lists'
 import { accessErrorMessages } from '#helpers/access_error_messages'
-import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
 import SubstationPolicy from '#policies/substation_policy'
 import SubstationService from '#services/substation_service'
-import { substationValidator } from '#validators/substation'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SubstationsController {
@@ -28,13 +26,7 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(substationValidator)
-    const substation = await Substation.create({
-      userId: user?.id,
-      nameSearch: transliterate(validatedData.name),
-      ...validatedData,
-    })
+    const substation = await SubstationService.createSubstation(request, auth)
 
     return response.status(201).json(substation)
   }
@@ -67,10 +59,9 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const substation = await Substation.findOrFail(params.id)
+    const substationParam = params as IParams
 
-    await substation.related('works').query().delete()
-    await substation.delete()
+    await SubstationService.deleteSubstation(substationParam)
 
     return response.status(204)
   }

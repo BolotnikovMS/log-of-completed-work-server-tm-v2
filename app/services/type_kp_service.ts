@@ -41,7 +41,5 @@ export default class TypeKpService {
     const typeKp = await TypeKp.findOrFail(params.id)
 
     await typeKp.delete()
-
-    return
   }
 }

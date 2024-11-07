@@ -1,7 +1,11 @@
 import ChannelDto from '#dtos/channel'
 import { OrderByEnums } from '#enums/sort'
+import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
 import Channel from '#models/channel'
+import { channelValidator } from '#validators/channel'
+import { Authenticator } from '@adonisjs/auth'
+import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell } from 'exceljs'
@@ -23,6 +27,7 @@ export default class ChannelService {
 
     return channels.serialize()
   }
+
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const channels = await this.getChannels(req)
     const transformData = channels.data.map(channel => new ChannelDto(channel as Channel))
@@ -62,5 +67,27 @@ export default class ChannelService {
     const buffer = await workbook.xlsx.writeBuffer()
 
     return buffer
+  }
+
+  static async createChannel(req: Request, auth: Authenticator<Authenticators>): Promise<Channel> {
+    const { user } = auth
+    const validatedData = await req.validateUsing(channelValidator)
+    const channel = await Channel.create({ userId: user?.id, ...validatedData })
+
+    return channel
+  }
+
+  static async updateChannel(req: Request, params: IParams): Promise<Channel> {
+    const channel = await Channel.findOrFail(params.id)
+    const validatedData = await req.validateUsing(channelValidator)
+    const updChannel = await channel.merge(validatedData).save()
+
+    return updChannel
+  }
+
+  static async deleteChannel(params: IParams): Promise<void> {
+    const channel = await Channel.findOrFail(params.id)
+
+    await channel.delete()
   }
 }

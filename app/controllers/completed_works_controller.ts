@@ -1,5 +1,6 @@
 import CompletedWorkDto from '#dtos/completed_work'
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import CompletedWork from '#models/completed_work'
 import CompletedWorkPolicy from '#policies/completed_work_policy'
 import CompletedWorkService from '#services/completed_wokr_service'
@@ -19,12 +20,7 @@ export default class CompletedWorksController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const { user } = auth
-    const validatedData = await request.validateUsing(completedWorkValidator)
-    const completedWork = await CompletedWork.create({
-      userId: user?.id,
-      ...validatedData,
-    })
+    const completedWork = await CompletedWorkService.createWork(request, auth)
 
     return response.status(201).json(completedWork)
   }
@@ -46,9 +42,9 @@ export default class CompletedWorksController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const completedWork = await CompletedWork.findOrFail(params.id)
+    const completedWorkParams = params as IParams
 
-    await completedWork.delete()
+    await CompletedWorkService.deleteWork(completedWorkParams)
 
     return response.status(204)
   }

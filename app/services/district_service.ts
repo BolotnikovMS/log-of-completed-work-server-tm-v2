@@ -1,12 +1,12 @@
+import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
+import { IQueryParams } from '#interfaces/query_params'
 import District from '#models/district'
 import { districtValidator } from '#validators/district'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import { OrderByEnums } from '#enums/sort'
-import { IQueryParams } from '#interfaces/query_params'
 
 export default class DistrictService {
   static async getDistricts(req: Request): Promise<{
@@ -44,7 +44,5 @@ export default class DistrictService {
     const district = await District.findOrFail(params.id)
 
     await district.delete()
-
-    return
   }
 }

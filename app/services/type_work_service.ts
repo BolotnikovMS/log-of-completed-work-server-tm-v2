@@ -36,7 +36,5 @@ export default class TypeWorkService {
     const typeWork = await TypeWork.findOrFail(params.id)
 
     await typeWork.delete()
-
-    return
   }
 }
