@@ -1,12 +1,15 @@
+import ChannelCategoryDto from '#dtos/channel_category'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
+import ChannelCategory from '#models/channel_category'
 import ChannelCategoryPolicy from '#policies/channel_category_policy'
 import ChannelCategoryService from '#services/channel_category_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelCategoriesController {
   async index({ request, response }: HttpContext) {
-    const channelCategories = await ChannelCategoryService.getChannelCategories(request)
+    const { meta, data } = await ChannelCategoryService.getChannelCategories(request)
+    const channelCategories = { meta, data: data.map(channelCategory => new ChannelCategoryDto(channelCategory as ChannelCategory))}
 
     return response.status(200).json(channelCategories)
   }
