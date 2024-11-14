@@ -4,6 +4,7 @@ import { BaseModelDto } from '@adocasts.com/dto/base'
 export default class ChannelCategoryDto extends BaseModelDto {
   declare id: number
   declare name: string
+  declare shortName: string
 
   constructor(channelCategory?: ChannelCategory) {
     super()
@@ -12,5 +13,6 @@ export default class ChannelCategoryDto extends BaseModelDto {
 
     this.id = channelCategory.id
     this.name = channelCategory.name
+    this.shortName = channelCategory.shortName
   }
 }

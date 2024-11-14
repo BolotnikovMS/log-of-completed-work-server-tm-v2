@@ -16,6 +16,11 @@ export default class ChannelCategory extends BaseModel {
   })
   declare name: string
 
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
+  declare shortName: string
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
