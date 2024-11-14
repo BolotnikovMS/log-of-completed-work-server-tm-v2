@@ -36,7 +36,7 @@ export default class ChannelService {
 
     worksheet.columns = [
       { header: 'Объект', key: 'substation', width: 26 },
-      { header: 'Категория канала', key: 'channelCategory', width: 20 },
+      { header: 'Категория канала', key: 'channelCategory', width: 25 },
       { header: 'Тип канала', key: 'channelType', width: 20 },
       { header: 'Тип оборудования', key: 'channelEquipment', width: 20 },
       { header: 'GSM оператор', key: 'gsmOperator', width: 20 },
