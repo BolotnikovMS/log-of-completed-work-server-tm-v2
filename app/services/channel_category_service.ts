@@ -6,15 +6,16 @@ import { channelCategoryValidator } from '#validators/channel_category'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class ChannelCategoryService {
-  static async getChannelCategories(req: Request) {
+  static async getChannelCategories(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
     const { sort, order, page, limit } = req.qs() as IQueryParams
     const channelCategories = await ChannelCategory.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .paginate(page, limit)
 
-    return channelCategories
+    return channelCategories.serialize()
   }
 
   static async createChannelCategory(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelCategory> {
