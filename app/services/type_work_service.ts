@@ -9,7 +9,7 @@ import { ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class TypeWorkService {
   static async getTypesWork(req: Request): Promise<{ meta: any; data: ModelObject[] }> {
-    const { page, limit } = req.qs() as IQueryParams
+    const { page, limit = -1 } = req.qs() as IQueryParams
     const typesWork = await TypeWork.query()
       .paginate(page, limit)
 
