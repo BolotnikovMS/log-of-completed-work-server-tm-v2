@@ -67,10 +67,10 @@ test.group('Тесты для проверки функционала "Райо�
 
   test('Добавление новой записи с корректным токеном, правами и некорректными данными')
     .with([
-      { name: 'T', shortName: 'T' },
-      { name: 'npspjgunibblwreuzjcgghqsbgvfyzttiusohctfcdvjofpaatndbzklunwzdvmutxamzcfuyccfblvpiioxswalzqhuxuzihtkgwiilogutohdayekovbwnpbtvvlfovhpqtanbmumzccgacjxfpakvcwejqknfkarncrziifhtpqbuvgdogpeuuwbwvvcccynirctmcdbgrwsarrdhiorobmrfrxswrepxotsqfsemezvtel', shortName: 'npspjgunibblwreuzjcgghqsbgvfyzttiusohctfcdvjofpaatndbzklunwzdvmutxamzcfuyccfblvpiioxswalzqhuxuzihtkgwiilogutohdayekovbwnpbtvvlfovhpqtanbmumzccgacjxfpakvcwejqknfkarncrziifhtpqbuvgdogpeuuwbwvvcccynirctmcdbgrwsarrdhiorobmrfrxswrepxotsqfsemezvtel' },
-      { name: '', shortName: '' },
-      { name: '   ', shortName: '    ' },
+      { name: 'T', shortName: 'T', errorMessages: { errors: [{ message: 'Минимальная длина 2 символа.' }, { message: 'Минимальная длина 2 символа.' }] } },
+      { name: 'npspjgunibblwreuzjcgghqsbgvfyzttiusohctfcdvjofpaatndbzklunwzdvmutxamzcfuyccfblvpiioxswalzqhuxuzihtkgwiilogutohdayekovbwnpbtvvlfovhpqtanbmumzccgacjxfpakvcwejqknfkarncrziifhtpqbuvgdogpeuuwbwvvcccynirctmcdbgrwsarrdhiorobmrfrxswrepxotsqfsemezvtel', shortName: 'npspjgunibblwreuzjcgghqsbgvfyzttiusohctfcdvjofpaatndbzklunwzdvmutxamzcfuyccfblvpiioxswalzqhuxuzihtkgwiilogutohdayekovbwnpbtvvlfovhpqtanbmumzccgacjxfpakvcwejqknfkarncrziifhtpqbuvgdogpeuuwbwvvcccynirctmcdbgrwsarrdhiorobmrfrxswrepxotsqfsemezvtel', errorMessages: { errors: [{message: 'Максимальная длина 240 символов.'}] } },
+      { name: '', shortName: '', errorMessages: { errors: [{message: 'Поле является обязательным.'}] } },
+      { name: '   ', shortName: '    ', errorMessages: { errors: [{message: 'Минимальная длина 2 символа.'}] } },
     ])
     .run(async ({ client }, testItem) => {
       const user = await User.findOrFail(1)
@@ -81,6 +81,7 @@ test.group('Тесты для проверки функционала "Райо�
         .loginAs(user)
 
       resp.assertStatus(422)
+      resp.assertBodyContains(testItem.errorMessages)
     })
 
   test('Добавление новой записи с корректным токеном, но без прав', async ({ client }) => {
