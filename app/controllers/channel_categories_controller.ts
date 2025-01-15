@@ -7,6 +7,21 @@ import ChannelCategoryService from '#services/channel_category_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelCategoriesController {
+  /**
+  * @index
+  * @description Возвращает массив с категориями каналов.
+  * @paramQuery page - Страница. - @type(number) @example(1)
+  * @paramQuery limit - Количесвто записей. - @type(number) @example(10)
+  * @paramQuery sort - Сортировка по столбцу. - @type(string) @example(name)
+  * @paramQuery order - Сортировка (asc, desc). - @type(string) @example(asc)
+  * @responseBody 200 - <ChannelCategory[]>
+  * @responseHeader 200 - @use(paginated)
+  // * @responseHeader 200 - x-pages - Количество страниц. - @example(1)
+  * @responseHeader 401
+  * @responseBody 401 - {errors : [{message: 'Unauthorized access'}]}
+  * @responseHeader 403
+  * @responseBody 403 - {message: 'У вас нету прав на просмотр!'}
+  */
   async index({ request, response }: HttpContext) {
     const { meta, data } = await ChannelCategoryService.getChannelCategories(request)
     const channelCategories = { meta, data: data.map(channelCategory => new ChannelCategoryDto(channelCategory as ChannelCategory))}

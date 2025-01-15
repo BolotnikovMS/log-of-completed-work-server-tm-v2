@@ -6,6 +6,18 @@ import hash from '@adonisjs/core/services/hash'
 import DB from '@adonisjs/lucid/services/db'
 
 export default class AuthController {
+  /**
+  * @login
+  * @description Аутентификация пользователя и получение токена.
+  * @requestBody {"username": "", "password": ""}
+  * @responseHeader 200
+  // * @responseBody 200 - <User>.with(relations).exclude(id, created_at, updated_at)
+  * @responseBody 200 - {"user": {"id": 999, "username": "test", "position": "Test", "email": "test@mail.ru", "role": {"name": "User"}, "fullName": "Test Test Test", "shortName": "Test T.T."}, "token": {"type": "bearer", "token":"token", "expiresIn": "date"}}
+  * @responseHeader 400
+  * @responseBody 400 - Учетная запись заблокирована!
+  * @responseHeader 404
+  * @responseBody 404 - Неверные учетные данные!
+  */
   async login({ response, request }: HttpContext) {
     try {
       const { username, password } = await request.validateUsing(loginValidator)
