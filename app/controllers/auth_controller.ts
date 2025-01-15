@@ -58,6 +58,16 @@ export default class AuthController {
     }
   }
 
+  /**
+  *
+  * @profile
+  * @summary Получение профиля
+  * @description Получение профиля аутентифицированного пользователя.
+  * @responseHeader 200
+  * @responseBody 200 - <User>.with(relations).exclude(created_at, updated_at)
+  * @responseHeader 401
+  * @responseBody 401 - Учетная запись заблокирована!
+  */
   async profile({ response, auth }: HttpContext) {
     const user = await auth.authenticate()
 
