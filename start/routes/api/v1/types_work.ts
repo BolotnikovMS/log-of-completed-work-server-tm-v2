@@ -1,6 +1,7 @@
-import TypesWorksController from "#controllers/types_works_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const TypesWorksController = () => import("#controllers/types_works_controller")
 
 export const typesWork = router
   .group(() => {

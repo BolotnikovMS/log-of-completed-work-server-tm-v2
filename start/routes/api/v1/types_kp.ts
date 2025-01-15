@@ -1,6 +1,7 @@
-import TypesKpsController from '#controllers/types_kps_controller'
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
+
+const TypesKpsController = () => import('#controllers/types_kps_controller')
 
 export const typesKpRoutes = router
   .group(() => {

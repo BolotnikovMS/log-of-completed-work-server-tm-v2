@@ -1,6 +1,7 @@
-import ChannelsController from "#controllers/channels_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const ChannelsController = () => import("#controllers/channels_controller")
 
 export const channelRoutes = router
   .group(() => {

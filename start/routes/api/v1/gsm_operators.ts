@@ -1,6 +1,7 @@
-import GsmOperatorsController from "#controllers/gsm_operators_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const GsmOperatorsController = () => import("#controllers/gsm_operators_controller")
 
 export const gsmOperatorsRoutes = router
   .group(() => {

@@ -1,6 +1,7 @@
-import SubstationsController from "#controllers/substations_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const SubstationsController = () => import("#controllers/substations_controller")
 
 export const substationsRoutes = router
   .group(() => {

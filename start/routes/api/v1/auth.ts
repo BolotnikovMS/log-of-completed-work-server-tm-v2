@@ -1,6 +1,7 @@
-import AuthController from "#controllers/auth_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const AuthController = () => import("#controllers/auth_controller")
 
 export const authRoutes = router.group(() => {
   router.post('/login', [AuthController, 'login'])

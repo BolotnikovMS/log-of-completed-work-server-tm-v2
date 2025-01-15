@@ -1,6 +1,7 @@
-import HeadsController from "#controllers/heads_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const HeadsController = () => import("#controllers/heads_controller")
 
 export const headControllersRoutes = router
   .group(() => {

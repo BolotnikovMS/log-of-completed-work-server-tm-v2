@@ -1,6 +1,7 @@
-import VoltageClassesController from "#controllers/voltage_classes_controller"
 import { middleware } from '#start/kernel'
 import router from "@adonisjs/core/services/router"
+
+const VoltageClassesController = () => import("#controllers/voltage_classes_controller")
 
 export const voltageClassesRoutes = router
   .group(() => {

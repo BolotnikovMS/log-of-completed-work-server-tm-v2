@@ -1,6 +1,7 @@
-import CompletedWorksController from "#controllers/completed_works_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
+
+const CompletedWorksController = () => import("#controllers/completed_works_controller")
 
 export const completedWorksRoutes = router
   .group(() => {
