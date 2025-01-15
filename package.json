@@ -67,6 +67,7 @@
     "@adonisjs/static": "^1.1.1",
     "@poppinss/utils": "^6.8.3",
     "@vinejs/vine": "^2.1.0",
+    "adonis-autoswagger": "^3.64.0",
     "better-sqlite3": "^11.5.0",
     "exceljs": "^4.4.0",
     "luxon": "^3.5.0",
