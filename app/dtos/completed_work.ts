@@ -10,6 +10,7 @@ export default class CompletedWorkDto extends BaseModelDto {
   declare description: string
   declare note: string | null
   declare dateCompletion: string
+  declare inControl: boolean
   declare work_producer: string | null
   declare author: string | null
   declare type_work: string | null
@@ -28,6 +29,7 @@ export default class CompletedWorkDto extends BaseModelDto {
     this.description = completedWork.description
     this.note = completedWork.note
     this.dateCompletion = completedWork.dateCompletion.toString()!
+    this.inControl = completedWork.inControl
     this.work_producer = completedWork.work_producer?.shortName
     this.author = completedWork.author?.shortName
     this.type_work = completedWork.type_work?.name

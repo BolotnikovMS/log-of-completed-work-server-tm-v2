@@ -37,6 +37,11 @@ export default class CompletedWork extends BaseModel {
   // @column()
   // declare dateCompletion: string
 
+  @column({
+    consume: (value: string): boolean => Boolean(value),
+  })
+  declare inControl: boolean
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
