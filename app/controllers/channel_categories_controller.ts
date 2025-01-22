@@ -12,11 +12,10 @@ export default class ChannelCategoriesController {
   * @description Возвращает массив с категориями каналов.
   * @paramQuery page - Страница. - @type(number) @example(1)
   * @paramQuery limit - Количесвто записей. - @type(number) @example(10)
-  * @paramQuery sort - Сортировка по столбцу. - @type(string) @example(name)
-  * @paramQuery order - Сортировка (asc, desc). - @type(string) @example(asc)
-  * @responseBody 200 - <ChannelCategory[]>
+  * @paramQuery sort - Сортировка по столбцу. - @type(string) @enum(id, name, shortName)
+  * @paramQuery order - Сортировка. - @enum(asc, desc)
+  * @responseBody 200 - <ChannelCategory[]>.only(id, name, short_name)
   * @responseHeader 200 - @use(paginated)
-  // * @responseHeader 200 - x-pages - Количество страниц. - @example(1)
   * @responseHeader 401
   * @responseBody 401 - {errors : [{message: 'Unauthorized access'}]}
   * @responseHeader 403

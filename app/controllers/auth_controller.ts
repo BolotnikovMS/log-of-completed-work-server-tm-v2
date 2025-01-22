@@ -59,7 +59,6 @@ export default class AuthController {
   }
 
   /**
-  *
   * @profile
   * @summary Получение профиля
   * @description Получение профиля аутентифицированного пользователя.
