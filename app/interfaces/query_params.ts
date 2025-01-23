@@ -21,4 +21,5 @@ export interface IQueryParams {
   channelType: string
   channelCategory: string
   typeWork: string
+  inControl: string
 }
