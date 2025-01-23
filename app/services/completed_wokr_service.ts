@@ -24,7 +24,8 @@ export default class CompletedWorkService {
       dateStart,
       dateEnd,
       executor,
-      typeWork
+      typeWork,
+      inControl
     } = req.qs() as IQueryParams
     const works = await CompletedWork.query()
       .if(dateStart && dateEnd, (query) =>
@@ -34,6 +35,7 @@ export default class CompletedWorkService {
       .if(substation, (query) => query.where('substationId', '=', substation))
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(typeWork, query => query.whereIn('typeWorkId', [...typeWork]))
+      .if(inControl, query => query.where('inControl', Boolean(inControl)))
       .preload('substation', (query) => query.preload('voltage_class'))
       .preload('work_producer')
       .preload('author')
