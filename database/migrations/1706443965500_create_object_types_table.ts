@@ -25,14 +25,14 @@ export default class extends BaseSchema {
         },
         {
           user_id: 1,
-          name: 'УС',
-          short_name: 'Узел связи',
+          name: 'Узел связи',
+          short_name: 'УС',
           created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
         },
         {
           user_id: 1,
-          name: 'ТП',
-          short_name: 'Трансформаторная подстанция',
+          name: 'Трансформаторная подстанция',
+          short_name: 'ТП',
           created_at: DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss'),
         },
       ])
