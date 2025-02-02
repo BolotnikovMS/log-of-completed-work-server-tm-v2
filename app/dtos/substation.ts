@@ -10,6 +10,7 @@ export default class SubstationDto extends BaseModelDto {
   declare voltageClassesId: number
   declare typeKpId: number
   declare headControllerId: number
+  declare objectTypeId: number
   declare name: string
   declare rdu: boolean
   declare note: string | null
@@ -21,6 +22,7 @@ export default class SubstationDto extends BaseModelDto {
   declare files_backups: FileDto[]
   declare other_files: FileDto[]
   declare channels: ChannelDto[]
+  declare object_type: string | null
 
   constructor(substation?: Substation) {
     super()
@@ -33,6 +35,7 @@ export default class SubstationDto extends BaseModelDto {
     this.voltageClassesId = substation.voltageClassesId
     this.typeKpId = substation.typeKpId
     this.headControllerId = substation.headControllerId
+    this.objectTypeId = substation.objectTypeId
     this.name = substation.name
     this.rdu = substation.rdu
     this.note = substation.note
@@ -44,5 +47,6 @@ export default class SubstationDto extends BaseModelDto {
     this.files_backups = FileDto.fromArray(substation.files_backups)
     this.other_files = FileDto.fromArray(substation.other_files)
     this.channels = ChannelDto.fromArray(substation.channels)
+    this.object_type = substation.object_type?.shortName
   }
 }
