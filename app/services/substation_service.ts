@@ -46,6 +46,7 @@ export default class SubstationService {
       .preload('district')
       .preload('type_kp')
       .preload('head_controller')
+      .preload('object_type')
       .preload('channels', query => {
         query
           .preload('channel_category')
@@ -68,6 +69,7 @@ export default class SubstationService {
     await substation.load('files_backups', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('channels', query => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
+    await substation.load('object_type')
 
     return { substation, numberCompletedWorks: substation.$extras.numberCompletedWorks }
   }
