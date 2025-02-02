@@ -36,7 +36,10 @@ export default class CompletedWorkService {
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(typeWork, query => query.whereIn('typeWorkId', [...typeWork]))
       .if(inControl, query => query.where('inControl', Boolean(inControl)))
-      .preload('substation', (query) => query.preload('voltage_class'))
+      .preload('substation', (query) => {
+        query.preload('voltage_class')
+        query.preload('object_type')
+      })
       .preload('work_producer')
       .preload('author')
       .preload('type_work')
