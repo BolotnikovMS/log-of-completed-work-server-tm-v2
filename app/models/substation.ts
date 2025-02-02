@@ -4,6 +4,7 @@ import CompletedWork from '#models/completed_work'
 import District from '#models/district'
 import File from '#models/file'
 import HeadController from '#models/head_controller'
+import ObjectType from '#models/object_type'
 import TypeKp from '#models/type_kp'
 import VoltageClass from '#models/voltage_class'
 import { BaseModel, belongsTo, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
@@ -35,6 +36,9 @@ export default class Substation extends BaseModel {
   declare headControllerId: number
 
   @column()
+  declare objectTypeId: number
+
+  @column()
   declare name: string
 
   @column()
@@ -58,7 +62,7 @@ export default class Substation extends BaseModel {
 
   @computed()
   get fullNameSubstation() {
-    return `ПС ${this.voltage_class?.name} кВ ${this.name}`
+    return `${this.object_type?.shortName} ${this.voltage_class?.name} кВ ${this.name}`
   }
 
   @hasMany(() => CompletedWork)
@@ -102,4 +106,8 @@ export default class Substation extends BaseModel {
 
   @hasMany(() => Channel)
   declare channels: HasMany<typeof Channel>
+
+  @belongsTo(() => ObjectType)
+  declare object_type: BelongsTo<typeof ObjectType>
+
 }
