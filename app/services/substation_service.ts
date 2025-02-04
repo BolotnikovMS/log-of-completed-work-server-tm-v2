@@ -20,7 +20,7 @@ export default class SubstationService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = -1, search, typeKp, headController, district, channelType, channelCategory } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = -1, search, typeKp, headController, district, channelType, channelCategory, objectType } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
@@ -28,6 +28,7 @@ export default class SubstationService {
       .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
       .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
       .if(headController, (query) => query.where('head_controller_id', '=', headController))
+      .if(objectType, (query) => query.where('object_type_id', '=', objectType))
       .if(channelType || channelCategory, query => {
         query.whereHas('channels', query => {
           query
@@ -82,7 +83,8 @@ export default class SubstationService {
 
     worksheet.columns = [
       { header: 'Район/ГП/УС', key: 'district', width: 20 },
-      { header: 'Подстанция', key: 'fullNameSubstation', width: 25 },
+      { header: 'Объект', key: 'fullNameSubstation', width: 25 },
+      { header: 'Тип объекта', key: 'objectType', width: 16 },
       { header: 'РДУ', key: 'rdu', width: 12 },
       { header: 'Тип КП', key: 'typeKp', width: 17 },
       { header: 'Головной контроллер', key: 'headeController', width: 20 },
@@ -106,6 +108,7 @@ export default class SubstationService {
           const row = worksheet.addRow({
             district: substation.district,
             fullNameSubstation: substation.fullNameSubstation,
+            objectType: substation.object_type ?? 'Не указан',
             rdu: substation.rdu,
             typeKp: substation.type_kp ?? 'Не указан',
             headeController: substation.head_controller ?? 'Не указан',
@@ -121,6 +124,7 @@ export default class SubstationService {
         const row = worksheet.addRow({
           district: substation.district,
           fullNameSubstation: substation.fullNameSubstation,
+          objectType: substation.object_type ?? 'Не указан',
           rdu: substation.rdu,
           typeKp: substation.type_kp ?? 'Не указан',
           headeController: substation.head_controller ?? 'Не указан',
