@@ -18,7 +18,10 @@ export default class ChannelService {
       .if(substation, (query) => query.where('substationId', '=', substation))
       .if(channelType, (query) => query.where('channelTypeId', '=', channelType))
       .if(channelCategory, (query) => query.where('channelCategoryId', '=', channelCategory))
-      .preload('substation', query => query.preload('voltage_class'))
+      .preload('substation', (query) => {
+        query.preload('voltage_class')
+        query.preload('object_type')
+      })
       .preload('channel_category')
       .preload('channel_type')
       .preload('channel_equipment')
