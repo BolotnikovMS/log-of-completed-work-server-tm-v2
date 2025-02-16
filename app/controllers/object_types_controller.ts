@@ -14,6 +14,13 @@ export default class ObjectTypesController {
     return response.status(200).json(objectTypes)
   }
 
+  async getObjectType({ params, response }: HttpContext) {
+    const objectTypeParams = params as IParams
+    const objectType = await ObjectTypeService.getObjectTypeById(objectTypeParams)
+
+    return response.status(200).json(objectType)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(ObjectTypePolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })

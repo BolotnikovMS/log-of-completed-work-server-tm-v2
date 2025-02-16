@@ -25,6 +25,14 @@ export default class DistrictsController {
     return response.status(200).json(substations)
   }
 
+  async getDistrict({ params, response }: HttpContext) {
+    const districtParams = params as IParams
+    const data = await DistrictService.getDistrictById(districtParams)
+    const district = new DistrictDto(data as District)
+
+    return response.status(200).json(district)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(DistrictPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })

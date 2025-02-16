@@ -19,6 +19,12 @@ export default class ObjectTypeService {
     return objectTypes.serialize()
   }
 
+  static async getObjectTypeById(params: IParams): Promise<ObjectType> {
+    const objectType = await ObjectType.findOrFail(params.id)
+
+    return objectType
+  }
+
   static async createObjectType(req: Request, auth: Authenticator<Authenticators>): Promise<ObjectType> {
     const { user } = auth
     const validatedData = await req.validateUsing(objectTypeValidator)
@@ -37,7 +43,7 @@ export default class ObjectTypeService {
 
   static async deleteObjectType(params: IParams): Promise<void> {
     const objectType = await ObjectType.findOrFail(params.id)
-  
+
     await objectType.delete()
   }
 }

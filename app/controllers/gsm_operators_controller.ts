@@ -12,6 +12,13 @@ export default class GsmOperatorsController {
 
     return response.status(200).json(gsmOperators)
   }
+  
+  async getGsmOperator({ params, response }: HttpContext) {
+    const gsmOperatorParams = params as IParams
+    const gsmOperator = await GsmOperatorService.getGsmOperatorById(gsmOperatorParams)
+
+    return response.status(200).json(gsmOperator)
+  }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(GsmOperatorPolicy).denies('create')) {

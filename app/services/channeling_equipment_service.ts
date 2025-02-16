@@ -21,6 +21,12 @@ export default class ChannelingEquipmentService {
     return channelingEquipments.serialize()
   }
 
+  static async getChannelingEquipmentById(params: IParams): Promise<ChannelingEquipment> {
+    const equipment = await ChannelingEquipment.findOrFail(params.id)
+
+    return equipment
+  }
+
   static async createChannelingEquipment(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelingEquipment> {
     const { user } = auth
     const validatedData = await req.validateUsing(channelingEquipmant)

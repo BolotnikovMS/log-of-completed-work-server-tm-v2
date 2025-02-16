@@ -16,6 +16,12 @@ export default class GsmOperatorService {
 
     return gsmOperators
   }
+  
+  static async getGsmOperatorById(params: IParams): Promise<GsmOperator> {
+    const gsmOperator = await GsmOperator.findOrFail(params.id)
+
+    return gsmOperator
+  }
 
   static async createGsmOperator(req: Request, auth: Authenticator<Authenticators>): Promise<GsmOperator> {
     const { user } = auth

@@ -6,6 +6,7 @@ export const districtsRoutes = router
   .group(() => {
     router.get('/', [DistrictsController, 'index'])
     router.post('/', [DistrictsController, 'store'])
+    router.get('/:id', [DistrictsController, 'getDistrict'])
     router.get('/:id/substations', [DistrictsController, 'getSubstations'])
     router.patch('/:id', [DistrictsController, 'update'])
     router.delete('/:id', [DistrictsController, 'destroy'])
