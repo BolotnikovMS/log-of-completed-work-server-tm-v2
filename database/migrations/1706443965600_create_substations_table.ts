@@ -40,6 +40,7 @@ export default class extends BaseSchema {
       table.string('name_search', 250)
       table.string('slug', 250).nullable()
       table.boolean('rdu').defaultTo(false)
+      table.text('note').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
