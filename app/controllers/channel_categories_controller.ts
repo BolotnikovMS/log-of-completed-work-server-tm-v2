@@ -13,6 +13,13 @@ export default class ChannelCategoriesController {
 
     return response.status(200).json(channelCategories)
   }
+  
+  async getChannelCategory({ params, response }: HttpContext) {
+    const channelCategoryParams = params as IParams
+    const channelCategory = await ChannelCategoryService.getChannelCategoryById(channelCategoryParams)
+
+    return response.status(200).json(channelCategory)
+  }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(ChannelCategoryPolicy).denies('create')) {
