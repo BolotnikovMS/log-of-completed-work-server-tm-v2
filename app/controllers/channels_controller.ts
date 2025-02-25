@@ -1,18 +1,25 @@
 import ChannelDto from '#dtos/channel'
+import ChannelListDto from '#dtos/channel_list'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Channel from '#models/channel'
 import ChannelPolicy from '#policies/channel_policy'
 import ChannelService from '#services/channel_service'
-import { channelValidator } from '#validators/channel'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await ChannelService.getChannels(request)
-    const channels = { meta, data: data.map(channel => new ChannelDto(channel as Channel)) }
+    const channels = { meta, data: data.map(channel => new ChannelListDto(channel as Channel)) }
 
     return response.status(200).json(channels)
+  }
+
+  async getChannel({ params, response }: HttpContext) {
+    const channelParams = params as IParams
+    const channel = new ChannelDto(await ChannelService.getChannelById(channelParams))
+
+    return response.status(200).json(channel)
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
@@ -42,7 +49,7 @@ export default class ChannelsController {
     }
 
     const channelParams = params as IParams
-    
+
     await ChannelService.deleteChannel(channelParams)
 
     return response.status(204)
