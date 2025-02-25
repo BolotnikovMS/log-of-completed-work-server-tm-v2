@@ -9,6 +9,7 @@ export const channelRoutes = router
     router.patch('/:id', [ChannelsController, 'update'])
     router.delete('/:id', [ChannelsController, 'destroy'])
     router.get('/download-excel', [ChannelsController, 'downloadExcel'])
+    router.get('/:id', [ChannelsController, 'getChannel'])
   })
   .prefix('/channels')
   .use([middleware.auth()])
