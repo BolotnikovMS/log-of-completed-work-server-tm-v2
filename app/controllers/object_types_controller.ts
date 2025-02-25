@@ -16,7 +16,7 @@ export default class ObjectTypesController {
 
   async getObjectType({ params, response }: HttpContext) {
     const objectTypeParams = params as IParams
-    const objectType = await ObjectTypeService.getObjectTypeById(objectTypeParams)
+    const objectType = new ObjectTypeDto(await ObjectTypeService.getObjectTypeById(objectTypeParams))
 
     return response.status(200).json(objectType)
   }
