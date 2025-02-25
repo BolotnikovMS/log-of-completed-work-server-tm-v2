@@ -112,7 +112,7 @@ export default class SubstationService {
             rdu: substation.rdu,
             typeKp: substation.type_kp ?? 'Не указан',
             headeController: substation.head_controller ?? 'Не указан',
-            channelCategory: channel.channel_category ?? 'Не указан',
+            channelCategory: channel.channel_category_short ?? 'Не указан',
             channelType: channel.channel_type ?? 'Не указан',
             channelIp: channel.ipAddress ?? 'Не указан',
             gsm: channel.gsm ?? 'Не указан',
