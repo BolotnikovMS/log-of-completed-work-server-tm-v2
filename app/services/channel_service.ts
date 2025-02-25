@@ -31,6 +31,21 @@ export default class ChannelService {
     return channels.serialize()
   }
 
+  static async getChannelById(params: IParams): Promise<Channel> {
+    const channel = await Channel.findOrFail(params.id)
+
+    await channel.load('substation', query => {
+      query.preload('voltage_class')
+      query.preload('object_type')
+    })
+    await channel.load('channel_category')
+    await channel.load('channel_type')
+    await channel.load('channel_equipment')
+    await channel.load('gsm_operator')
+
+    return channel
+  }
+
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const channels = await this.getChannels(req)
     const transformData = channels.data.map(channel => new ChannelDto(channel as Channel))
