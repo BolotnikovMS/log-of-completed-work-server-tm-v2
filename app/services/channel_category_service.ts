@@ -17,6 +17,12 @@ export default class ChannelCategoryService {
 
     return channelCategories.serialize()
   }
+  
+  static async getChannelCategoryById(params: IParams): Promise<ChannelCategory> {
+    const channelCategory = await ChannelCategory.findOrFail(params.id)
+
+    return channelCategory
+  }
 
   static async createChannelCategory(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelCategory> {
     const { user } = auth
