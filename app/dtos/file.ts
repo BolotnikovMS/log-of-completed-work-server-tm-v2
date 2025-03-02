@@ -1,4 +1,4 @@
-import SubstationDto from '#dtos/substation'
+import SubstationInfoDto from '#dtos/substation_info'
 import File from '#models/file'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 
@@ -12,7 +12,7 @@ export default class FileDto extends BaseModelDto {
   declare extname: string
   declare size: number
   declare createdAt: string
-  declare substation: SubstationDto | null
+  declare substation: SubstationInfoDto | null
   declare author: string | null
 
   constructor(file?: File) {
@@ -29,7 +29,7 @@ export default class FileDto extends BaseModelDto {
     this.extname = file.extname
     this.size = file.size
     this.createdAt = file.createdAt.toString()!
-    this.substation = file.substation && new SubstationDto(file.substation)
+    this.substation = file.substation && new SubstationInfoDto(file.substation)
     this.author = file.author.shortName
   }
 }
