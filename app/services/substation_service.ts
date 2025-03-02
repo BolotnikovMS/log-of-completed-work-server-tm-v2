@@ -1,4 +1,4 @@
-import SubstationDto from '#dtos/substation'
+import SubstationInfoDto from '#dtos/substation_info'
 import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
@@ -58,7 +58,14 @@ export default class SubstationService {
 
     return substations.serialize()
   }
-  static async getSubstation(params: Record<string, any>): Promise<{ substation: Substation, numberCompletedWorks: number }> {
+
+  static async getSubstationById(params: IParams): Promise<Substation> {
+    const substation = await Substation.findOrFail(params.id)
+    
+    return substation
+  }
+
+  static async getSubstationInfo(params: Record<string, any>): Promise<{ substation: Substation, numberCompletedWorks: number }> {
     const substation = await Substation.findOrFail(params.id)
 
     await substation.load('district')
@@ -77,7 +84,7 @@ export default class SubstationService {
 
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const substations = await this.getSubstations(req)
-    const transformData = substations.data.map(substation => new SubstationDto(substation as Substation))
+    const transformData = substations.data.map(substation => new SubstationInfoDto(substation as Substation))
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
