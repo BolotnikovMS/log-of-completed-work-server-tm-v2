@@ -1,5 +1,5 @@
-import FileDto from '#dtos/file'
 import SubstationChannelsDto from '#dtos/substation_channels'
+import SubstationFileListDto from '#dtos/substation_file_list'
 import Substation from '#models/substation'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 
@@ -13,9 +13,9 @@ export default class SubstationInfoDto extends BaseModelDto {
   declare district: string | null
   declare type_kp: string | null
   declare head_controller: string | null
-  declare files_photos_ps: FileDto[]
-  declare files_backups: FileDto[]
-  declare other_files: FileDto[]
+  declare files_photos_ps: SubstationFileListDto[]
+  declare files_backups: SubstationFileListDto[]
+  declare other_files: SubstationFileListDto[]
   declare channels: SubstationChannelsDto[]
   declare object_type: string | null
 
@@ -32,9 +32,9 @@ export default class SubstationInfoDto extends BaseModelDto {
     this.district = substation.district?.name
     this.type_kp = substation.type_kp?.name
     this.head_controller = substation.head_controller?.name
-    this.files_photos_ps = FileDto.fromArray(substation.files_photos_ps)
-    this.files_backups = FileDto.fromArray(substation.files_backups)
-    this.other_files = FileDto.fromArray(substation.other_files)
+    this.files_photos_ps = SubstationFileListDto.fromArray(substation.files_photos_ps)
+    this.files_backups = SubstationFileListDto.fromArray(substation.files_backups)
+    this.other_files = SubstationFileListDto.fromArray(substation.other_files)
     this.channels = SubstationChannelsDto.fromArray(substation.channels)
     this.object_type = substation.object_type?.shortName
   }
