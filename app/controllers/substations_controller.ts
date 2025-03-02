@@ -1,4 +1,5 @@
 import SubstationDto from '#dtos/substation'
+import SubstationInfoDto from '#dtos/substation_info'
 import SubstationListDto from '#dtos/substation_lists'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
@@ -16,9 +17,16 @@ export default class SubstationsController {
   }
 
   async getSubstation({ params, response }: HttpContext) {
-    const data = await SubstationService.getSubstation(params)
+    const substationParam = params as IParams
+    const data = await SubstationService.getSubstationById(substationParam)
 
-    return response.status(200).json({ ...new SubstationDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
+    return response.status(200).json(new SubstationDto(data))
+  }
+
+  async getSubstationInfo({ params, response }: HttpContext) {
+    const data = await SubstationService.getSubstationInfo(params)
+
+    return response.status(200).json({ ...new SubstationInfoDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
