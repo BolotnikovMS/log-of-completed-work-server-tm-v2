@@ -47,6 +47,27 @@ export default class CompletedWorkService {
 
     return works.serialize()
   }
+
+  static async getCompletedWorkById(params: IParams): Promise<CompletedWork> {
+    const work = await CompletedWork.findOrFail(params.id)
+
+    return work
+  }
+
+  static async getCompletedWorkInfo(params: IParams): Promise<CompletedWork> {
+    const completedWork = await CompletedWork.findOrFail(params.id)
+
+    await completedWork.load('substation', (query) => {
+      query.preload('voltage_class')
+      query.preload('object_type')
+    })
+    await completedWork.load('type_work')
+    await completedWork.load('work_producer')
+    await completedWork.load('author')
+
+    return completedWork
+  }
+
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const works = await this.getCompletedWorks(req)
     const transformData = works.data.map(work => new CompletedWorkDto(work as CompletedWork))
