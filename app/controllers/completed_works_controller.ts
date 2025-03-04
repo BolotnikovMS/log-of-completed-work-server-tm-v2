@@ -1,4 +1,6 @@
 import CompletedWorkDto from '#dtos/completed_work'
+import CompletedWorkInfoDto from '#dtos/completed_work_info'
+import CompletedWorkListDto from '#dtos/completed_work_list'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import CompletedWork from '#models/completed_work'
@@ -10,9 +12,23 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class CompletedWorksController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await CompletedWorkService.getCompletedWorks(request)
-    const works = { meta, data: data.map(work => new CompletedWorkDto(work as CompletedWork)) }
+    const works = { meta, data: data.map(work => new CompletedWorkListDto(work as CompletedWork)) }
 
     return response.status(200).json(works)
+  }
+
+  async getCompletedWork({ params, response }: HttpContext) {
+    const completedWorkParams = params as IParams
+    const completedWork = await CompletedWorkService.getCompletedWorkById(completedWorkParams)
+
+    return response.status(200).json(new CompletedWorkDto(completedWork))
+  }
+  
+  async getCompletedWorkInfo({ params, response }: HttpContext) {
+    const completedWorkParams = params as IParams
+    const completedWork = await CompletedWorkService.getCompletedWorkInfo(completedWorkParams)
+
+    return response.status(200).json(new CompletedWorkInfoDto(completedWork))
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
