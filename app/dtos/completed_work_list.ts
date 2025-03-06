@@ -3,6 +3,7 @@ import { BaseModelDto } from '@adocasts.com/dto/base'
 
 export default class CompletedWorkListDto extends BaseModelDto {
   declare id: number
+  declare userId: number
   declare substationId: number
   declare description: string
   declare dateCompletion: string
@@ -17,6 +18,7 @@ export default class CompletedWorkListDto extends BaseModelDto {
     if (!completedWork) return
 
     this.id = completedWork.id
+    this.userId = completedWork.userId
     this.substationId = completedWork.substationId
     this.description = completedWork.description
     this.dateCompletion = completedWork.dateCompletion.toString()
