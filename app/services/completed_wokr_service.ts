@@ -1,4 +1,4 @@
-import CompletedWorkDto from '#dtos/completed_work'
+import CompletedWorkInfoDto from '#dtos/completed_work_info'
 import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
@@ -70,7 +70,7 @@ export default class CompletedWorkService {
 
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const works = await this.getCompletedWorks(req)
-    const transformData = works.data.map(work => new CompletedWorkDto(work as CompletedWork))
+    const transformData = works.data.map(work => new CompletedWorkInfoDto(work as CompletedWork))
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
