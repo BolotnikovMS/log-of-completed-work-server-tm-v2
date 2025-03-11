@@ -5,12 +5,44 @@ import UserPolicy from '#policies/user_policy'
 import RoleService from '#services/role_service'
 import UserService from '#services/user_service'
 import type { HttpContext } from '@adonisjs/core/http'
+import { UserBaseDto, UserFullDto, UserShortDto } from '#dtos/users/index'
 
 export default class UsersController {
   async index({ request, response }: HttpContext) {
-    const users = await UserService.getUsers(request)
+    const { meta, data } = await UserService.getUsers(request)
+    const users = { meta, data: data.map(user => new UserBaseDto(user as User)) }
 
     return response.status(200).json(users)
+  }
+
+  async getShortUsers({ request, response }: HttpContext) {
+    try {
+      const { meta, data } = await UserService.getUsers(request)
+      const shortUsers = {meta, data: data.map(user => new UserShortDto(user as User))}
+
+      return response.status(200).json(shortUsers)
+    } catch (error) {
+      console.error("Error in getUsers: ", error.message)
+
+      return response.status(error.status).json({
+        message: error.message
+      })
+    }
+  }
+
+  async getUser({ response, params }: HttpContext) {
+    try {
+      const userParams = params as IParams
+      const user = await UserService.getUserById(userParams)
+
+      return response.status(200).json(new UserFullDto(user))
+    } catch (error) {
+      console.error("Error in getUser: ", error.message)
+
+      return response.status(error.status).json({
+        message: error.message
+      })
+    }
   }
 
   async getRoles({ response, bouncer }: HttpContext) {
