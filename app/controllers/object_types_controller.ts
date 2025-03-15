@@ -1,4 +1,4 @@
-import ObjectTypeDto from '#dtos/object_type'
+import { ObjectTypeDto } from '#dtos/object_types/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ObjectType from '#models/object_type'

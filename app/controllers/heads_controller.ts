@@ -1,4 +1,4 @@
-import HeadControllerDto from '#dtos/head_controller'
+import { HeadControllerDto } from '#dtos/head_controllers/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import HeadController from '#models/head_controller'

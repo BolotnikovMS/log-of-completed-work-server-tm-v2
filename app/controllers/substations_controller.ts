@@ -1,6 +1,4 @@
-import SubstationDto from '#dtos/substation'
-import SubstationInfoDto from '#dtos/substation_info'
-import SubstationListDto from '#dtos/substation_lists'
+import { SubstationDto, SubstationInfoDto, SubstationListDto } from '#dtos/substations/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'

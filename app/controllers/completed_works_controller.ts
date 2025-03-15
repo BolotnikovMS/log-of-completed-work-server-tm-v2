@@ -1,6 +1,4 @@
-import CompletedWorkDto from '#dtos/completed_work'
-import CompletedWorkInfoDto from '#dtos/completed_work_info'
-import CompletedWorkListDto from '#dtos/completed_work_list'
+import { CompletedWorkDto, CompletedWorkInfoDto, CompletedWorkListDto } from '#dtos/completed_works/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import CompletedWork from '#models/completed_work'

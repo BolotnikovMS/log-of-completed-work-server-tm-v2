@@ -1,5 +1,4 @@
-import ChannelDto from '#dtos/channel'
-import ChannelListDto from '#dtos/channel_list'
+import { ChannelDto, ChannelListDto } from '#dtos/channels/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Channel from '#models/channel'

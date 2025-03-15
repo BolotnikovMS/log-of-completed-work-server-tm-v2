@@ -1,4 +1,4 @@
-import ChannelTypeDto from '#dtos/channel_type'
+import { ChannelTypeDto } from '#dtos/channel_types/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelType from '#models/channel_type'

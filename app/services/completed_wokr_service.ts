@@ -1,4 +1,4 @@
-import CompletedWorkInfoDto from '#dtos/completed_work_info'
+import { CompletedWorkInfoDto } from '#dtos/completed_works/index'
 import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'

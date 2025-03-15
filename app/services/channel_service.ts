@@ -1,4 +1,4 @@
-import ChannelDto from '#dtos/channel'
+import { ChannelDto } from '#dtos/channels/index'
 import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'

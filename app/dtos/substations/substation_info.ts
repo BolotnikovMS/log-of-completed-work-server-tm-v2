@@ -1,7 +1,6 @@
-import SubstationChannelsDto from '#dtos/substation_channels'
-import SubstationFileListDto from '#dtos/substation_file_list'
 import Substation from '#models/substation'
 import { BaseModelDto } from '@adocasts.com/dto/base'
+import { SubstationChannelsDto, SubstationFileListDto } from './index.js'
 
 export default class SubstationInfoDto extends BaseModelDto {
   declare id: number

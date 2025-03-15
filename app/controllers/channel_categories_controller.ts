@@ -1,4 +1,4 @@
-import ChannelCategoryDto from '#dtos/channel_category'
+import { ChannelCategoryDto } from '#dtos/channel_categories/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelCategory from '#models/channel_category'

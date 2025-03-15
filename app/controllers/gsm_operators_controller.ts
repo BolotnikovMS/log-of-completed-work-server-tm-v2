@@ -1,4 +1,4 @@
-import GsmOperatorDto from '#dtos/gsm_operator'
+import { GsmOperatorDto } from '#dtos/gsm_operators/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import GsmOperatorPolicy from '#policies/gsm_operator_policy'

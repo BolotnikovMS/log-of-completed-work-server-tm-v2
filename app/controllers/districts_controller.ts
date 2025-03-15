@@ -1,5 +1,5 @@
-import DistrictDto from '#dtos/district'
-import SubstationListDto from '#dtos/substation_lists'
+import { DistrictDto } from '#dtos/districts/index'
+import { SubstationListDto } from '#dtos/substations/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import District from '#models/district'

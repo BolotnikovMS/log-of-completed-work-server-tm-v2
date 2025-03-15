@@ -1,4 +1,4 @@
-import SubstationInfoDto from '#dtos/substation_info'
+import { SubstationInfoDto } from '#dtos/substations/index'
 import File from '#models/file'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 

@@ -1,4 +1,4 @@
-import ChannelingEquipmentDto from '#dtos/channeling_equipment'
+import { ChannelingEquipmentDto } from '#dtos/channeling_equipment/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelingEquipment from '#models/channeling_equipment'

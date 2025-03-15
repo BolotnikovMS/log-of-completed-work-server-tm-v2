@@ -1,4 +1,4 @@
-import SubstationInfoDto from '#dtos/substation_info'
+import { SubstationInfoDto } from '#dtos/substations/index'
 import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
@@ -61,7 +61,7 @@ export default class SubstationService {
 
   static async getSubstationById(params: IParams): Promise<Substation> {
     const substation = await Substation.findOrFail(params.id)
-    
+
     return substation
   }
 

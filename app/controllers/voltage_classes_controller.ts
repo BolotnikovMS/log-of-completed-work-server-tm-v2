@@ -1,4 +1,4 @@
-import VoltageClassDto from '#dtos/voltage_class'
+import { VoltageClassDto } from '#dtos/voltage_classes/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import VoltageClass from '#models/voltage_class'
