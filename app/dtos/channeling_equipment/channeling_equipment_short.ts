@@ -1,7 +1,7 @@
 import ChannelingEquipment from '#models/channeling_equipment'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 
-export default class ChannelingEquipmentListDto extends BaseModelDto {
+export default class ChannelingEquipmentShortDto extends BaseModelDto {
   declare id: number
   declare name: string
 

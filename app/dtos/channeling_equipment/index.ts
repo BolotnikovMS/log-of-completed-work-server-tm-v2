@@ -1,4 +1,4 @@
 import ChannelingEquipmentDto from './channeling_equipment.js'
-import ChannelingEquipmentListDto from './channeling_equipment_list.js'
+import ChannelingEquipmentShortDto from './channeling_equipment_short.js'
 
-export { ChannelingEquipmentDto, ChannelingEquipmentListDto }
+export { ChannelingEquipmentDto, ChannelingEquipmentShortDto }
