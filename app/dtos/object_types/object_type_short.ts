@@ -1,7 +1,7 @@
-import { BaseModelDto } from '@adocasts.com/dto/base'
 import ObjectType from '#models/object_type'
+import { BaseModelDto } from '@adocasts.com/dto/base'
 
-export default class ObjectTypeListsDto extends BaseModelDto {
+export default class ObjectTypeShortDto extends BaseModelDto {
   declare id: number
   declare name: string
 
@@ -9,7 +9,7 @@ export default class ObjectTypeListsDto extends BaseModelDto {
     super()
 
     if (!objectType) return
-    
+
     this.id = objectType.id
     this.name = objectType.name
   }
