@@ -1,4 +1,4 @@
-import { ChannelingEquipmentDto } from '#dtos/channeling_equipment/index'
+import { ChannelingEquipmentDto, ChannelingEquipmentShortDto } from '#dtos/channeling_equipment/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelingEquipment from '#models/channeling_equipment'
@@ -9,14 +9,14 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class ChannelingEquipmentsController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await ChannelingEquipmentService.getChannelingEquipments(request)
-    const channelingEquipments = { meta, data: data.map(channelEquipment => new ChannelingEquipmentDto(channelEquipment as ChannelingEquipment)) }
+    const channelingEquipments = { meta, data: data.map(channelEquipment => new ChannelingEquipmentShortDto(channelEquipment as ChannelingEquipment)) }
 
     return response.status(200).json(channelingEquipments)
   }
-  
+
   async getEquipment({ params, response }: HttpContext) {
     const equipmentParams = params as IParams
-    const equipment = await ChannelingEquipmentService.getChannelingEquipmentById(equipmentParams)
+    const equipment = new ChannelingEquipmentDto(await ChannelingEquipmentService.getChannelingEquipmentById(equipmentParams))
 
     return response.status(200).json(equipment)
   }
