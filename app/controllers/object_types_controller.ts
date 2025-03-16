@@ -1,4 +1,4 @@
-import { ObjectTypeDto } from '#dtos/object_types/index'
+import { ObjectTypeDto, ObjectTypeShortDto } from '#dtos/object_types/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ObjectType from '#models/object_type'
@@ -9,7 +9,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class ObjectTypesController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await ObjectTypeService.getObjectTypes(request)
-    const objectTypes = { meta, data: data.map(objectType => new ObjectTypeDto(objectType as ObjectType))}
+    const objectTypes = { meta, data: data.map(objectType => new ObjectTypeShortDto(objectType as ObjectType))}
 
     return response.status(200).json(objectTypes)
   }
