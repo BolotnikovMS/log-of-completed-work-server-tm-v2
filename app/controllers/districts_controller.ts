@@ -1,4 +1,4 @@
-import { DistrictDto } from '#dtos/districts/index'
+import { DistrictDto, DistrictShortDto } from '#dtos/districts/index'
 import { SubstationListDto } from '#dtos/substations/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
@@ -12,7 +12,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class DistrictsController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await DistrictService.getDistricts(request)
-    const districts = { meta, data: data.map(district => new DistrictDto(district as District)) }
+    const districts = { meta, data: data.map(district => new DistrictShortDto(district as District)) }
 
     return response.status(200).json(districts)
   }
