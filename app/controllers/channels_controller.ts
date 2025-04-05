@@ -1,4 +1,4 @@
-import { ChannelDto, ChannelListDto } from '#dtos/channels/index'
+import { ChannelDto, ChannelInfoDto, ChannelListDto } from '#dtos/channels/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Channel from '#models/channel'
@@ -17,6 +17,13 @@ export default class ChannelsController {
   async getChannel({ params, response }: HttpContext) {
     const channelParams = params as IParams
     const channel = new ChannelDto(await ChannelService.getChannelById(channelParams))
+
+    return response.status(200).json(channel)
+  }
+
+  async getChannelInfo({ params, response }: HttpContext) {
+    const channelParams = params as IParams
+    const channel = new ChannelInfoDto(await ChannelService.getChannelById(channelParams))
 
     return response.status(200).json(channel)
   }
