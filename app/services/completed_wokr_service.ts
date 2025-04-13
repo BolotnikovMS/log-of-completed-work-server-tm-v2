@@ -8,7 +8,7 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS, { Cell } from 'exceljs'
+import ExcelJS, { Cell, Row } from 'exceljs'
 
 export default class CompletedWorkService {
   static async getCompletedWorks(req: Request): Promise<{
@@ -77,19 +77,24 @@ export default class CompletedWorkService {
     worksheet.columns = [
       { header: 'Автор записи', key: 'author', width: 18 },
       { header: 'Выполнил', key: 'workProducer', width: 18 },
-      { header: 'Категория работ', key: 'typeWork', width: 26 },
-      { header: 'Дата выполнения', key: 'dateCompletion', width: 16 },
+      { header: 'Категория работ', key: 'typeWork', width: 30 },
+      { header: 'Дата выполнения', key: 'dateCompletion', width: 21 },
       { header: 'ПС', key: 'substation', width: 26 },
       { header: 'Описание', key: 'description', width: 50 },
       { header: 'Примечания', key: 'note', width: 50 },
     ]
     worksheet.getRow(1).eachCell((cell: Cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true }
+      cell.font = { bold: true, size: 15 }
+    })
+
+    const applyStyles = (row: Row): void => row.eachCell(cell => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
+      cell.font = { size: 14 }
     })
 
     transformData.forEach(work => {
-      worksheet.addRow({
+      const row = worksheet.addRow({
         author: work.author,
         workProducer: work.work_producer,
         typeWork: work.type_work,
@@ -98,6 +103,7 @@ export default class CompletedWorkService {
         description: work.description,
         note: work.note,
       })
+      applyStyles(row)
     })
     const descrCol = worksheet.getColumn('description')
     const noteCol = worksheet.getColumn('note')
