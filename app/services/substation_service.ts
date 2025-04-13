@@ -1,4 +1,3 @@
-import { SubstationInfoDto } from '#dtos/substations/index'
 import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
@@ -11,6 +10,7 @@ import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell, Row } from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
+import { SubstationsReportDto } from '#dtos/reports/index'
 
 export default class SubstationService {
   static async getSubstations(
@@ -73,7 +73,7 @@ export default class SubstationService {
     await substation.load('type_kp')
     await substation.loadCount('works', (query) => query.count('*').as('numberCompletedWorks'))
     await substation.load('head_controller')
-    await substation.load('files_photos_ps', (query) => query.preload('author').orderBy('createdAt', 'desc'))
+    await substation.load('files_photos_ps', (query) => query.preload('author').orderBy('createdAt', 'asc'))
     await substation.load('files_backups', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('channels', query => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
@@ -84,30 +84,33 @@ export default class SubstationService {
 
   static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
     const substations = await this.getSubstations(req)
-    const transformData = substations.data.map(substation => new SubstationInfoDto(substation as Substation))
+    const transformData = substations.data.map(substation => new SubstationsReportDto(substation as Substation))
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
     worksheet.columns = [
       { header: 'Район/ГП/УС', key: 'district', width: 20 },
-      { header: 'Объект', key: 'fullNameSubstation', width: 25 },
+      { header: 'Объект', key: 'fullNameSubstation', width: 27 },
       { header: 'Тип объекта', key: 'objectType', width: 16 },
       { header: 'РДУ', key: 'rdu', width: 12 },
       { header: 'Тип КП', key: 'typeKp', width: 17 },
-      { header: 'Головной контроллер', key: 'headeController', width: 20 },
-      { header: 'Категория канала', key: 'channelCategory', width: 20 },
+      { header: 'Головной контроллер', key: 'headeController', width: 25 },
+      { header: 'Категория канала', key: 'channelCategory', width: 30 },
       { header: 'Тип канала', key: 'channelType', width: 20 },
       { header: 'IP адрес канала', key: 'channelIp', width: 19 },
       { header: 'GSM оператор', key: 'gsm', width: 17 },
-      { header: 'Примечание', key: 'note', width: 25 },
+      { header: 'Примечание', key: 'note', width: 26 },
     ]
 
     worksheet.getRow(1).eachCell((cell: Cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true }
+      cell.font = { bold: true, size: 14 }
     })
 
-    const applyStyles = (row: Row): void => row.eachCell(cell => cell.alignment = { vertical: 'middle', horizontal: 'center' })
+    const applyStyles = (row: Row): void => row.eachCell(cell => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
+      cell.font = { size: 14 }
+    })
 
     transformData.forEach(substation => {
       if (substation.channels && substation.channels.length > 0) {
@@ -119,10 +122,10 @@ export default class SubstationService {
             rdu: substation.rdu,
             typeKp: substation.type_kp ?? 'Не указан',
             headeController: substation.head_controller ?? 'Не указан',
-            channelCategory: channel.channel_category_short ?? 'Не указан',
+            channelCategory: channel.channel_category ?? 'Не указан',
             channelType: channel.channel_type ?? 'Не указан',
             channelIp: channel.ipAddress ?? 'Не указан',
-            gsm: channel.gsm ?? 'Не указан',
+            gsm: channel.gsm_operator ?? 'Не указан',
             note: substation.note
           })
           applyStyles(row)
