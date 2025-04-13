@@ -1,3 +1,4 @@
+import { SubstationsReportDto } from '#dtos/reports/index'
 import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
@@ -10,7 +11,6 @@ import { ModelObject } from '@adonisjs/lucid/types/model'
 import ExcelJS, { Cell, Row } from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
-import { SubstationsReportDto } from '#dtos/reports/index'
 
 export default class SubstationService {
   static async getSubstations(
@@ -94,17 +94,17 @@ export default class SubstationService {
       { header: 'Тип объекта', key: 'objectType', width: 16 },
       { header: 'РДУ', key: 'rdu', width: 12 },
       { header: 'Тип КП', key: 'typeKp', width: 17 },
-      { header: 'Головной контроллер', key: 'headeController', width: 25 },
+      { header: 'Головной контроллер', key: 'headeController', width: 26 },
       { header: 'Категория канала', key: 'channelCategory', width: 30 },
       { header: 'Тип канала', key: 'channelType', width: 20 },
       { header: 'IP адрес канала', key: 'channelIp', width: 19 },
-      { header: 'GSM оператор', key: 'gsm', width: 17 },
-      { header: 'Примечание', key: 'note', width: 26 },
+      { header: 'GSM оператор', key: 'gsm', width: 18 },
+      { header: 'Примечание', key: 'note', width: 50 },
     ]
 
     worksheet.getRow(1).eachCell((cell: Cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true, size: 14 }
+      cell.font = { bold: true, size: 15 }
     })
 
     const applyStyles = (row: Row): void => row.eachCell(cell => {
@@ -147,6 +147,10 @@ export default class SubstationService {
         applyStyles(row)
       }
     })
+
+    const noteCol = worksheet.getColumn('note')
+
+    noteCol.eachCell(cell => cell.alignment = { wrapText: true })
 
     const buffer = await workbook.xlsx.writeBuffer()
 
