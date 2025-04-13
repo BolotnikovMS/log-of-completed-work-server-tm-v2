@@ -8,11 +8,11 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS, { Cell } from 'exceljs'
+import ExcelJS, { Cell, Row } from 'exceljs'
 
 export default class ChannelService {
   static async getChannels(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
-    const { sort, order, page, limit, substation, channelType, channelCategory } = req.qs() as IQueryParams
+    const { sort = 'substationId', order = 'asc', page, limit, substation, channelType, channelCategory } = req.qs() as IQueryParams
     const channels = await Channel.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(substation, (query) => query.where('substationId', '=', substation))
@@ -54,9 +54,9 @@ export default class ChannelService {
 
     worksheet.columns = [
       { header: 'Объект', key: 'substation', width: 26 },
-      { header: 'Категория канала', key: 'channelCategory', width: 25 },
+      { header: 'Категория канала', key: 'channelCategory', width: 30 },
       { header: 'Тип канала', key: 'channelType', width: 20 },
-      { header: 'Тип оборудования', key: 'channelEquipment', width: 20 },
+      { header: 'Тип оборудования', key: 'channelEquipment', width: 25 },
       { header: 'GSM оператор', key: 'gsmOperator', width: 20 },
       { header: 'IP адрес', key: 'ipAddress', width: 20 },
       { header: 'Примечание', key: 'note', width: 50 },
@@ -64,11 +64,16 @@ export default class ChannelService {
 
     worksheet.getRow(1).eachCell((cell: Cell) => {
       cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true }
+      cell.font = { bold: true, size: 15 }
+    })
+
+    const applyStyles = (row: Row): void => row.eachCell(cell => {
+      cell.alignment = { vertical: 'middle', horizontal: 'center' }
+      cell.font = { size: 14 }
     })
 
     transformData.forEach(channel => {
-      worksheet.addRow({
+      const row = worksheet.addRow({
         substation: channel.substation,
         channelCategory: channel.channel_category,
         channelType: channel.channel_type,
@@ -77,6 +82,7 @@ export default class ChannelService {
         ipAddress: channel.ipAddress ?? 'Не указан',
         note: channel.note
       })
+      applyStyles(row)
     })
 
     const noteCol = worksheet.getColumn('note')
