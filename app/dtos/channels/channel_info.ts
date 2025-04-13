@@ -8,6 +8,7 @@ export default class ChannelInfoDto extends BaseModelDto {
   declare substation: string | null
   declare channel_category: string | null
   declare channel_type: string | null
+  declare gsm_operator: string | null
   declare channel_equipment: string | null
 
   constructor(channel?: Channel) {
@@ -21,6 +22,7 @@ export default class ChannelInfoDto extends BaseModelDto {
     this.substation = channel.substation?.fullNameSubstation
     this.channel_category = channel.channel_category?.name
     this.channel_type = channel.channel_type?.name
+    this.gsm_operator = channel.gsm_operator?.name
     this.channel_equipment = channel.channel_equipment?.name
   }
 }
