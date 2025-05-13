@@ -4,6 +4,7 @@ import { IParams } from '#interfaces/params'
 import CompletedWork from '#models/completed_work'
 import CompletedWorkPolicy from '#policies/completed_work_policy'
 import CompletedWorkService from '#services/completed_wokr_service'
+import ReportService from '#services/report_service'
 import { completedWorkValidator } from '#validators/completed_work'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -21,7 +22,7 @@ export default class CompletedWorksController {
 
     return response.status(200).json(new CompletedWorkDto(completedWork))
   }
-  
+
   async getCompletedWorkInfo({ params, response }: HttpContext) {
     const completedWorkParams = params as IParams
     const completedWork = await CompletedWorkService.getCompletedWorkInfo(completedWorkParams)
@@ -64,7 +65,7 @@ export default class CompletedWorksController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const buffer = await CompletedWorkService.createExcelFile(request)
+    const buffer = await ReportService.createExcelCompletedWorks(request)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')

@@ -3,6 +3,7 @@ import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
 import SubstationPolicy from '#policies/substation_policy'
+import ReportService from '#services/report_service'
 import SubstationService from '#services/substation_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -73,7 +74,7 @@ export default class SubstationsController {
   }
 
   async downloadSubstationsExcel({ request, response }: HttpContext) {
-    const buffer = await SubstationService.createExcelFile(request)
+    const buffer = await ReportService.createExcelSubstations(request)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
