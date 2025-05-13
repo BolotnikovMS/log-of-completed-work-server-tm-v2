@@ -1,4 +1,3 @@
-import { ChannelDto } from '#dtos/channels/index'
 import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
@@ -8,7 +7,6 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS, { Cell, Row } from 'exceljs'
 
 export default class ChannelService {
   static async getChannels(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
@@ -44,53 +42,6 @@ export default class ChannelService {
     await channel.load('gsm_operator')
 
     return channel
-  }
-
-  static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
-    const channels = await this.getChannels(req)
-    const transformData = channels.data.map(channel => new ChannelDto(channel as Channel))
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Sheet 1')
-
-    worksheet.columns = [
-      { header: 'Объект', key: 'substation', width: 26 },
-      { header: 'Категория канала', key: 'channelCategory', width: 30 },
-      { header: 'Тип канала', key: 'channelType', width: 20 },
-      { header: 'Тип оборудования', key: 'channelEquipment', width: 25 },
-      { header: 'GSM оператор', key: 'gsmOperator', width: 20 },
-      { header: 'IP адрес', key: 'ipAddress', width: 20 },
-      { header: 'Примечание', key: 'note', width: 50 },
-    ]
-
-    worksheet.getRow(1).eachCell((cell: Cell) => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true, size: 15 }
-    })
-
-    const applyStyles = (row: Row): void => row.eachCell(cell => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { size: 14 }
-    })
-
-    transformData.forEach(channel => {
-      const row = worksheet.addRow({
-        substation: channel.substation,
-        channelCategory: channel.channel_category,
-        channelType: channel.channel_type,
-        channelEquipment: channel.channel_equipment ?? 'Не указан',
-        gsmOperator: channel.gsm ?? 'Не указан',
-        ipAddress: channel.ipAddress ?? 'Не указан',
-        note: channel.note
-      })
-      applyStyles(row)
-    })
-
-    const noteCol = worksheet.getColumn('note')
-    noteCol.eachCell(cell => cell.alignment = { wrapText: true })
-
-    const buffer = await workbook.xlsx.writeBuffer()
-
-    return buffer
   }
 
   static async createChannel(req: Request, auth: Authenticator<Authenticators>): Promise<Channel> {
