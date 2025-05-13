@@ -4,6 +4,7 @@ import { IParams } from '#interfaces/params'
 import Channel from '#models/channel'
 import ChannelPolicy from '#policies/channel_policy'
 import ChannelService from '#services/channel_service'
+import ReportService from '#services/report_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {
@@ -62,7 +63,7 @@ export default class ChannelsController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const buffer = await ChannelService.createExcelFile(request)
+    const buffer = await ReportService.createExcelChannels(request)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
