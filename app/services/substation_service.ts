@@ -1,4 +1,3 @@
-import { SubstationsReportDto } from '#dtos/reports/index'
 import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
@@ -8,7 +7,6 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS, { Cell, Row } from 'exceljs'
 import { OrderByEnums } from '../enums/sort.js'
 import { IQueryParams } from '../interfaces/query_params.js'
 
@@ -80,81 +78,6 @@ export default class SubstationService {
     await substation.load('object_type')
 
     return { substation, numberCompletedWorks: substation.$extras.numberCompletedWorks }
-  }
-
-  static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
-    const substations = await this.getSubstations(req)
-    const transformData = substations.data.map(substation => new SubstationsReportDto(substation as Substation))
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Sheet 1')
-
-    worksheet.columns = [
-      { header: 'Район/ГП/УС', key: 'district', width: 20 },
-      { header: 'Объект', key: 'fullNameSubstation', width: 27 },
-      { header: 'Тип объекта', key: 'objectType', width: 16 },
-      { header: 'РДУ', key: 'rdu', width: 12 },
-      { header: 'Тип КП', key: 'typeKp', width: 17 },
-      { header: 'Головной контроллер', key: 'headeController', width: 26 },
-      { header: 'Категория канала', key: 'channelCategory', width: 30 },
-      { header: 'Тип канала', key: 'channelType', width: 20 },
-      { header: 'IP адрес канала', key: 'channelIp', width: 19 },
-      { header: 'GSM оператор', key: 'gsm', width: 18 },
-      { header: 'Примечание', key: 'note', width: 50 },
-    ]
-
-    worksheet.getRow(1).eachCell((cell: Cell) => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true, size: 15 }
-    })
-
-    const applyStyles = (row: Row): void => row.eachCell(cell => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { size: 14 }
-    })
-
-    transformData.forEach(substation => {
-      if (substation.channels && substation.channels.length > 0) {
-        substation.channels?.forEach(channel => {
-          const row = worksheet.addRow({
-            district: substation.district,
-            fullNameSubstation: substation.fullNameSubstation,
-            objectType: substation.object_type ?? 'Не указан',
-            rdu: substation.rdu,
-            typeKp: substation.type_kp ?? 'Не указан',
-            headeController: substation.head_controller ?? 'Не указан',
-            channelCategory: channel.channel_category ?? 'Не указан',
-            channelType: channel.channel_type ?? 'Не указан',
-            channelIp: channel.ipAddress ?? 'Не указан',
-            gsm: channel.gsm_operator ?? 'Не указан',
-            note: substation.note
-          })
-          applyStyles(row)
-        })
-      } else {
-        const row = worksheet.addRow({
-          district: substation.district,
-          fullNameSubstation: substation.fullNameSubstation,
-          objectType: substation.object_type ?? 'Не указан',
-          rdu: substation.rdu,
-          typeKp: substation.type_kp ?? 'Не указан',
-          headeController: substation.head_controller ?? 'Не указан',
-          channelCategory: 'Не указан',
-          channelType: 'Не указан',
-          channelIp: 'Не указан',
-          gsm: 'Не указан',
-          note: substation.note
-        })
-        applyStyles(row)
-      }
-    })
-
-    const noteCol = worksheet.getColumn('note')
-
-    noteCol.eachCell(cell => cell.alignment = { wrapText: true })
-
-    const buffer = await workbook.xlsx.writeBuffer()
-
-    return buffer
   }
 
   static async createSubstation(req: Request, auth: Authenticator<Authenticators>): Promise<Substation> {

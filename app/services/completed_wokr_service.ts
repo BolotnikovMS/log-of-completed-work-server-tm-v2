@@ -1,4 +1,3 @@
-import { CompletedWorkInfoDto } from '#dtos/completed_works/index'
 import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
@@ -8,7 +7,6 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS, { Cell, Row } from 'exceljs'
 
 export default class CompletedWorkService {
   static async getCompletedWorks(req: Request): Promise<{
@@ -66,54 +64,6 @@ export default class CompletedWorkService {
     await completedWork.load('author')
 
     return completedWork
-  }
-
-  static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
-    const works = await this.getCompletedWorks(req)
-    const transformData = works.data.map(work => new CompletedWorkInfoDto(work as CompletedWork))
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Sheet 1')
-
-    worksheet.columns = [
-      { header: 'Автор записи', key: 'author', width: 18 },
-      { header: 'Выполнил', key: 'workProducer', width: 18 },
-      { header: 'Категория работ', key: 'typeWork', width: 30 },
-      { header: 'Дата выполнения', key: 'dateCompletion', width: 21 },
-      { header: 'ПС', key: 'substation', width: 26 },
-      { header: 'Описание', key: 'description', width: 50 },
-      { header: 'Примечания', key: 'note', width: 50 },
-    ]
-    worksheet.getRow(1).eachCell((cell: Cell) => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true, size: 15 }
-    })
-
-    const applyStyles = (row: Row): void => row.eachCell(cell => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { size: 14 }
-    })
-
-    transformData.forEach(work => {
-      const row = worksheet.addRow({
-        author: work.author,
-        workProducer: work.work_producer,
-        typeWork: work.type_work,
-        dateCompletion: work.dateCompletion.split('-').reverse().join('.'),
-        substation: work.substation,
-        description: work.description,
-        note: work.note,
-      })
-      applyStyles(row)
-    })
-    const descrCol = worksheet.getColumn('description')
-    const noteCol = worksheet.getColumn('note')
-
-    descrCol.eachCell(cell => cell.alignment = { wrapText: true })
-    noteCol.eachCell(cell => cell.alignment = { wrapText: true })
-
-    const buffer = await workbook.xlsx.writeBuffer()
-
-    return buffer
   }
 
   static async createWork(req: Request, auth: Authenticator<Authenticators>): Promise<CompletedWork> {
