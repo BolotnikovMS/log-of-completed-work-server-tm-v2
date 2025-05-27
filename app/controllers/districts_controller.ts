@@ -1,5 +1,5 @@
-import DistrictDto from '#dtos/district'
-import SubstationListDto from '#dtos/substation_lists'
+import { DistrictDto, DistrictShortDto } from '#dtos/districts/index'
+import { SubstationListDto } from '#dtos/substations/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import District from '#models/district'
@@ -12,7 +12,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class DistrictsController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await DistrictService.getDistricts(request)
-    const districts = { meta, data: data.map(district => new DistrictDto(district as District)) }
+    const districts = { meta, data: data.map(district => new DistrictShortDto(district as District)) }
 
     return response.status(200).json(districts)
   }
@@ -23,6 +23,14 @@ export default class DistrictsController {
     const substations = { meta, data: data.map(substation => new SubstationListDto(substation as Substation)) }
 
     return response.status(200).json(substations)
+  }
+
+  async getDistrict({ params, response }: HttpContext) {
+    const districtParams = params as IParams
+    const data = await DistrictService.getDistrictById(districtParams)
+    const district = new DistrictDto(data as District)
+
+    return response.status(200).json(district)
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {

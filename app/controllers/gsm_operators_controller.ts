@@ -1,4 +1,4 @@
-import GsmOperatorDto from '#dtos/gsm_operator'
+import { GsmOperatorDto } from '#dtos/gsm_operators/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import GsmOperatorPolicy from '#policies/gsm_operator_policy'
@@ -11,6 +11,13 @@ export default class GsmOperatorsController {
     const gsmOperators = data.map(gsm => new GsmOperatorDto(gsm))
 
     return response.status(200).json(gsmOperators)
+  }
+  
+  async getGsmOperator({ params, response }: HttpContext) {
+    const gsmOperatorParams = params as IParams
+    const gsmOperator = await GsmOperatorService.getGsmOperatorById(gsmOperatorParams)
+
+    return response.status(200).json(gsmOperator)
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {

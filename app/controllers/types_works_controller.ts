@@ -1,4 +1,4 @@
-import TypeWorkDto from '#dtos/type_work'
+import { TypeWorkDto } from '#dtos/types_work/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import TypeWork from '#models/type_work'

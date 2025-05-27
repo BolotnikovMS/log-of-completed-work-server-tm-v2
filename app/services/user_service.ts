@@ -6,9 +6,10 @@ import { changePasswordValidator } from '#validators/change_password'
 import { changeUserRole } from '#validators/change_user_role'
 import { registerValidator } from '#validators/registrer'
 import { Request } from '@adonisjs/core/http'
+import { ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class UserService {
-  static async getUsers(req: Request): Promise<User[]> {
+  static async getUsers(req: Request): Promise<{meta: any, data: ModelObject[]}> {
     const { active, cleanUser, page, limit } = req.qs() as IQueryParams
     const users = await User.query()
       .if(Boolean(active), (query) => query.where('active', '=', 1))
@@ -21,7 +22,15 @@ export default class UserService {
       .preload('role')
       .paginate(page, limit)
 
-    return users
+    return users.serialize()
+  }
+
+  static async getUserById(params: IParams): Promise<User> {
+    const user = await User.findOrFail(params.id)
+
+    await user.preload('role')
+
+    return user
   }
 
   static async createUserAccount(req: Request): Promise<void> {

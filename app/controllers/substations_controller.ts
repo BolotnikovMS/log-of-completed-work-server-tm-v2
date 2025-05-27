@@ -1,9 +1,9 @@
-import SubstationDto from '#dtos/substation'
-import SubstationListDto from '#dtos/substation_lists'
+import { SubstationDto, SubstationInfoDto, SubstationListDto } from '#dtos/substations/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
 import SubstationPolicy from '#policies/substation_policy'
+import ReportService from '#services/report_service'
 import SubstationService from '#services/substation_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -16,9 +16,16 @@ export default class SubstationsController {
   }
 
   async getSubstation({ params, response }: HttpContext) {
-    const data = await SubstationService.getSubstation(params)
+    const substationParam = params as IParams
+    const data = await SubstationService.getSubstationById(substationParam)
 
-    return response.status(200).json({ ...new SubstationDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
+    return response.status(200).json(new SubstationDto(data))
+  }
+
+  async getSubstationInfo({ params, response }: HttpContext) {
+    const data = await SubstationService.getSubstationInfo(params)
+
+    return response.status(200).json({ ...new SubstationInfoDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
@@ -67,7 +74,7 @@ export default class SubstationsController {
   }
 
   async downloadSubstationsExcel({ request, response }: HttpContext) {
-    const buffer = await SubstationService.createExcelFile(request)
+    const buffer = await ReportService.createExcelSubstations(request)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')

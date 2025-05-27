@@ -15,7 +15,6 @@ export default class ChannelingEquipmentDto extends BaseModelDto {
     this.id = channelingEquipment.id
     this.channelTypeId = channelingEquipment.channelTypeId
     this.name = channelingEquipment.name
-
     this.channel_type = channelingEquipment.channel_type?.name ?? null
   }
 }

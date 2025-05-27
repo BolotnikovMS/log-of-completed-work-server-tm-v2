@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { dateText, numberCheck, text1000, text700Optional } from './fields_check.js'
+import { booleanCheckOptional, dateText, numberCheck, text1000, text700Optional } from './fields_check.js'
 
 export const completedWorkValidator = vine.compile(
   vine.object({
@@ -12,5 +12,6 @@ export const completedWorkValidator = vine.compile(
     //   formats: 'DD.MM.YYYY',
     // }),
     dateCompletion: dateText,
+    inControl: booleanCheckOptional,
   })
 )

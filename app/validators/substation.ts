@@ -1,8 +1,8 @@
 import vine from '@vinejs/vine'
 import {
-  booleanCheckOptional,
-  numberCheck,
-  text240
+    booleanCheckOptional,
+    numberCheck,
+    text240
 } from './fields_check.js'
 
 export const substationValidator = vine.compile(
@@ -12,6 +12,7 @@ export const substationValidator = vine.compile(
     voltageClassesId: numberCheck,
     typeKpId: numberCheck,
     headControllerId: numberCheck,
+    objectTypeId: numberCheck,
     name: text240,
     rdu: booleanCheckOptional,
   })

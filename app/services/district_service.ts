@@ -24,6 +24,12 @@ export default class DistrictService {
     return districts.serialize()
   }
 
+  static async getDistrictById(params: IParams): Promise<District> {
+    const district = await District.findOrFail(params.id)
+
+    return district
+  }
+
   static async createDistrict(req: Request, auth: Authenticator<Authenticators>): Promise<District> {
     const { user } = auth
     const validatedData = await req.validateUsing(districtValidator)

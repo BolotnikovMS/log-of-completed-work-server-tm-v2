@@ -1,4 +1,4 @@
-import TypeKpDto from '#dtos/type_kp'
+import { TypeKpDto } from '#dtos/types_kp/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import TypeKp from '#models/type_kp'

@@ -1,4 +1,3 @@
-import CompletedWorkDto from '#dtos/completed_work'
 import { OrderByEnums } from '#enums/sort'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
@@ -8,7 +7,6 @@ import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
 import { ModelObject } from '@adonisjs/lucid/types/model'
-import ExcelJS, { Cell } from 'exceljs'
 
 export default class CompletedWorkService {
   static async getCompletedWorks(req: Request): Promise<{
@@ -24,7 +22,8 @@ export default class CompletedWorkService {
       dateStart,
       dateEnd,
       executor,
-      typeWork
+      typeWork,
+      inControl
     } = req.qs() as IQueryParams
     const works = await CompletedWork.query()
       .if(dateStart && dateEnd, (query) =>
@@ -34,7 +33,11 @@ export default class CompletedWorkService {
       .if(substation, (query) => query.where('substationId', '=', substation))
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(typeWork, query => query.whereIn('typeWorkId', [...typeWork]))
-      .preload('substation', (query) => query.preload('voltage_class'))
+      .if(inControl, query => query.where('inControl', Boolean(inControl)))
+      .preload('substation', (query) => {
+        query.preload('voltage_class')
+        query.preload('object_type')
+      })
       .preload('work_producer')
       .preload('author')
       .preload('type_work')
@@ -42,46 +45,25 @@ export default class CompletedWorkService {
 
     return works.serialize()
   }
-  static async createExcelFile(req: Request): Promise<ExcelJS.Buffer> {
-    const works = await this.getCompletedWorks(req)
-    const transformData = works.data.map(work => new CompletedWorkDto(work as CompletedWork))
-    const workbook = new ExcelJS.Workbook()
-    const worksheet = workbook.addWorksheet('Sheet 1')
 
-    worksheet.columns = [
-      { header: 'Автор записи', key: 'author', width: 18 },
-      { header: 'Выполнил', key: 'workProducer', width: 18 },
-      { header: 'Категория работ', key: 'typeWork', width: 26 },
-      { header: 'Дата выполнения', key: 'dateCompletion', width: 16 },
-      { header: 'ПС', key: 'substation', width: 26 },
-      { header: 'Описание', key: 'description', width: 50 },
-      { header: 'Примечания', key: 'note', width: 50 },
-    ]
-    worksheet.getRow(1).eachCell((cell: Cell) => {
-      cell.alignment = { vertical: 'middle', horizontal: 'center' }
-      cell.font = { bold: true }
+  static async getCompletedWorkById(params: IParams): Promise<CompletedWork> {
+    const work = await CompletedWork.findOrFail(params.id)
+
+    return work
+  }
+
+  static async getCompletedWorkInfo(params: IParams): Promise<CompletedWork> {
+    const completedWork = await CompletedWork.findOrFail(params.id)
+
+    await completedWork.load('substation', (query) => {
+      query.preload('voltage_class')
+      query.preload('object_type')
     })
+    await completedWork.load('type_work')
+    await completedWork.load('work_producer')
+    await completedWork.load('author')
 
-    transformData.forEach(work => {
-      worksheet.addRow({
-        author: work.author,
-        workProducer: work.work_producer,
-        typeWork: work.type_work,
-        dateCompletion: work.dateCompletion.split('-').reverse().join('.'),
-        substation: work.substation,
-        description: work.description,
-        note: work.note,
-      })
-    })
-    const descrCol = worksheet.getColumn('description')
-    const noteCol = worksheet.getColumn('note')
-
-    descrCol.eachCell(cell => cell.alignment = { wrapText: true })
-    noteCol.eachCell(cell => cell.alignment = { wrapText: true })
-
-    const buffer = await workbook.xlsx.writeBuffer()
-
-    return buffer
+    return completedWork
   }
 
   static async createWork(req: Request, auth: Authenticator<Authenticators>): Promise<CompletedWork> {

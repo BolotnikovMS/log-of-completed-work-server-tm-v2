@@ -1,17 +1,17 @@
 import { BaseSchema } from '@adonisjs/lucid/schema'
 
 export default class extends BaseSchema {
-  protected tableName = 'substations'
+  protected tableName = 'completed_works'
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.text('note').nullable()
+      table.boolean('in_control').defaultTo(false)
     })
   }
 
   async down() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn('note')
+      table.dropColumn('in_control')
     })
   }
 }

@@ -1,4 +1,4 @@
-import ChannelCategoryDto from '#dtos/channel_category'
+import { ChannelCategoryDto } from '#dtos/channel_categories/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelCategory from '#models/channel_category'
@@ -12,6 +12,13 @@ export default class ChannelCategoriesController {
     const channelCategories = { meta, data: data.map(channelCategory => new ChannelCategoryDto(channelCategory as ChannelCategory))}
 
     return response.status(200).json(channelCategories)
+  }
+  
+  async getChannelCategory({ params, response }: HttpContext) {
+    const channelCategoryParams = params as IParams
+    const channelCategory = await ChannelCategoryService.getChannelCategoryById(channelCategoryParams)
+
+    return response.status(200).json(channelCategory)
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {
