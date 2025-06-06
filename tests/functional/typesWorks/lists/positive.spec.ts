@@ -10,6 +10,9 @@ test.group('✅ Позитивные тесты. Тесты для провер�
   let moderator: User
   let admin: User
   let recordTypeWork: TypeWork | null
+  const testData = {
+    name: 'Test type work',
+  }
   const borderlineData = [
     { name: 'Te' },
     { name: 'Tes' },
@@ -47,9 +50,6 @@ test.group('✅ Позитивные тесты. Тесты для провер�
   test('Добавление новой записи с корректными данными и ролями: Moderator, Admin.')
     .with(() => [moderator, admin])
     .run(async ({ client, assert }, userItem) => {
-      const testData = {
-        name: 'Test type work',
-      }
       const resp = await client
         .post(urlApi)
         .json(testData)
@@ -60,24 +60,24 @@ test.group('✅ Позитивные тесты. Тесты для провер�
       resp.assertStatus(201)
       resp.assertHeader('content-type', 'application/json; charset=utf-8')
       assert.properties(resp.body(), ['id', 'userId', 'name', 'createdAt', 'updatedAt'])
-      resp.assertBodyContains(testData.name)
+      resp.assertBodyContains({ name: testData.name })
       assert.equal(moderator.id, resp.body().userId)
     })
 
   test('Добавление новой записи с ролью Moderator и пограничными значениями.')
     // min - 2, max - 240
     .with(borderlineData)
-    .run(async ({ client, assert }, testData) => {
+    .run(async ({ client, assert }, testItem) => {
       const resp = await client
         .post(urlApi)
-        .json(testData)
+        .json(testItem)
         .withGuard('api')
         .loginAs(moderator)
 
       resp.assertStatus(201)
       resp.assertHeader('content-type', 'application/json; charset=utf-8')
       assert.properties(resp.body(), ['id', 'userId', 'name', 'createdAt', 'updatedAt'])
-      resp.assertBodyContains(testData.name)
+      resp.assertBodyContains({ name: testItem.name })
       assert.equal(moderator.id, resp.body().userId)
       assert.equal(RolesEnum.MODERATOR, moderator.roleId)
     })
@@ -85,17 +85,17 @@ test.group('✅ Позитивные тесты. Тесты для провер�
   test('Добавление новой записи с ролью Admin и пограничными значениями.')
     // min - 2, max - 240
     .with(borderlineData)
-    .run(async ({ client, assert }, testData) => {
+    .run(async ({ client, assert }, testItem) => {
       const resp = await client
         .post(urlApi)
-        .json(testData)
+        .json(testItem)
         .withGuard('api')
         .loginAs(admin)
 
       resp.assertStatus(201)
       resp.assertHeader('content-type', 'application/json; charset=utf-8')
       assert.properties(resp.body(), ['id', 'userId', 'name', 'createdAt', 'updatedAt'])
-      resp.assertBodyContains(testData.name)
+      resp.assertBodyContains({ name: testItem.name })
       assert.equal(admin.id, resp.body().userId)
       assert.equal(RolesEnum.ADMIN, admin.roleId)
     })
@@ -117,7 +117,7 @@ test.group('✅ Позитивные тесты. Тесты для провер�
         resp.assertHeader('content-type', 'application/json; charset=utf-8')
         assert.equal(recordTypeWork.id, resp.body().id)
         assert.properties(resp.body(), ['id', 'userId', 'name', 'createdAt', 'updatedAt'])
-        resp.assertBodyContains(updData.name)
+        resp.assertBodyContains({ name: updData.name })
       }
     })
 
@@ -135,19 +135,21 @@ test.group('✅ Позитивные тесты. Тесты для провер�
         resp.assertHeader('content-type', 'application/json; charset=utf-8')
         assert.equal(recordTypeWork.id, resp.body().id)
         assert.properties(resp.body(), ['id', 'userId', 'name', 'createdAt', 'updatedAt'])
-        resp.assertBodyContains(testItem.name)
+        resp.assertBodyContains({ name: testItem.name })
       }
     })
 
   test('Удаление записи пользователем с ролью Admin.', async ({ client }) => {
-    if (recordTypeWork) {
-      const resp = await client
-        .delete(`${urlApi}/${recordTypeWork.id}`)
-        .withGuard('api')
-        .loginAs(admin)
+    const respAddRecord = await client
+      .post(urlApi)
+      .json(testData)
+      .withGuard('api')
+      .loginAs(admin)
+    const respDeleteRecord = await client
+      .delete(`${urlApi}/${respAddRecord.body().id}`)
+      .withGuard('api')
+      .loginAs(admin)
 
-      resp.assertStatus(204)
-      resp.assertHeader('content-type', 'application/json; charset=utf-8')
-    }
+      respDeleteRecord.assertStatus(204)
   })
 })
