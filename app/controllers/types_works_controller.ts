@@ -26,7 +26,7 @@ export default class TypesWorksController {
 
   async update({ params, request, response, bouncer }: HttpContext) {
     if (await bouncer.with(TypeWorkPolicy).denies('edit')) {
-      return response.status(403).json({ message: accessErrorMessages.create })
+      return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
     const typeWorkParams = params as IParams
@@ -37,7 +37,7 @@ export default class TypesWorksController {
 
   async destroy({ params, response, bouncer }: HttpContext) {
     if (await bouncer.with(TypeWorkPolicy).denies('delete')) {
-      return response.status(403).json({ message: accessErrorMessages.create })
+      return response.status(403).json({ message: accessErrorMessages.delete })
     }
     const typeWorkParams = params as IParams
 
