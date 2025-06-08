@@ -21,7 +21,7 @@ export default class TypesWorksController {
 
     const typeWork = await TypeWorkService.createTypeWork(request, auth)
 
-    return response.status(200).json(typeWork)
+    return response.status(201).json(typeWork)
   }
 
   async update({ params, request, response, bouncer }: HttpContext) {
