@@ -96,8 +96,8 @@ test.group('⛔️ Негативные тесты. Тесты для прове
 
         resp.assertStatus(403)
         resp.assertHeader('content-type', 'application/json; charset=utf-8')
-        resp.assertBodyContains(accessErrorMessages.delete)
-        assert.equal((RolesEnum.USER || RolesEnum.MODERATOR), userItem.roleId)
+        resp.assertBodyContains({ message: accessErrorMessages.delete })
+        assert.includeDeepMembers([RolesEnum.USER, RolesEnum.MODERATOR], [userItem.roleId])
       }
     })
 
@@ -111,7 +111,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
 
       resp.assertStatus(403)
       resp.assertHeader('content-type', 'application/json; charset=utf-8')
-      resp.assertBodyContains(accessErrorMessages.edit)
+      resp.assertBodyContains({ message: accessErrorMessages.edit })
       assert.equal(RolesEnum.USER, user.roleId)
     }
   })
