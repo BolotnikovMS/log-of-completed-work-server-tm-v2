@@ -97,7 +97,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
         resp.assertStatus(403)
         resp.assertHeader('content-type', 'application/json; charset=utf-8')
         resp.assertBodyContains({ message: accessErrorMessages.delete })
-        assert.includeDeepMembers([RolesEnum.USER, RolesEnum.MODERATOR], [userItem.roleId])
+        assert.includeMembers([RolesEnum.USER, RolesEnum.MODERATOR], [userItem.roleId])
       }
     })
 
