@@ -61,7 +61,7 @@ test.group('✅ Позитивные тесты. Тесты для провер�
       resp.assertHeader('content-type', 'application/json; charset=utf-8')
       assert.properties(resp.body(), ['id', 'userId', 'name', 'createdAt', 'updatedAt'])
       resp.assertBodyContains({ name: testData.name })
-      assert.equal(moderator.id, resp.body().userId)
+      assert.equal(userItem.id, resp.body().userId)
     })
 
   test('Добавление новой записи с ролью Moderator и пограничными значениями.')
