@@ -35,6 +35,13 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('head_controllers')
+      table
+        .integer('object_type_id', 11)
+        .notNullable()
+        .index()
+        .unsigned()
+        .references('id')
+        .inTable('object_types')
       table.boolean('active').defaultTo(true)
       table.string('name', 250).notNullable()
       table.string('name_search', 250)
