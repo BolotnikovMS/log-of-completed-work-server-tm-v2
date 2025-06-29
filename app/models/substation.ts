@@ -54,6 +54,9 @@ export default class Substation extends BaseModel {
   })
   declare note: string | null
 
+  @column()
+  declare keyDefectSubstation: number | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
