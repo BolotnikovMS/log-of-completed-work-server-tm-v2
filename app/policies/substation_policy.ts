@@ -15,4 +15,8 @@ export default class SubstationPolicy extends BasePolicy {
   delete(user: User): AuthorizerResponse {
     return user.roleId === RolesEnum.ADMIN
   }
+
+  updateKeyDefectSubstation(user: User): AuthorizerResponse {
+    return user.roleId === RolesEnum.ADMIN
+  }
 }
