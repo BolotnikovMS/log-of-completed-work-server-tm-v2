@@ -9,6 +9,7 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'date': 'Дата и время должны иметь формат: dd.mm.yyyy.',
   'unique': 'Поле {{ field }} должно быть уникальным.',
   'password.confirmed': 'Поле: "пароля" и "подтверждение пароля" должны совпадать!',
+  'number': 'Поле {{ field }} должно быть числом.',
 
   // Error message for the username field
   'username.required': 'Please choose a username for your account',
