@@ -5,20 +5,13 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.alterTable(this.tableName, (table) => {
-      table
-        .integer('object_type_id', 11)
-        .notNullable()
-        .index()
-        .unsigned()
-        .references('id')
-        .inTable('object_types')
-        .defaultTo(1)
+      table.integer('key_defect_substation', 11).nullable()
     })
   }
 
   async down() {
     this.schema.alterTable(this.tableName, (table) => {
-      table.dropColumn('object_type_id')
+      table.dropColumn('key_defect_substation')
     })
   }
 }

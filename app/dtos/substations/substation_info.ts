@@ -17,6 +17,7 @@ export default class SubstationInfoDto extends BaseModelDto {
   declare other_files: SubstationFileListDto[]
   declare channels: SubstationChannelsDto[]
   declare object_type: string | null
+  declare keyDefectSubstation: number | null
 
   constructor(substation?: Substation) {
     super()
@@ -36,5 +37,6 @@ export default class SubstationInfoDto extends BaseModelDto {
     this.other_files = SubstationFileListDto.fromArray(substation.other_files)
     this.channels = SubstationChannelsDto.fromArray(substation.channels)
     this.object_type = substation.object_type?.shortName
+    this.keyDefectSubstation = substation.keyDefectSubstation
   }
 }

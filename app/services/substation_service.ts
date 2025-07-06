@@ -2,6 +2,7 @@ import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
 import { substationValidator } from '#validators/substation'
+import { substationKeyDefectValidator } from '#validators/substation_key_defect'
 import { substationNoteValidator } from '#validators/substation_note'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
@@ -115,5 +116,13 @@ export default class SubstationService {
 
     await substation.related('works').query().delete()
     await substation.delete()
+  }
+
+  static async updateKeyDefectSubstation(req: Request, params: IParams): Promise<Substation> {
+    const substation = await Substation.findOrFail(params.id)
+    const validatedData = await req.validateUsing(substationKeyDefectValidator)
+    const updSubstation = await substation.merge(validatedData).save()
+
+    return updSubstation
   }
 }

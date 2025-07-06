@@ -32,6 +32,7 @@ export default class extends BaseSchema {
       table.text('description').notNullable()
       table.string('note').nullable()
       table.dateTime('date_completion').notNullable()
+      table.boolean('in_control').defaultTo(false)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

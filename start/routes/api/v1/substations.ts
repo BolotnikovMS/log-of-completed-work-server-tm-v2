@@ -11,6 +11,7 @@ export const substationsRoutes = router
     router.get('/:id', [SubstationsController, 'getSubstation'])
     router.patch('/:id', [SubstationsController, 'update'])
     router.patch('/:id/note', [SubstationsController, 'updateNote'])
+    router.patch('/:id/add-key-defects', [SubstationsController, 'updateKeyDefectSubstation'])
     router.delete('/:id', [SubstationsController, 'destroy'])
   })
   .prefix('/substations')

@@ -80,4 +80,15 @@ export default class SubstationsController {
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
     response.send(buffer)
   }
+
+  async updateKeyDefectSubstation({ request, response, params, bouncer }: HttpContext) {
+    if (await bouncer.with(SubstationPolicy).denies('updateKeyDefectSubstation')) {
+      return response.status(403).json({ message: accessErrorMessages.noRights })
+    }
+
+    const substationParam = params as IParams
+    const updSubstation = await SubstationService.updateKeyDefectSubstation(request, substationParam)
+
+    return response.status(200).json(updSubstation)
+  }
 }
