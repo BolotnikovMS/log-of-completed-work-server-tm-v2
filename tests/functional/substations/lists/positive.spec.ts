@@ -3,7 +3,7 @@ import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
-test.group('✅ Позитивные тесты. Тесты для проверки функционала "Обновления ключа связт с ЖД".', group => {
+test.group('✅ Позитивные тесты. Тесты для проверки функционала "Обновления ключа связи с ЖД".', group => {
   const id = 4
   const urlApi = `/api/v1.0/substations/${id}/add-key-defects`
   let admin: User
