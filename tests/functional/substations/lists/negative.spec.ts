@@ -20,7 +20,8 @@ test.group('⛔️ Негативные тесты. Тесты для прове
     { keyDefectSubstation: 0 },
     { keyDefectSubstation: 'abc' },
     { },
-    { keyDefectSubstation: true }
+    { keyDefectSubstation: true },
+    { keyDefectSubstation: '!@#' }
   ]
 
   group.setup(async () => {
@@ -67,6 +68,17 @@ test.group('⛔️ Негативные тесты. Тесты для прове
     assert.propertyVal(resp.body(), 'message', 'Row not found')
   })
 
-  test('Обновление ключа некорректными значениями.')
+  test('{$i} - Обновление ключа некорректными значениями - "{keyDefectSubstation}"')
     .with(incorrectData)
+    .run(async ({ client, assert}, item) => {
+      const resp = await client
+      .patch(urlApi)
+      .json(item)
+      .withGuard('api')
+      .loginAs(admin)
+
+      resp.assertStatus(422)
+      resp.assertHeader('content-type', 'application/json; charset=utf-8')
+      assert.exists(resp.body().errors)
+    })
 })
