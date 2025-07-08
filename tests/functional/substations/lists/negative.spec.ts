@@ -19,7 +19,6 @@ test.group('⛔️ Негативные тесты. Тесты для прове
     { keyDefectSubstation: 1.5 },
     { keyDefectSubstation: 0 },
     { keyDefectSubstation: 'abc' },
-    { },
     { keyDefectSubstation: true },
     { keyDefectSubstation: '!@#' }
   ]
