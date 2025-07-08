@@ -67,7 +67,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
     assert.propertyVal(resp.body(), 'message', 'Row not found')
   })
 
-  test('{$i} - Обновление ключа некорректными значениями - "{keyDefectSubstation}"')
+  test('{$i} - Обновление ключа некорректными значениями - "{keyDefectSubstation}".')
     .with(incorrectData)
     .run(async ({ client, assert}, item) => {
       const resp = await client
