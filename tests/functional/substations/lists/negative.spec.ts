@@ -4,7 +4,7 @@ import User from '#models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
-test.group('⛔️ Негативные тесты. Тесты для проверки функционала "Обновления ключа связт с ЖД".', group => {
+test.group('⛔️ Негативные тесты. Тесты для проверки функционала "Обновления ключа связи с ЖД".', group => {
   const id = 4
   const urlApi = `/api/v1.0/substations/${id}/add-key-defects`
   const incorrectUrlApi = `/api/v1.0/substations/999999/add-key-defects`
