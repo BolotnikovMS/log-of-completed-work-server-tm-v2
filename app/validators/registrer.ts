@@ -9,7 +9,11 @@ export const registerValidator = vine.compile(
     patronymic: text20,
     position: text30,
     email: email,
-    password: vine.string().minLength(6),
+    password: vine
+      .string()
+      .trim()
+      .minLength(6)
+      .maxLength(15),
     roleId: numberCheck,
   })
 )
