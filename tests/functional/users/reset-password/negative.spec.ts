@@ -15,7 +15,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
   const correctData = { password: 'qwertyuiop', passwordConfirm: 'qwertyuiop' }
   const incorrectData = [
     { password: '', passwordConfirm: '', message: { errors: [{ message: 'Поле является обязательным.' }] } },
-    { password: '       ', passwordConfirm: '       ', message: { errors: [{ message: 'Поле является обязательным.' }] } },
+    { password: '       ', passwordConfirm: '       ', message: { errors: [{ message: 'Минимальная длина 6 символа.' }] } },
     { password: 'Qwerty#W', message: { errors: [{ message: 'Поле: "пароля" и "подтверждение пароля" должны совпадать!' }] } },
     { password: 'qwer', message: { errors: [{ message: 'Минимальная длина 6 символа.' }] } },
     { password: 'Qwerty#W', passwordConfirm: 'Qwerty!1', message: { errors: [{ message: 'Поле: "пароля" и "подтверждение пароля" должны совпадать!' }] } },
