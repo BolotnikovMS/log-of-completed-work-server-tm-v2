@@ -17,7 +17,7 @@ type TOptions = {
  */
 
 async function unique(value: unknown, options: TOptions, field: FieldContext) {
-  if (typeof value !== 'string') {
+  if (typeof value !== 'string' && typeof value !== 'number') {
     return
   }
 
