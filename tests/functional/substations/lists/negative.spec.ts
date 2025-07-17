@@ -80,4 +80,17 @@ test.group('⛔️ Негативные тесты. Тесты для прове
       resp.assertHeader('content-type', 'application/json; charset=utf-8')
       assert.exists(resp.body().errors)
     })
+
+  test('{$i} - Обновление ключа одинаковым значением у двух объектов - "{$self}".')
+    .with(['/api/v1.0/substations/1/add-key-defects', '/api/v1.0/substations/2/add-key-defects'])
+    .run(async ({ client, assert }, urlItem) => {
+      const resp = await client
+        .patch(urlItem)
+        .json(correctData)
+        .withGuard('api')
+        .loginAs(admin)
+
+      resp.assertStatus(422)
+      resp.assertHeader('content-type', 'application/json; charset=utf-8')
+    })
 })
