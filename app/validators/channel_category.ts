@@ -1,9 +1,9 @@
 import vine from '@vinejs/vine'
-import { text180 } from './fields_check.js'
+import { text50 } from './fields_check.js'
 
 export const channelCategoryValidator = vine.compile(
   vine.object({
-    name: text180,
-    shortName: text180,
+    name: text50.escape(),
+    shortName: text50.escape(),
   })
 )

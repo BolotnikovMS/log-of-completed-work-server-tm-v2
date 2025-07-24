@@ -1,19 +1,42 @@
 import vine from '@vinejs/vine'
 import {
-    booleanCheckOptional,
-    numberCheck,
-    text240
+    booleanCheck,
+    text50
 } from './fields_check.js'
 
 export const substationValidator = vine.compile(
   vine.object({
-    active: booleanCheckOptional,
-    districtId: numberCheck,
-    voltageClassesId: numberCheck,
-    typeKpId: numberCheck,
-    headControllerId: numberCheck,
-    objectTypeId: numberCheck,
-    name: text240,
-    rdu: booleanCheckOptional,
+    active: booleanCheck.optional(),
+    districtId: vine
+      .number({ strict: true })
+      .positive()
+      .withoutDecimals()
+      .min(1)
+      .exists({ table: 'districts', column: 'id' }),
+    voltageClassesId: vine
+      .number({ strict: true })
+      .positive()
+      .withoutDecimals()
+      .min(1)
+      .exists({ table: 'voltage_classes', column: 'id' }),
+    typeKpId: vine
+      .number({ strict: true })
+      .positive()
+      .withoutDecimals()
+      .min(1)
+      .exists({ table: 'type_kps', column: 'id' }),
+    headControllerId: vine
+      .number({ strict: true })
+      .positive()
+      .withoutDecimals().min(1)
+      .exists({ table: 'head_controllers', column: 'id' }),
+    objectTypeId: vine
+      .number({ strict: true })
+      .positive()
+      .withoutDecimals()
+      .min(1)
+      .exists({ table: 'object_types', column: 'id' }),
+    name: text50.escape(),
+    rdu: booleanCheck.optional(),
   })
 )
