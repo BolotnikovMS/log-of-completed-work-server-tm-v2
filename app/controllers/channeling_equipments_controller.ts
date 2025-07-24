@@ -28,7 +28,7 @@ export default class ChannelingEquipmentsController {
 
     const equipment = await ChannelingEquipmentService.createChannelingEquipment(request, auth)
 
-    return response.status(200).json(equipment)
+    return response.status(201).json(equipment)
   }
 
   async update({ params, request, response, bouncer }: HttpContext) {

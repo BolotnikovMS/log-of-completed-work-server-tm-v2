@@ -36,7 +36,7 @@ export default class ChannelsController {
 
     const channel = await ChannelService.createChannel(request, auth)
 
-    return response.status(200).json(channel)
+    return response.status(201).json(channel)
   }
 
   async update({ params, request, response, bouncer }: HttpContext) {
