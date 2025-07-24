@@ -1,8 +1,8 @@
 import vine from '@vinejs/vine'
-import { text180 } from './fields_check.js'
+import { text30 } from './fields_check.js'
 
 export const headControllerValidator = vine.compile(
   vine.object({
-    name: text180,
+    name: text30.escape(),
   })
 )

@@ -1,9 +1,9 @@
-import { text140 } from '#validators/fields_check'
+import { text50 } from '#validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const objectTypeValidator = vine.compile(
   vine.object({
-    name: text140,
-    shortName: text140,
+    name: text50.escape(),
+    shortName: text50.escape(),
   })
 )

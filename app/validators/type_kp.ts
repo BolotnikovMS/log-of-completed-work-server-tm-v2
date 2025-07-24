@@ -1,8 +1,8 @@
 import vine from '@vinejs/vine'
-import { text240 } from './fields_check.js'
+import { text30 } from './fields_check.js'
 
 export const typeKpValidator = vine.compile(
   vine.object({
-    name: text240,
+    name: text30.escape(),
   })
 )
