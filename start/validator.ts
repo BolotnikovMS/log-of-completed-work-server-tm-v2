@@ -12,6 +12,7 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'number': 'В поле {{ field }} должно быть введено число.',
   'withoutDecimals': 'В поле {{ field }} должно быть введено целое число.',
   'positive': 'В поле {{ field }} должно быть введено положительное число.',
+  'database.exists': 'Выбранный {{ field }} является недопустимым.',
 
   // Error message for the username field
   'username.required': 'Please choose a username for your account',
