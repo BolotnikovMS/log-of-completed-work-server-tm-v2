@@ -38,7 +38,9 @@ export default class Substation extends BaseModel {
   @column()
   declare objectTypeId: number
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value)
+  })
   declare name: string
 
   @column()

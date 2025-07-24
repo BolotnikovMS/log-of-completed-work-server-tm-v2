@@ -1,7 +1,8 @@
-import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
-import { DateTime } from 'luxon'
+import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import Substation from '#models/substation'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
+import { DateTime } from 'luxon'
 
 export default class ObjectType extends BaseModel {
   @column({ isPrimary: true })
@@ -10,7 +11,9 @@ export default class ObjectType extends BaseModel {
   @column()
   declare userId: number
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value)
+  })
   declare name: string
 
   @column()
@@ -21,7 +24,7 @@ export default class ObjectType extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
-  
+
   @hasMany(() => Substation)
   declare objects: HasMany<typeof Substation>
 }
