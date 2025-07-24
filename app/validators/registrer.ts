@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { email, numberCheck, text20, text30, username } from './fields_check.js'
+import { email, text20, text30, username } from './fields_check.js'
 
 export const registerValidator = vine.compile(
   vine.object({
@@ -14,6 +14,11 @@ export const registerValidator = vine.compile(
       .trim()
       .minLength(6)
       .maxLength(15),
-    roleId: numberCheck,
+    roleId: vine
+      .number({ strict: true })
+      .positive()
+      .withoutDecimals()
+      .min(1)
+      .exists({ table: 'roles', column: 'id' }),
   })
 )
