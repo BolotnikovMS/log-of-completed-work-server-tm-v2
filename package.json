@@ -68,6 +68,7 @@
     "@poppinss/utils": "^6.8.3",
     "@vinejs/vine": "^2.1.0",
     "better-sqlite3": "^11.5.0",
+    "csv-parser": "^3.2.0",
     "exceljs": "^4.4.0",
     "luxon": "^3.5.0",
     "npm-check-updates": "^17.1.4",
