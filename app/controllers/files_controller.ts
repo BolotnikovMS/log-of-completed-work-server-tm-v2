@@ -8,6 +8,7 @@ import db from '@adonisjs/lucid/services/db'
 import vine from '@vinejs/vine'
 import csv from 'csv-parser'
 import * as fs from 'node:fs'
+import { unlink } from 'node:fs/promises'
 import path from 'node:path'
 
 const fileSubstationKeyValidator = vine.compile(
@@ -21,16 +22,21 @@ const fileSubstationKeyValidator = vine.compile(
 const csvDataSubstationKeyValidator = vine.compile(
   vine.object({
     id: numberCheck.exists({ table: 'substations', column: 'id' }),
-    keyDefectSubstation: numberCheck
+    keyDefectSubstation: vine.number({ strict: true }).positive().withoutDecimals().min(1).nullable()
   })
 )
 
-type TResultParseCSVKey = {
-  id: number
-  keyDefectSubstation: number
+interface ICSVSubstationKeyRow {
+  id: string
+  keyDefectSubstation: string
 }
 
-type TErrorParseCSVKey = {
+type TResultParseCSVSubstationKey = {
+  id: number
+  keyDefectSubstation: number | null
+}
+
+type TErrorParseCSVSubstationKey = {
   row: number
   error: string
 }
@@ -74,10 +80,13 @@ export default class FilesController {
 
   async uploadSubstationKey({ request, response }: HttpContext) {
     const { csvFile } = await request.validateUsing(fileSubstationKeyValidator)
-    const results: TResultParseCSVKey[] = []
-    const errors: TErrorParseCSVKey[] = []
-    const filePath = await csvFile.move(app.tmpPath('uploads'), {
-      name: `${cuid()}.${csvFile.extname}`,
+    const results: TResultParseCSVSubstationKey[] = []
+    const errors: TErrorParseCSVSubstationKey[] = []
+    const fileName = `${cuid()}.${csvFile.extname}`
+    const filePath = app.tmpPath('uploads', fileName)
+
+    await csvFile.move(app.tmpPath('uploads'), {
+      name: fileName,
       overwrite: true
     })
 
@@ -87,28 +96,24 @@ export default class FilesController {
 
     try {
       await new Promise((resolve, reject) => {
-        
-        fs
-          .createReadStream(csvFile.tmpPath!)
-          .pipe(
-            csv({
-              mapHeaders: ({ header }) => header.trim(),
-              mapValues: ({ value }) => value.trim(),
-              separator: ';'
-            })
-          )
-          .on('data', async (data) => {
+        const stream = fs.createReadStream(filePath)
+
+        stream.pipe(
+          csv({
+            mapHeaders: ({ header }) => header.trim(),
+            mapValues: ({ value }) => value.trim(),
+            separator: ';'
+          })
+        )
+          .on('data', async (data: ICSVSubstationKeyRow) => {
             try {
-              // Валидация данных строки
+              const { id, keyDefectSubstation } = data
               const validatedData = await csvDataSubstationKeyValidator.validate({
-                id: parseInt(data.id),
-                keyDefectSubstation: parseInt(data.keyDefectSubstation),
+                id: parseInt(id),
+                keyDefectSubstation: keyDefectSubstation === 'null' ? null : parseInt(keyDefectSubstation)
               })
 
-              results.push({
-                id: validatedData.id,
-                keyDefectSubstation: validatedData.keyDefectSubstation,
-              })
+              results.push(validatedData)
             } catch (error) {
               console.log(error)
 
@@ -121,7 +126,7 @@ export default class FilesController {
           .on('end', () => {
             console.log('CSV processing completed')
 
-            resolve(true)
+            resolve({ validRows: results, errors })
           })
           .on('error', (error) => {
             reject(error)
@@ -131,7 +136,6 @@ export default class FilesController {
       console.log('Result: ', results)
       console.log('Errors: ', errors)
 
-      // Массовое обновление в транзакции
       await db.transaction(async (trx) => {
         for (const item of results) {
           try {
@@ -149,11 +153,7 @@ export default class FilesController {
         }
       })
 
-      return response.ok({
-        success: true,
-        processed: results.length,
-        errors,
-      })
+      return response.status(200).json({ processed: results.length, errors })
     } catch (error) {
       return response.status(500).json({
         success: false,
@@ -161,10 +161,9 @@ export default class FilesController {
         errors,
       })
     } finally {
-      // Удаляем временный файл
-      // if (csvFile.csvFile.tmpPath) {
-      //   fs.unlink(csvFile.csvFile.tmpPath, () => { })
-      // }
+      console.log(`${fileName} удален!`)
+
+      await unlink(filePath)
     }
   }
 
