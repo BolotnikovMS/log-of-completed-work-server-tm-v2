@@ -138,7 +138,7 @@ export default class FilesServices {
             try {
               await trx
                 .from('substations')
-                .where('ids', item.id)
+                .where('id', item.id)
                 .update({ key_defect_substation: item.keyDefectSubstation })
             } catch (error) {
               errors.push({
