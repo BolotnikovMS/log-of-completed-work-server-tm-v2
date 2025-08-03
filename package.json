@@ -35,7 +35,8 @@
     "#interfaces/*": "./app/interfaces/*.js",
     "#helpers/*": "./app/helpers/*.js",
     "#routes/*": "./start/routes/*.js",
-    "#dtos/*": "./app/dtos/*.js"
+    "#dtos/*": "./app/dtos/*.js",
+    "#domains/*": "./app/domains/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",

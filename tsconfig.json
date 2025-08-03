@@ -66,6 +66,9 @@
       ],
       "#dtos/*": [
         "./app/dtos/*.js"
+      ],
+      "#domains/*": [
+        "./app/domains/*.js"
       ]
     }
   }
