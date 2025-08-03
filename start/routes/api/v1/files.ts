@@ -7,7 +7,7 @@ export const filesRoutes = router
     router.post('/upload', [FilesController, 'upload'])
     router.get('/download/:id', [FilesController, 'download'])
     router.delete('/:id', [FilesController, 'destroy'])
-    router.post('/upload-substation-key', [FilesController, 'uploadSubstationKey'])
+    router.post('/upload-substation-key', [FilesController, 'uploadCSVFileSubstationKey'])
   })
   .prefix('/files')
   .use([middleware.auth()])
