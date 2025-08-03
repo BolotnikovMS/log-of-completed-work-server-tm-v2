@@ -138,7 +138,7 @@ export default class FilesServices {
             try {
               await trx
                 .from('substations')
-                .where('id', item.id)
+                .where('ids', item.id)
                 .update({ key_defect_substation: item.keyDefectSubstation })
             } catch (error) {
               errors.push({
@@ -155,7 +155,7 @@ export default class FilesServices {
         return { message: 'Нет данных для загрузки!' }
       }
 
-      return { processed: results.length, message: 'Данные успешно загружены из файла!', errors }
+      return { processed: results.length, message: errors.length ? errors[0].message : 'Данные успешно загружены из файла!', errors }
     } catch (errors) {
       return {
         message: 'Failed to process CSV',
