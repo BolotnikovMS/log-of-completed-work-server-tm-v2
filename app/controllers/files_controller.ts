@@ -44,7 +44,7 @@ export default class FilesController {
 
   async uploadCSVFileSubstationKey({ request, response }: HttpContext) {
     const data = await FilesServices.uploadCSVFileSubstationKey(request)
-    console.log(data)
+
     if (data.errors && data.errors.length !== 0) {
       return response.status(data.errors[0].status!).json(data)
     }
