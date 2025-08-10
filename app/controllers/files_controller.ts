@@ -1,4 +1,6 @@
+import { accessErrorMessages } from '#helpers/access_error_messages'
 import File from '#models/file'
+import FilePolicy from '#policies/file_policy'
 import FilesServices from '#services/file_upload_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
@@ -42,7 +44,11 @@ export default class FilesController {
     }
   }
 
-  async uploadCSVFileSubstationKey({ request, response }: HttpContext) {
+  async uploadCSVFileSubstationKey({ request, response, bouncer }: HttpContext) {
+    if (await bouncer.with(FilePolicy).denies('uploadCSVFileSubstationKey')) {
+      return response.status(403).json({ message: accessErrorMessages.noRights })
+    }
+
     const data = await FilesServices.uploadCSVFileSubstationKey(request)
 
     if (data.errors && data.errors.length !== 0) {
