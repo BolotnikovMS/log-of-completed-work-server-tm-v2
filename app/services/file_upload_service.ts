@@ -108,8 +108,8 @@ export default class FilesServices {
             try {
               const { id, keyDefectSubstation } = data
               const validatedData = await csvDataSubstationKeyValidator.validate({
-                id: parseInt(id),
-                keyDefectSubstation: keyDefectSubstation === 'null' ? null : parseInt(keyDefectSubstation)
+                id: +id,
+                keyDefectSubstation: keyDefectSubstation === 'null' ? null : +keyDefectSubstation
               })
 
               results.push(validatedData)
@@ -132,7 +132,7 @@ export default class FilesServices {
           })
       })
 
-      if (results.length) {
+      if (results.length && errors.length === 0) {
         await db.transaction(async (trx) => {
           for (const item of results) {
             try {
@@ -152,7 +152,7 @@ export default class FilesServices {
           }
         })
       } else {
-        return { message: 'Нет данных для загрузки!' }
+        return { errors }
       }
 
       return { processed: results.length, message: errors.length ? errors[0].message : 'Данные успешно загружены из файла!', errors }
