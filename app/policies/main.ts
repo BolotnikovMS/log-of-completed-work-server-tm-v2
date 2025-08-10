@@ -13,6 +13,7 @@
 */
 
 export const policies = {
+  FilePolicy: () => import('#policies/file_policy'),
   ObjectTypePolicy: () => import('#policies/object_type_policy'),
   TypeWorkPolicy: () => import('#policies/type_work_policy'),
   ChannelingEquipmentPolicy: () => import('#policies/channeling_equipment_policy'),
