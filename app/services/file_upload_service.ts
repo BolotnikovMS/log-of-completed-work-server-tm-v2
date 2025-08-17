@@ -14,7 +14,8 @@ import path from 'node:path'
 
 export default class FilesServices {
   static async uploadFile(req: Request, userId: number | undefined): Promise<string> {
-    const validateData = await req.validateUsing(fileValidator)
+    const data = { ...req.body(), substationId: +req.body().substationId, ...req.__raw_files }
+    const validateData = await fileValidator.validate(data)
 
     validateData?.file.forEach(async (fileItem) => {
       const newFileName = `${cuid()}.${fileItem.extname}`
