@@ -18,8 +18,12 @@ export class LogService {
     return logs
   }
 
-  static async createRecord(log: INewLogRecord): Promise<Log> {
-    const logRecord = await Log.create(log)
+  static async createRecord({ data, changes, ...props }: INewLogRecord): Promise<Log> {
+    const logRecord = await Log.create({
+      data: JSON.stringify(data),
+      changes: changes ? JSON.stringify(changes) : null,
+      ...props
+    })
 
     return logRecord
   }
