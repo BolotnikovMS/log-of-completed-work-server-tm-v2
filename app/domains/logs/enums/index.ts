@@ -3,11 +3,7 @@ export enum ELogActionType {
   CREATE = 'create',
   UPDATE = 'update',
   DELETE = 'delete',
-  LOGIN = 'login',
-  LOGOUT = 'logout'
-}
-
-export enum ELogStatus {
-  SUCCESS = 'success',
-  FAILED = 'failed'
+  LOGIN = 'auth',
+  VALIDATION = 'validation',
+  ERROR = 'error'
 }
