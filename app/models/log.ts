@@ -1,4 +1,4 @@
-import { ELogActionType, ELogStatus } from '#domains/logs/enums/index'
+import type { TLogAction } from '#domains/logs/types/index'
 import User from '#models/user'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
@@ -9,28 +9,37 @@ export default class Log extends BaseModel {
   declare id: number
 
   @column()
-  declare userId: number
+  declare userId: number | null
 
   @column()
-  declare actionType: ELogActionType
+  declare url: string | null
 
   @column()
-  declare entityType: string
+  declare method: string | null
 
   @column()
-  declare entityId: number | null
+  declare statusCode: number | null
 
   @column()
-  declare userIpAddress: string
+  declare action: TLogAction
 
   @column()
-  declare additionalData: string | null
-
-  @column()
-  declare status: ELogStatus
+  declare errorType: string | null
 
   @column()
   declare errorMessage: string | null
+
+  @column()
+  declare model: string | null
+
+  @column()
+  declare data: string | null
+
+  @column()
+  declare changes: string | null
+
+  @column()
+  declare ipAddress: string | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
