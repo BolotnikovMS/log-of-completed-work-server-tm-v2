@@ -1,5 +1,4 @@
-import LogInfoDto from '#domains/logs/dtos/log_info'
-import LogShortDto from '#domains/logs/dtos/log_short'
+import { LogInfoDto, LogShortDto } from '#domains/logs/dtos/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import LogPolicy from '#policies/log_policy'
