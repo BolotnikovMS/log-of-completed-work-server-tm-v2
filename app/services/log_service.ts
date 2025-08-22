@@ -6,13 +6,13 @@ import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export class LogService {
   static async getLogs(req: Request): Promise<ModelPaginatorContract<Log>> {
-    const { page, limit = -1, status, action } = req.qs() as IQueryParamsLog
+    const { page, limit = -1, action } = req.qs() as IQueryParamsLog
 
-    await req.validateUsing(logParamsValidator, { meta: { status, action, page, limit } })
+    await req.validateUsing(logParamsValidator, { meta: { action, page, limit } })
 
     const logs = await Log.query()
-      .if(status, query => query.where('status', '=', status))
-      .if(action, query => query.where('action_type', '=', action))
+      .if(action, query => query.where('action', '=', action))
+      .preload('user')
       .paginate(page, limit)
 
     return logs
