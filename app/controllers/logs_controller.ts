@@ -10,10 +10,6 @@ export default class LogsController {
     return response.status(200).json(logs)
   }
 
-  async store({ request }: HttpContext) {
-
-  }
-
   async show({ params }: HttpContext) {
     //  Получение полной инф-ии по конкретному событию
   }
