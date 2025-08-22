@@ -1,4 +1,5 @@
 import { INewLogRecord, IQueryParamsLog } from '#domains/logs/interfaces/index'
+import { IParams } from '#interfaces/params'
 import Log from '#models/log'
 import { logParamsValidator } from '#validators/log'
 import { Request } from '@adonisjs/core/http'
@@ -26,5 +27,13 @@ export class LogService {
     })
 
     return logRecord
+  }
+
+  static async getLogInfoById(params: IParams): Promise<Log> {
+    const log = await Log.findOrFail(params.id)
+
+    await log.load('user')
+
+    return log
   }
 }
