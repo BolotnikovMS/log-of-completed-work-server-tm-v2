@@ -12,6 +12,11 @@ export const numberCheck = vine
   .positive()
   .withoutDecimals()
   .min(1)
+export const noStrictNumberCheck = vine
+  .number()
+  .positive()
+  .withoutDecimals()
+  .min(1)
 export const arrFiles = vine.array(vine.file()).notEmpty()
 export const typeFile = vine.string().in(['photo_ps', 'backup', 'other_files'])
 export const username = vine

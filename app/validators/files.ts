@@ -13,3 +13,12 @@ export const fileValidator = vine.compile(
     typeFile: typeFile,
   })
 )
+
+export const fileSubstationKeyValidator = vine.compile(
+  vine.object({
+    csvFile: vine.file({
+      size: '10mb',
+      extnames: ['csv']
+    })
+  })
+)
