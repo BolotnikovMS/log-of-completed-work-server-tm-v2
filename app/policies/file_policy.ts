@@ -7,4 +7,7 @@ export default class FilePolicy extends BasePolicy {
   uploadCSVFileSubstationKey(user: User): AuthorizerResponse {
     return user.roleId === RolesEnum.ADMIN
   }
+  updateNameFile(user: User): AuthorizerResponse {
+    return user.roleId === RolesEnum.MODERATOR
+  }
 }
