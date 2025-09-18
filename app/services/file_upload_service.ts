@@ -1,3 +1,4 @@
+import { IUpdFile } from '#domains/files/interfaces/index'
 import { ICSVSubstationKeyRow, IErrorParseCSVSubstationKey, IResultParseCSVSubstationKey } from '#domains/substations/interfaces/index'
 import File from '#models/file'
 import { fileSubstationKeyValidator, fileValidator } from '#validators/files'
@@ -167,5 +168,11 @@ export default class FilesServices {
 
       await unlink(filePath)
     }
+  }
+  static async updateNameFile(id: number, data: IUpdFile): Promise<File> {
+    const file = await File.findOrFail(id)
+    const updFile = await file.merge(data).save()
+
+    return updFile
   }
 }
