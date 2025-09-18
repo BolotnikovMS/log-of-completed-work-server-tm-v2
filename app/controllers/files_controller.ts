@@ -1,7 +1,9 @@
 import { accessErrorMessages } from '#helpers/access_error_messages'
+import { IParams } from '#interfaces/params'
 import File from '#models/file'
 import FilePolicy from '#policies/file_policy'
 import FilesServices from '#services/file_upload_service'
+import { fileUpdateNameValidator } from '#validators/files'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import * as fs from 'node:fs'
@@ -56,6 +58,19 @@ export default class FilesController {
     }
 
     response.status(200).json(data)
+  }
+
+  async updateFileName({ request, response, params, bouncer }: HttpContext) {
+    if (await bouncer.with(FilePolicy).denies('updateNameFile')) {
+      return response.status(403).json({ message: accessErrorMessages.noRights })
+    }
+
+    const validatedData = await request.validateUsing(fileUpdateNameValidator)
+    const fileParams = params as IParams
+
+    await FilesServices.updateNameFile(fileParams.id, validatedData)
+
+    return response.status(200).json('OK!')
   }
 
   // async getImages({ request, response }: HttpContext) {
