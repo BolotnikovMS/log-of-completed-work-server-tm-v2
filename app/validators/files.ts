@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { arrFiles, typeFile } from './fields_check.js'
+import { arrFiles, text50, typeFile } from './fields_check.js'
 
 export const fileValidator = vine.compile(
   vine.object({
@@ -20,5 +20,11 @@ export const fileSubstationKeyValidator = vine.compile(
       size: '10mb',
       extnames: ['csv']
     })
+  })
+)
+
+export const fileUpdateNameValidator = vine.compile(
+  vine.object({
+    clientName: text50
   })
 )
