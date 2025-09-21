@@ -70,7 +70,7 @@ export default class FilesController {
 
     await FilesServices.updateNameFile(fileParams.id, validatedData)
 
-    return response.status(200).json('OK!')
+    return response.status(200).json({ message: 'Имя файла изменено!' })
   }
 
   // async getImages({ request, response }: HttpContext) {
