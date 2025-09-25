@@ -1,5 +1,6 @@
 import { IUpdFile } from '#domains/files/interfaces/index'
 import { ICSVSubstationKeyRow, IErrorParseCSVSubstationKey, IResultParseCSVSubstationKey } from '#domains/substations/interfaces/index'
+import { getFileNameWithoutExtension } from '#helpers/get_file_name_without_extension'
 import File from '#models/file'
 import { fileSubstationKeyValidator, fileValidator } from '#validators/files'
 import { csvDataSubstationKeyValidator } from '#validators/substation_keys_defect_file'
@@ -25,7 +26,7 @@ export default class FilesServices {
         userId: userId,
         substationId: validateData.substationId,
         filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
-        clientName: fileItem.clientName,
+        clientName: getFileNameWithoutExtension(fileItem.clientName, fileItem.extname!),
         typeFile: validateData.typeFile,
         extname: fileItem.extname,
         size: +(fileItem.size / 1024).toFixed(3),
