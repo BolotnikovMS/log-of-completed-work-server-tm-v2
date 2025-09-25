@@ -26,7 +26,7 @@ export default class FilesServices {
         userId: userId,
         substationId: validateData.substationId,
         filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
-        clientName: getFileNameWithoutExtension(fileItem.clientName, fileItem.extname!),
+        clientName: getFileNameWithoutExtension(fileItem.clientName, fileItem.extname || ''),
         typeFile: validateData.typeFile,
         extname: fileItem.extname,
         size: +(fileItem.size / 1024).toFixed(3),
