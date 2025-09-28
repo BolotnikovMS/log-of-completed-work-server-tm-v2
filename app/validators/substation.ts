@@ -1,7 +1,7 @@
 import vine from '@vinejs/vine'
 import {
-    booleanCheck,
-    text50
+  booleanCheck,
+  text50
 } from './fields_check.js'
 
 export const substationValidator = vine.compile(
@@ -19,17 +19,6 @@ export const substationValidator = vine.compile(
       .withoutDecimals()
       .min(1)
       .exists({ table: 'voltage_classes', column: 'id' }),
-    typeKpId: vine
-      .number({ strict: true })
-      .positive()
-      .withoutDecimals()
-      .min(1)
-      .exists({ table: 'type_kps', column: 'id' }),
-    headControllerId: vine
-      .number({ strict: true })
-      .positive()
-      .withoutDecimals().min(1)
-      .exists({ table: 'head_controllers', column: 'id' }),
     objectTypeId: vine
       .number({ strict: true })
       .positive()
