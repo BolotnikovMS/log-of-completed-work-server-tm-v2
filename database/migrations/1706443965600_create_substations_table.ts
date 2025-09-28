@@ -22,20 +22,6 @@ export default class extends BaseSchema {
         .references('id')
         .inTable('voltage_classes')
       table
-        .integer('type_kp_id')
-        .notNullable()
-        .index()
-        .unsigned()
-        .references('id')
-        .inTable('type_kps')
-      table
-        .integer('head_controller_id', 11)
-        .notNullable()
-        .index()
-        .unsigned()
-        .references('id')
-        .inTable('head_controllers')
-      table
         .integer('object_type_id', 11)
         .notNullable()
         .index()
