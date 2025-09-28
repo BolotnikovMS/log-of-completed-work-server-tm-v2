@@ -6,8 +6,8 @@ import File from '#models/file'
 import ObjectType from '#models/object_type'
 import TelemechanicsDevice from '#models/telemechanics_device'
 import VoltageClass from '#models/voltage_class'
-import { BaseModel, belongsTo, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
-import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
+import { BaseModel, belongsTo, column, computed, hasMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
 export default class Substation extends BaseModel {
@@ -75,11 +75,8 @@ export default class Substation extends BaseModel {
   })
   declare voltage_class: BelongsTo<typeof VoltageClass>
 
-  @hasOne(() => TelemechanicsDevice, {
-    localKey: 'substationId',
-    foreignKey: 'id'
-  })
-  declare telemechanics_device: HasOne<typeof TelemechanicsDevice>
+  @hasMany(() => TelemechanicsDevice)
+  declare telemechanics_device: HasMany<typeof TelemechanicsDevice>
 
   @hasMany(() => File, {
     onQuery: (query) => query.where('type_file', '=', 'photo_ps'),
