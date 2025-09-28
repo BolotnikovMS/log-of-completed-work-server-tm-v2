@@ -17,6 +17,7 @@ import { usersRoutes } from '#routes/api/v1/users'
 import { voltageClassesRoutes } from '#routes/api/v1/voltage_classes'
 import router from '@adonisjs/core/services/router'
 import { logRoutes } from './routes/api/v1/logs.js'
+import { telemechanicsDevicesRoutes } from './routes/api/v1/telemechanics_device.js'
 
 router.get('/', async () => {
   return {
@@ -42,3 +43,4 @@ channelingEquipmentsRoutes.prefix('/api/v1.0/')
 typesWork.prefix('/api/v1.0/')
 objectTypesRoutes.prefix('/api/v1.0/')
 logRoutes.prefix('/api/v1.0/')
+telemechanicsDevicesRoutes.prefix('/api/v1.0/')
