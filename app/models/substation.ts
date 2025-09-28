@@ -3,9 +3,8 @@ import Channel from '#models/channel'
 import CompletedWork from '#models/completed_work'
 import District from '#models/district'
 import File from '#models/file'
-import HeadController from '#models/head_controller'
 import ObjectType from '#models/object_type'
-import TypeKp from '#models/type_kp'
+import TelemechanicsDevice from '#models/telemechanics_device'
 import VoltageClass from '#models/voltage_class'
 import { BaseModel, belongsTo, column, computed, hasMany, hasOne } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany, HasOne } from '@adonisjs/lucid/types/relations'
@@ -28,12 +27,6 @@ export default class Substation extends BaseModel {
 
   @column()
   declare voltageClassesId: number
-
-  @column()
-  declare typeKpId: number
-
-  @column()
-  declare headControllerId: number
 
   @column()
   declare objectTypeId: number
@@ -82,17 +75,11 @@ export default class Substation extends BaseModel {
   })
   declare voltage_class: BelongsTo<typeof VoltageClass>
 
-  @hasOne(() => TypeKp, {
-    localKey: 'typeKpId',
-    foreignKey: 'id',
+  @hasOne(() => TelemechanicsDevice, {
+    localKey: 'substationId',
+    foreignKey: 'id'
   })
-  declare type_kp: HasOne<typeof TypeKp>
-
-  @hasOne(() => HeadController, {
-    localKey: 'headControllerId',
-    foreignKey: 'id',
-  })
-  declare head_controller: HasOne<typeof HeadController>
+  declare telemechanics_device: HasOne<typeof TelemechanicsDevice>
 
   @hasMany(() => File, {
     onQuery: (query) => query.where('type_file', '=', 'photo_ps'),
@@ -114,5 +101,4 @@ export default class Substation extends BaseModel {
 
   @belongsTo(() => ObjectType)
   declare object_type: BelongsTo<typeof ObjectType>
-
 }
