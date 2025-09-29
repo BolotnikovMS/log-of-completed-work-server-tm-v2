@@ -19,14 +19,12 @@ export default class SubstationService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = -1, search, typeKp, headController, district, channelType, channelCategory, objectType } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = -1, search, district, channelType, channelCategory, objectType } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
       .if(districtValue, (query) => query.where('district_id', '=', districtValue!))
       .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
-      .if(typeKp, (query) => query.where('type_kp_id', '=', typeKp))
-      .if(headController, (query) => query.where('head_controller_id', '=', headController))
       .if(objectType, (query) => query.where('object_type_id', '=', objectType))
       .if(channelType || channelCategory, query => {
         query.whereHas('channels', query => {
@@ -44,8 +42,6 @@ export default class SubstationService {
       })
       .preload('voltage_class')
       .preload('district')
-      .preload('type_kp')
-      .preload('head_controller')
       .preload('object_type')
       .preload('channels', query => {
         query
@@ -69,9 +65,7 @@ export default class SubstationService {
 
     await substation.load('district')
     await substation.load('voltage_class')
-    await substation.load('type_kp')
     await substation.loadCount('works', (query) => query.count('*').as('numberCompletedWorks'))
-    await substation.load('head_controller')
     await substation.load('files_photos_ps', (query) => query.preload('author').orderBy('createdAt', 'asc'))
     await substation.load('files_backups', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
