@@ -1,5 +1,5 @@
 import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
-import Substation from '#models/substation'
+import TelemechanicsDevice from '#models/telemechanics_device'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
@@ -22,6 +22,6 @@ export default class TypeKp extends BaseModel {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @hasMany(() => Substation)
-  declare substations: HasMany<typeof Substation>
+  @hasMany(() => TelemechanicsDevice)
+  declare telemechanics_devices: HasMany<typeof TelemechanicsDevice>
 }

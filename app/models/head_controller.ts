@@ -1,6 +1,7 @@
 import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
-import { BaseModel, column } from '@adonisjs/lucid/orm'
-
+import TelemechanicsDevice from '#models/telemechanics_device'
+import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
+import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
 
 export default class HeadController extends BaseModel {
@@ -20,4 +21,7 @@ export default class HeadController extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @hasMany(() => TelemechanicsDevice)
+  declare telemechanics_devices: HasMany<typeof TelemechanicsDevice>
 }
