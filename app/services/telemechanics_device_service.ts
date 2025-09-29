@@ -1,4 +1,4 @@
-import { ITelemechanicsDevice } from "#domains/telemechanics_devices/interfaces/index"
+import { ICreateTelemechanicsDevice, ITelemechanicsDevice } from "#domains/telemechanics_devices/interfaces/index"
 import TelemechanicsDevice from "#models/telemechanics_device"
 
 export class TelemechanicsDeviceService {
@@ -8,7 +8,7 @@ export class TelemechanicsDeviceService {
     return telemechanicsDevice
   }
 
-  static async create(data: ITelemechanicsDevice): Promise<TelemechanicsDevice> {
+  static async create(data: ICreateTelemechanicsDevice): Promise<TelemechanicsDevice> {
     const telemechanicsDevice = await TelemechanicsDevice.create(data)
 
     return telemechanicsDevice
