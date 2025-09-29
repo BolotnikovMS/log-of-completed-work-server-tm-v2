@@ -10,8 +10,6 @@ export default class SubstationInfoDto extends BaseModelDto {
   declare note: string | null
   declare fullNameSubstation: string
   declare district: string | null
-  declare type_kp: string | null
-  declare head_controller: string | null
   declare files_photos_ps: SubstationFileListDto[]
   declare files_backups: SubstationFileListDto[]
   declare other_files: SubstationFileListDto[]
@@ -30,8 +28,6 @@ export default class SubstationInfoDto extends BaseModelDto {
     this.note = substation.note
     this.fullNameSubstation = substation.fullNameSubstation ?? substation.name
     this.district = substation.district?.name
-    this.type_kp = substation.type_kp?.name
-    this.head_controller = substation.head_controller?.name
     this.files_photos_ps = SubstationFileListDto.fromArray(substation.files_photos_ps)
     this.files_backups = SubstationFileListDto.fromArray(substation.files_backups)
     this.other_files = SubstationFileListDto.fromArray(substation.other_files)
