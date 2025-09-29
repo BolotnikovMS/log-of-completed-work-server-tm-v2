@@ -6,7 +6,7 @@ export const telemechanicsDevicesRoutes = router
   .group(() => {
     router.get('/:id', [TelemechanicsDevicesController, 'getTelemechanicsDeviceById'])
     router.post('/', [TelemechanicsDevicesController, 'store'])
-    router.patch('/id', [TelemechanicsDevicesController, 'update'])
+    router.patch('/:id', [TelemechanicsDevicesController, 'update'])
     router.delete('/:id', [TelemechanicsDevicesController, 'destroy'])
   })
   .prefix('/telemechanics-devices')
