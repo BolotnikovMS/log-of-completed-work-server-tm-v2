@@ -1,6 +1,6 @@
 import Substation from '#models/substation'
 import { BaseModelDto } from '@adocasts.com/dto/base'
-import { SubstationChannelsDto, SubstationFileListDto } from './index.js'
+import { SubstationChannelsDto, SubstationFileListDto, SubstationTelemechanicsDevicesDto } from './index.js'
 
 export default class SubstationInfoDto extends BaseModelDto {
   declare id: number
@@ -16,6 +16,7 @@ export default class SubstationInfoDto extends BaseModelDto {
   declare channels: SubstationChannelsDto[]
   declare object_type: string | null
   declare keyDefectSubstation: number | null
+  declare telemechanics_devices: SubstationTelemechanicsDevicesDto[]
 
   constructor(substation?: Substation) {
     super()
@@ -34,5 +35,6 @@ export default class SubstationInfoDto extends BaseModelDto {
     this.channels = SubstationChannelsDto.fromArray(substation.channels)
     this.object_type = substation.object_type?.shortName
     this.keyDefectSubstation = substation.keyDefectSubstation
+    this.telemechanics_devices = SubstationTelemechanicsDevicesDto.fromArray(substation.telemechanics_device)
   }
 }
