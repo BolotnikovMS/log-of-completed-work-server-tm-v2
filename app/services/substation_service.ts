@@ -69,8 +69,12 @@ export default class SubstationService {
     await substation.load('files_photos_ps', (query) => query.preload('author').orderBy('createdAt', 'asc'))
     await substation.load('files_backups', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
-    await substation.load('channels', query => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
+    await substation.load('channels', (query) => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator'))
     await substation.load('object_type')
+    await substation.load('telemechanics_device', (query) => {
+      query.preload('head_controller')
+      query.preload('type_kp')
+    })
 
     return { substation, numberCompletedWorks: substation.$extras.numberCompletedWorks }
   }
