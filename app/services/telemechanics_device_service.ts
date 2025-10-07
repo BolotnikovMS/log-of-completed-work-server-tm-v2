@@ -1,7 +1,28 @@
-import { ICreateTelemechanicsDevice, ITelemechanicsDevice } from "#domains/telemechanics_devices/interfaces/index"
-import TelemechanicsDevice from "#models/telemechanics_device"
+import {
+  ICreateTelemechanicsDevice,
+  ITelemechanicsDevice,
+} from '#domains/telemechanics_devices/interfaces/index'
+import { IQueryParams2 } from '#interfaces/query_params'
+import TelemechanicsDevice from '#models/telemechanics_device'
+import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export class TelemechanicsDeviceService {
+  static async findAll(
+    filters: IQueryParams2
+  ): Promise<ModelPaginatorContract<TelemechanicsDevice>> {
+    const { page, limit } = filters
+    const telemechanicsDevices = await TelemechanicsDevice.query()
+      .preload('substation', (query) => {
+        query.preload('voltage_class')
+        query.preload('object_type')
+      })
+      .preload('type_kp')
+      .preload('head_controller')
+      .paginate(page!, limit)
+
+    return telemechanicsDevices
+  }
+
   static async findById(id: number): Promise<TelemechanicsDevice> {
     const telemechanicsDevice = await TelemechanicsDevice.findOrFail(id)
 
