@@ -1,12 +1,23 @@
 import { TUrlParamId } from '#domains/params/types/index'
+import TelemechanicsDeviceListDto from '#domains/telemechanics_devices/dtos/telemechanics_device_list'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { TelemechanicsDeviceService } from '#services/telemechanics_device_service'
+import { queryParamsValidator } from '#validators/query_param'
 import { telemechanicsDeviceValidator } from '#validators/telemechanics_device'
 import { urlParamIdValidator } from '#validators/url_params_id'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TelemechanicsDevicesController {
+  async index({ request, response }: HttpContext) {
+    const filters = request.qs()
+    const validatedFilters = await queryParamsValidator.validate(filters)
+    const data = await TelemechanicsDeviceService.findAll(validatedFilters)
+    const telemechanicsDevices = TelemechanicsDeviceListDto.fromPaginator(data)
+
+    return response.status(200).json(telemechanicsDevices)
+  }
+
   async getTelemechanicsDeviceById({ response, params }: HttpContext) {
     const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
     const telemechanicsDevice = await TelemechanicsDeviceService.findById(id)
@@ -21,7 +32,10 @@ export default class TelemechanicsDevicesController {
 
     const { user } = auth
     const validatedData = await request.validateUsing(telemechanicsDeviceValidator)
-    const telemechanicsDevice = await TelemechanicsDeviceService.create({ userId: user?.id!, ...validatedData })
+    const telemechanicsDevice = await TelemechanicsDeviceService.create({
+      userId: user?.id!,
+      ...validatedData,
+    })
 
     return response.status(201).json(telemechanicsDevice)
   }
