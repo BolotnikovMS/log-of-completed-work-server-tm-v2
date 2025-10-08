@@ -4,6 +4,7 @@ import { uniqueRule } from '../rules/unique.js'
 export const text20 = vine.string().trim().minLength(2).maxLength(20)
 export const text30 = vine.string().trim().minLength(2).maxLength(30)
 export const text50 = vine.string().trim().minLength(2).maxLength(50)
+export const text150 = vine.string().trim().minLength(2).maxLength(150)
 export const text1000 = vine.string().trim().minLength(2).maxLength(1000).escape()
 export const dateText = vine.string()
 // Не работает, если нужна проверка через бд

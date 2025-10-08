@@ -27,6 +27,7 @@ export default class extends BaseSchema {
         .unsigned()
         .references('id')
         .inTable('head_controllers')
+      table.string('controller_firmware_version', 150).nullable()
       table.text('note').nullable()
 
       table.timestamp('created_at')

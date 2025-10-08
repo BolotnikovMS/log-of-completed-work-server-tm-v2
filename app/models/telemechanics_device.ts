@@ -22,6 +22,9 @@ export default class TelemechanicsDevice extends BaseModel {
   declare headControllerId: number
 
   @column()
+  declare controllerFirmwareVersion?: string | null
+
+  @column()
   declare note?: string | null
 
   @belongsTo(() => Substation)

@@ -1,5 +1,5 @@
 import vine from '@vinejs/vine'
-import { text1000 } from './fields_check.js'
+import { text1000, text150 } from './fields_check.js'
 
 export const telemechanicsDeviceValidator = vine.compile(
   vine.object({
@@ -20,6 +20,7 @@ export const telemechanicsDeviceValidator = vine.compile(
       .positive()
       .withoutDecimals().min(1)
       .exists({ table: 'head_controllers', column: 'id' }),
+    controllerFirmwareVersion: text150.optional().nullable(),
     note: text1000.optional().nullable(),
   })
 )
