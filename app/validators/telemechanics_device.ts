@@ -20,7 +20,7 @@ export const telemechanicsDeviceValidator = vine.compile(
       .positive()
       .withoutDecimals().min(1)
       .exists({ table: 'head_controllers', column: 'id' }),
-    controllerFirmwareVersion: text150.optional().nullable(),
+    controllerFirmwareVersion: text150.escape().optional().nullable(),
     note: text1000.optional().nullable(),
   })
 )
