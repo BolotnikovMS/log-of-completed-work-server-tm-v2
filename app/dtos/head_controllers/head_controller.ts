@@ -4,6 +4,7 @@ import { BaseModelDto } from '@adocasts.com/dto/base'
 export default class HeadControllerDto extends BaseModelDto {
   declare id: number
   declare name: string
+  declare actualFirmwareVersion: string | null
 
   constructor(headController?: HeadController) {
     super()
@@ -12,5 +13,6 @@ export default class HeadControllerDto extends BaseModelDto {
 
     this.id = headController.id
     this.name = headController.name
+    this.actualFirmwareVersion = headController.actualFirmwareVersion || null
   }
 }
