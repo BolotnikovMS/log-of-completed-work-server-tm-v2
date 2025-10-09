@@ -16,6 +16,11 @@ export default class HeadController extends BaseModel {
   })
   declare name: string
 
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
+  declare actualFirmwareVersion?: string | null
+
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
 
