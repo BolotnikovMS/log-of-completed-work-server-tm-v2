@@ -1,3 +1,4 @@
+import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
 import HeadController from '#models/head_controller'
 import Substation from '#models/substation'
 import TypeKp from '#models/type_kp'
@@ -21,7 +22,9 @@ export default class TelemechanicsDevice extends BaseModel {
   @column()
   declare headControllerId: number
 
-  @column()
+  @column({
+    consume: (value: string): string | null => replacementEscapeSymbols(value),
+  })
   declare controllerFirmwareVersion?: string | null
 
   @column()
