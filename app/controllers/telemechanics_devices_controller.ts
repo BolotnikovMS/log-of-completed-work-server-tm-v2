@@ -1,5 +1,5 @@
 import { TUrlParamId } from '#domains/params/types/index'
-import TelemechanicsDeviceListDto from '#domains/telemechanics_devices/dtos/telemechanics_device_list'
+import { TelemechanicsDeviceInfoDto, TelemechanicsDeviceListDto } from '#domains/telemechanics_devices/dtos/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { TelemechanicsDeviceService } from '#services/telemechanics_device_service'
@@ -21,6 +21,14 @@ export default class TelemechanicsDevicesController {
   async getTelemechanicsDeviceById({ response, params }: HttpContext) {
     const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
     const telemechanicsDevice = await TelemechanicsDeviceService.findById(id)
+
+    return response.status(200).json(telemechanicsDevice)
+  }
+
+  async getTelemechanicsDeviceInfoById({ response, params }: HttpContext) {
+    const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
+    const data = await TelemechanicsDeviceService.findInfoById(id)
+    const telemechanicsDevice = new TelemechanicsDeviceInfoDto(data)
 
     return response.status(200).json(telemechanicsDevice)
   }
