@@ -29,6 +29,24 @@ export class TelemechanicsDeviceService {
     return telemechanicsDevice
   }
 
+  static async findInfoById(id: number) {
+    const telemechanicsDevice = await TelemechanicsDevice
+      .query()
+      .select('id', 'substationId', 'typeKpId', 'headControllerId', 'note', 'controllerFirmwareVersion')
+      .where('id', '=', id)
+      .firstOrFail()
+
+    await telemechanicsDevice.load('substation', query => {
+      query.select('id', 'name', 'objectTypeId', 'voltageClassesId')
+      query.preload('object_type', query => query.select('id', 'shortName'))
+      query.preload('voltage_class', query => query.select('id', 'name'))
+    })
+    await telemechanicsDevice.load('type_kp', query => query.select('id', 'name'))
+    await telemechanicsDevice.load('head_controller', query => query.select('id', 'name'))
+
+    return telemechanicsDevice
+  }
+
   static async create(data: ICreateTelemechanicsDevice): Promise<TelemechanicsDevice> {
     const telemechanicsDevice = await TelemechanicsDevice.create(data)
 
