@@ -32,7 +32,6 @@ export class TelemechanicsDeviceService {
   static async findInfoById(id: number) {
     const telemechanicsDevice = await TelemechanicsDevice
       .query()
-      .select('id', 'substationId', 'typeKpId', 'headControllerId', 'note', 'controllerFirmwareVersion')
       .where('id', '=', id)
       .firstOrFail()
 
