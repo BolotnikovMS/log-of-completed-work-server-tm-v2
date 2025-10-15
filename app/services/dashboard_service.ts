@@ -4,9 +4,10 @@ import db from "@adonisjs/lucid/services/db"
 
 export default class DashboardService {
   static async getSubstationsTypeKp() {
-    const typesKp = await TypeKp.query().withCount('substations')
-    const typesKpSerialize = typesKp.map(({ id, name, $extras: { substations_count } }) => ({
-      id, name, numberSubstations: substations_count
+    const typesKp = await TypeKp.query()
+      .preload('telemechanics_devices')
+    const typesKpSerialize = typesKp.map(({ id, name, telemechanics_devices }) => ({
+      id, name, numberSubstations: telemechanics_devices.length
     }))
 
     return typesKpSerialize
