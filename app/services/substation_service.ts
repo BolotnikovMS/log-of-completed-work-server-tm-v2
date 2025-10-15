@@ -40,14 +40,21 @@ export default class SubstationService {
             .where('channelCategoryId', '=', channelCategory)
         })
       })
-      .preload('voltage_class')
-      .preload('district')
-      .preload('object_type')
+      .preload('voltage_class', query => query.select('id', 'name'))
+      .preload('district', query => query.select('id', 'name'))
+      .preload('object_type', query => query.select('id', 'shortName'))
       .preload('channels', query => {
         query
-          .preload('channel_category')
-          .preload('channel_type')
-          .preload('gsm_operator')
+          .select('id', 'channelCategoryId', 'channelTypeId', 'channelEquipmentId', 'gsmId', 'ipAddress')
+          .preload('channel_category', query => query.select('id', 'name'))
+          .preload('channel_type', query => query.select('id', 'name'))
+          .preload('gsm_operator', query => query.select('id', 'name'))
+      })
+      .preload('telemechanics_device', query => {
+        query
+          .select('id', 'typeKpId', 'headControllerId', 'controllerFirmwareVersion')
+          .preload('type_kp', query => query.select('id', 'name'))
+          .preload('head_controller', query => query.select('id', 'name'))
       })
       .paginate(page, limit)
 
