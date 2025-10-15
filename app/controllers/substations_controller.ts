@@ -1,4 +1,4 @@
-import { SubstationDto, SubstationInfoDto, SubstationListDto } from '#dtos/substations/index'
+import { SubstationDto, SubstationInfoDto, SubstationListDto, SubstationSelectOptionDto } from '#dtos/substations/index'
 import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import Substation from '#models/substation'
@@ -11,6 +11,13 @@ export default class SubstationsController {
   async index({ request, response }: HttpContext) {
     const { meta, data } = await SubstationService.getSubstations(request)
     const substations = { meta, data: data.map(substation => new SubstationListDto(substation as Substation)) }
+
+    return response.status(200).json(substations)
+  }
+
+  async getSubstationsForSelect({ request, response }: HttpContext) {
+    const { meta, data } = await SubstationService.getSubstations(request)
+    const substations = { meta, data: data.map(substation => new SubstationSelectOptionDto(substation as Substation)) }
 
     return response.status(200).json(substations)
   }
