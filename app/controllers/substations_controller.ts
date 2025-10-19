@@ -16,8 +16,8 @@ export default class SubstationsController {
   }
 
   async getSubstationsForSelect({ request, response }: HttpContext) {
-    const { meta, data } = await SubstationService.getSubstations(request)
-    const substations = { meta, data: data.map(substation => new SubstationSelectOptionDto(substation as Substation)) }
+    const { data } = await SubstationService.getSubstations(request)
+    const substations = data.map(substation => new SubstationSelectOptionDto(substation as Substation))
 
     return response.status(200).json(substations)
   }
