@@ -19,7 +19,7 @@ export default class SubstationService {
     meta: any,
     data: ModelObject[]
   }> {
-    const { sort = 'name', order = 'asc', page, limit = -1, search, district, channelType, channelCategory, objectType } = req.qs() as IQueryParams
+    const { sort = 'name', order = 'asc', page, limit = -1, search, district, channelType, channelCategory, objectType, typeKp, headController } = req.qs() as IQueryParams
     const districtValue = districtId || district
     const substations = await Substation.query()
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
@@ -28,16 +28,28 @@ export default class SubstationService {
       .if(objectType, (query) => query.where('object_type_id', '=', objectType))
       .if(channelType || channelCategory, query => {
         query.whereHas('channels', query => {
-          query
-            .where('channelTypeId', '=', channelType)
-            .orWhere('channelCategoryId', '=', channelCategory)
+          if (channelType && channelCategory) {
+            query
+              .where('channelTypeId', '=', channelType)
+              .where('channelCategoryId', '=', channelCategory)
+          } else if (channelType) {
+            query.where('channelTypeId', '=', channelType)
+          } else if (channelCategory) {
+            query.where('channelCategoryId', '=', channelCategory)
+          }
         })
       })
-      .if(channelType && channelCategory, query => {
-        query.whereHas('channels', query => {
-          query
-            .where('channelTypeId', '=', channelType)
-            .where('channelCategoryId', '=', channelCategory)
+      .if(typeKp || headController, query => {
+        query.whereHas('telemechanics_device', query => {
+          if (typeKp && headController) {
+            query
+              .where('typeKpId', '=', typeKp)
+              .where('headControllerId', '=', headController)
+          } else if (typeKp) {
+            query.where('typeKpId', '=', typeKp)
+          } else if (headController) {
+            query.where('headControllerId', '=', headController)
+          }
         })
       })
       .preload('voltage_class', query => query.select('id', 'name'))
