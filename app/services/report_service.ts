@@ -1,6 +1,6 @@
 import { ChannelDto } from '#dtos/channels/index'
 import CompletedWorkInfoDto from '#dtos/completed_works/completed_work_info'
-import { SubstationsReportDto } from '#dtos/reports/index'
+import { SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#dtos/reports/index'
 import Channel from '#models/channel'
 import CompletedWork from '#models/completed_work'
 import Substation from '#models/substation'
@@ -131,6 +131,57 @@ export default class ReportService {
           channelType: 'Не указан',
           channelIp: 'Не указан',
           gsm: 'Не указан',
+          note: substation.note
+        })
+      }
+    })
+
+    this.#applyStyles(worksheet, ['note'])
+
+    const buffer = await workbook.xlsx.writeBuffer()
+
+    return buffer
+  }
+
+  static async createExcelSubstationsTelemechanicsDevices(req: Request): Promise<ExcelJS.Buffer> {
+    const substations = await SubstationService.getSubstations(req)
+    const transformData = substations.data.map(substation => new SubstationsTelemechanicsDevicesReportDto(substation as Substation))
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Sheet 1')
+
+    worksheet.columns = [
+      { header: 'Район/ГП/УС', key: 'district', width: 20 },
+      { header: 'Объект', key: 'name', width: 27 },
+      { header: 'Тип объекта', key: 'objectType', width: 16 },
+      { header: 'РДУ', key: 'rdu', width: 12 },
+      { header: 'Тип КП', key: 'typeKp', width: 17 },
+      { header: 'Головной контроллер', key: 'headeController', width: 26 },
+      { header: 'Примечание', key: 'note', width: 50 },
+    ]
+
+    this.#applyStylesRowTitle(worksheet)
+
+    transformData.forEach(substation => {
+      if (substation.telemechanics_device && substation.telemechanics_device.length > 0) {
+        substation.telemechanics_device?.forEach(device => {
+          worksheet.addRow({
+            district: substation.district,
+            name: substation.name,
+            objectType: substation.object_type ?? 'Не указан',
+            rdu: substation.rdu,
+            typeKp: device.type_kp ?? 'Не указан',
+            headeController: device.head_controller ?? 'Не указан',
+            note: substation.note
+          })
+        })
+      } else {
+        worksheet.addRow({
+          district: substation.district,
+          name: substation.name,
+          objectType: substation.object_type ?? 'Не указан',
+          rdu: substation.rdu,
+          typeKp: 'Не указан',
+          headeController: 'Не указан',
           note: substation.note
         })
       }
