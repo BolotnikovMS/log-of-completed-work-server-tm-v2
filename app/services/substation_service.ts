@@ -28,26 +28,20 @@ export default class SubstationService {
       .if(objectType, (query) => query.where('object_type_id', '=', objectType))
       .if(channelType || channelCategory, query => {
         query.whereHas('channels', query => {
-          if (channelType && channelCategory) {
-            query
-              .where('channelTypeId', '=', channelType)
-              .where('channelCategoryId', '=', channelCategory)
-          } else if (channelType) {
+          if (channelType) {
             query.where('channelTypeId', '=', channelType)
-          } else if (channelCategory) {
+          }
+          if (channelCategory) {
             query.where('channelCategoryId', '=', channelCategory)
           }
         })
       })
       .if(typeKp || headController, query => {
         query.whereHas('telemechanics_device', query => {
-          if (typeKp && headController) {
-            query
-              .where('typeKpId', '=', typeKp)
-              .where('headControllerId', '=', headController)
-          } else if (typeKp) {
+          if (typeKp) {
             query.where('typeKpId', '=', typeKp)
-          } else if (headController) {
+          }
+          if (headController) {
             query.where('headControllerId', '=', headController)
           }
         })
@@ -64,6 +58,14 @@ export default class SubstationService {
       })
       .preload('telemechanics_device', query => {
         query
+          .if(typeKp || headController, query => {
+            if (typeKp) {
+              query.where('typeKpId', '=', typeKp)
+            }
+            if (headController) {
+              query.where('headControllerId', '=', headController)
+            }
+          })
           .select('id', 'typeKpId', 'headControllerId', 'controllerFirmwareVersion')
           .preload('type_kp', query => query.select('id', 'name'))
           .preload('head_controller', query => query.select('id', 'name'))
