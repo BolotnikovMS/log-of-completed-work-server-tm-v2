@@ -88,6 +88,14 @@ export default class SubstationsController {
     response.send(buffer)
   }
 
+  async downloadSubstationsSubstationsTelemechanicsDevicesExcel({ request, response }: HttpContext) {
+    const buffer = await ReportService.createExcelSubstationsTelemechanicsDevices(request)
+
+    response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.header('Content-Disposition', 'attachment; filename=example.xlsx')
+    response.send(buffer)
+  }
+
   async updateKeyDefectSubstation({ request, response, params, bouncer }: HttpContext) {
     if (await bouncer.with(SubstationPolicy).denies('updateKeyDefectSubstation')) {
       return response.status(403).json({ message: accessErrorMessages.noRights })
