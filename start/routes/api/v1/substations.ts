@@ -8,6 +8,7 @@ export const substationsRoutes = router
     router.post('/', [SubstationsController, 'store'])
     router.get('/select-options', [SubstationsController, 'getSubstationsForSelect'])
     router.get('/download-substations-excel', [SubstationsController, 'downloadSubstationsExcel'])
+    router.get('/download-substations-telemechanics-devices-excel', [SubstationsController, 'downloadSubstationsSubstationsTelemechanicsDevicesExcel'])
     router.get('/:id/info', [SubstationsController, 'getSubstationInfo'])
     router.get('/:id', [SubstationsController, 'getSubstation'])
     router.patch('/:id', [SubstationsController, 'update'])
