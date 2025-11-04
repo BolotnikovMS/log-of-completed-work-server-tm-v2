@@ -66,7 +66,7 @@ export default class SubstationService {
               query.where('headControllerId', '=', headController)
             }
           })
-          .select('id', 'typeKpId', 'headControllerId', 'controllerFirmwareVersion')
+          .select('id', 'typeKpId', 'headControllerId', 'controllerFirmwareVersion', 'note')
           .preload('type_kp', query => query.select('id', 'name'))
           .preload('head_controller', query => query.select('id', 'name'))
       })
