@@ -151,27 +151,33 @@ export default class ReportService {
 
     worksheet.columns = [
       { header: 'Район/ГП/УС', key: 'district', width: 20 },
-      { header: 'Объект', key: 'name', width: 27 },
+      { header: 'Объект', key: 'name', width: 30 },
       { header: 'Тип объекта', key: 'objectType', width: 16 },
       { header: 'РДУ', key: 'rdu', width: 12 },
+      { header: 'УТМ', key: 'ytm', width: 12 },
       { header: 'Тип КП', key: 'typeKp', width: 17 },
       { header: 'Головной контроллер', key: 'headeController', width: 26 },
-      { header: 'Примечание', key: 'note', width: 50 },
+      { header: 'Версия прошивки', key: 'controllerFirmwareVersion', width: 26 },
+      { header: 'Примечание по УТМ', key: 'noteYTM', width: 50 },
+      { header: 'Примечание по ПС', key: 'notePs', width: 50 },
     ]
 
     this.#applyStylesRowTitle(worksheet)
 
     transformData.forEach(substation => {
       if (substation.telemechanics_device && substation.telemechanics_device.length > 0) {
-        substation.telemechanics_device?.forEach(device => {
+        substation.telemechanics_device?.forEach((device, i) => {
           worksheet.addRow({
             district: substation.district,
             name: substation.name,
             objectType: substation.object_type ?? 'Не указан',
             rdu: substation.rdu,
+            ytm: `УТМ ${i + 1}`,
             typeKp: device.type_kp ?? 'Не указан',
             headeController: device.head_controller ?? 'Не указан',
-            note: substation.note
+            controllerFirmwareVersion: device.controllerFirmwareVersion ?? 'Не указан',
+            noteYTM: device.note,
+            notePs: substation.note
           })
         })
       } else {
@@ -180,14 +186,17 @@ export default class ReportService {
           name: substation.name,
           objectType: substation.object_type ?? 'Не указан',
           rdu: substation.rdu,
+          ytm: 'Не указан',
           typeKp: 'Не указан',
           headeController: 'Не указан',
-          note: substation.note
+          controllerFirmwareVersion: 'Не указан',
+          noteYTM: '',
+          notePs: substation.note
         })
       }
     })
 
-    this.#applyStyles(worksheet, ['note'])
+    this.#applyStyles(worksheet, ['noteYTM', 'notePs'])
 
     const buffer = await workbook.xlsx.writeBuffer()
 
