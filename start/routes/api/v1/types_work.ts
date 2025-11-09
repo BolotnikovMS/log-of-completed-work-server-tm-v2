@@ -1,5 +1,5 @@
-import TypesWorksController from "#controllers/types_works_controller"
 import { middleware } from "#start/kernel"
+import TypesWorksController from "#type_work/controllers/types_works_controller"
 import router from "@adonisjs/core/services/router"
 
 export const typesWork = router

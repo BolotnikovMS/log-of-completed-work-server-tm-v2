@@ -1,4 +1,4 @@
-import ChannelCategoriesController from "#controllers/channel_categories_controller"
+import ChannelCategoriesController from "#channel_category/controllers/channel_categories_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

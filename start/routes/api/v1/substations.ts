@@ -1,5 +1,5 @@
-import SubstationsController from "#controllers/substations_controller"
 import { middleware } from "#start/kernel"
+import SubstationsController from "#substation/controllers/substations_controller"
 import router from "@adonisjs/core/services/router"
 
 export const substationsRoutes = router

@@ -1,4 +1,4 @@
-import HeadsController from "#controllers/heads_controller"
+import HeadsController from "#head_controller/controllers/heads_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

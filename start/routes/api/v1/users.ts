@@ -1,5 +1,5 @@
-import UsersController from "#controllers/users_controller"
 import { middleware } from "#start/kernel"
+import UsersController from "#user/controllers/users_controller"
 import router from "@adonisjs/core/services/router"
 
 export const usersRoutes = router

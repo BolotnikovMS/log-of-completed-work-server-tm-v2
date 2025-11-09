@@ -1,4 +1,4 @@
-import GsmOperatorsController from "#controllers/gsm_operators_controller"
+import GsmOperatorsController from "#gsm_operator/controllers/gsm_operators_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

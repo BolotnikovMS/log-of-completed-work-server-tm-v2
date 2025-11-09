@@ -1,5 +1,5 @@
-import TelemechanicsDevicesController from '#controllers/telemechanics_devices_controller'
 import { middleware } from '#start/kernel'
+import TelemechanicsDevicesController from '#telemechanic_device/controllers/telemechanics_devices_controller'
 import router from '@adonisjs/core/services/router'
 
 export const telemechanicsDevicesRoutes = router

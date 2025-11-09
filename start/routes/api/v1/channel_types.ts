@@ -1,4 +1,4 @@
-import ChannelTypesController from "#controllers/channel_types_controller"
+import ChannelTypesController from "#channel_type/controllers/channel_types_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

@@ -1,4 +1,4 @@
-import CompletedWorksController from "#controllers/completed_works_controller"
+import CompletedWorksController from "#completed_work/controllers/completed_works_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

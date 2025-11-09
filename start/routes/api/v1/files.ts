@@ -1,4 +1,4 @@
-import FilesController from "#controllers/files_controller"
+import FilesController from "#file/controllers/files_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

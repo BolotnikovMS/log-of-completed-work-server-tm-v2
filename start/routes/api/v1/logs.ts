@@ -1,4 +1,4 @@
-import LogsController from '#controllers/logs_controller'
+import LogsController from '#log/controllers/logs_controller'
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 

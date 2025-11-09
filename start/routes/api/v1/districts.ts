@@ -1,4 +1,4 @@
-import DistrictsController from '#controllers/districts_controller'
+import DistrictsController from '#district/controllers/districts_controller'
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 

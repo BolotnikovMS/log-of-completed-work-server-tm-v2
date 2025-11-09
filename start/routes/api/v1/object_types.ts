@@ -1,4 +1,4 @@
-import ObjectTypesController from "#controllers/object_types_controller"
+import ObjectTypesController from "#object_type/controllers/object_types_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 
