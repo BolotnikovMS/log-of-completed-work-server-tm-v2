@@ -1,4 +1,4 @@
-import { RolesEnum } from '#enums/roles'
+import { RolesEnum } from '#shared/enums/roles'
 import hash from '@adonisjs/core/services/hash'
 import { BaseSchema } from '@adonisjs/lucid/schema'
 import { DateTime } from 'luxon'

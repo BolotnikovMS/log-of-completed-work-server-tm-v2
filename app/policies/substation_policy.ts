@@ -1,6 +1,6 @@
-import { RolesEnum } from '#enums/roles'
+import { RolesEnum } from '#shared/enums/roles'
 import User from '#user/models/user'
-import { AuthorizerResponse } from '@adonisjs/bouncer/types'
+import { type AuthorizerResponse } from '@adonisjs/bouncer/types'
 import BasePolicy from './base_policy.js'
 
 export default class SubstationPolicy extends BasePolicy {
