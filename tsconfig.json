@@ -3,6 +3,7 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./build",
+    "verbatimModuleSyntax": true,
     "paths": {
       "#controllers/*": [
         "./app/controllers/*.js"
@@ -52,9 +53,6 @@
       "#config/*": [
         "./config/*.js"
       ],
-      "#enums/*": [
-        "./app/enums/*.js"
-      ],
       "#interfaces/*": [
         "./app/interfaces/*.js"
       ],
@@ -69,6 +67,9 @@
       ],
       "#domains/*": [
         "./app/domains/*.js"
+      ],
+      "#shared/*": [
+        "./app/shared/*.js"
       ]
     }
   }

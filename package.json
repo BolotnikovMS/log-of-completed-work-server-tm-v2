@@ -31,7 +31,6 @@
     "#start/*": "./start/*.js",
     "#tests/*": "./tests/*.js",
     "#config/*": "./config/*.js",
-    "#enums/*": "./app/enums/*.js",
     "#interfaces/*": "./app/interfaces/*.js",
     "#helpers/*": "./app/helpers/*.js",
     "#routes/*": "./start/routes/*.js",
@@ -57,7 +56,8 @@
     "#type_work/*": "./app/type_work/*.js",
     "#user/*": "./app/user/*.js",
     "#voltage_class/*": "./app/voltage_class/*.js",
-    "#report/*": "./app/report/*.js"
+    "#report/*": "./app/report/*.js",
+    "#shared/*": "./app/shared/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
