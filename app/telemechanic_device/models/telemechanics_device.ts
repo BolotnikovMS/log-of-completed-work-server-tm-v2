@@ -1,5 +1,5 @@
 import HeadController from '#head_controller/models/head_controller'
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
 import Substation from '#substation/models/substation'
 import TypeKp from '#type_kp/models/type_kp'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'

@@ -1,8 +1,8 @@
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import { LogInfoDto, LogShortDto } from '#log/dtos/index'
 import { LogService } from '#log/services/log_service'
 import LogPolicy from '#policies/log_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LogsController {

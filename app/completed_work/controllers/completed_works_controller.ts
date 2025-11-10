@@ -2,10 +2,10 @@ import { CompletedWorkDto, CompletedWorkInfoDto, CompletedWorkListDto } from '#c
 import CompletedWork from '#completed_work/models/completed_work'
 import CompletedWorkService from '#completed_work/services/completed_wokr_service'
 import { completedWorkValidator } from '#completed_work/validators/completed_work'
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import CompletedWorkPolicy from '#policies/completed_work_policy'
 import ReportService from '#report/services/report_service'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CompletedWorksController {

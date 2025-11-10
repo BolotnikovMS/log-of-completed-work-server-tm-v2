@@ -1,10 +1,10 @@
 import { ChannelDto, ChannelInfoDto, ChannelListDto } from '#channel/dtos/index'
 import Channel from '#channel/models/channel'
 import ChannelService from '#channel/services/channel_service'
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelPolicy from '#policies/channel_policy'
 import ReportService from '#report/services/report_service'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {

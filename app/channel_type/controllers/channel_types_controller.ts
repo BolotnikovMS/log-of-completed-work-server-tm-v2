@@ -1,9 +1,9 @@
 import ChannelTypeDto from '#channel_type/dtos/channel_type'
 import ChannelType from '#channel_type/models/channel_type'
 import ChannelTypeService from '#channel_type/services/channel_type_service'
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelTypePolicy from '#policies/channel_type_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelTypesController {

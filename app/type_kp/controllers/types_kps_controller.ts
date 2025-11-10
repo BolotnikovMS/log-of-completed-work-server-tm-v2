@@ -1,6 +1,6 @@
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import TypeKpPolicy from '#policies/type_kp_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import TypeKpDto from '#type_kp/dtos/type_kp'
 import TypeKp from '#type_kp/models/type_kp'
 import TypeKpService from '#type_kp/services/type_kp_service'

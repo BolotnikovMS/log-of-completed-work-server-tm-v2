@@ -1,6 +1,6 @@
 import { TUrlParamId } from '#domains/params/types/index'
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import TelemechanicsDeviceInfoDto from '#telemechanic_device/dtos/telemechanics_device_info'
 import TelemechanicsDeviceListDto from '#telemechanic_device/dtos/telemechanics_device_list'
 import { TelemechanicsDeviceService } from '#telemechanic_device/services/telemechanics_device_service'

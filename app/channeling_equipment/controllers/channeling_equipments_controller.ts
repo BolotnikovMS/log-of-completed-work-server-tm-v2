@@ -1,9 +1,9 @@
 import ChannelingEquipmentDto from '#channeling_equipment/dtos/channeling_equipment'
 import ChannelingEquipment from '#channeling_equipment/models/channeling_equipment'
 import ChannelingEquipmentService from '#channeling_equipment/services/channeling_equipment_service'
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import ChannelingEquipmentPolicy from '#policies/channeling_equipment_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelingEquipmentsController {

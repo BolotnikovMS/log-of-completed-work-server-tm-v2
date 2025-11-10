@@ -1,6 +1,6 @@
 import Channel from '#channel/models/channel'
 import ChannelType from '#channel_type/models/channel_type'
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
 import User from '#user/models/user'
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'

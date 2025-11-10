@@ -1,4 +1,4 @@
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
 import User from '#user/models/user'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'

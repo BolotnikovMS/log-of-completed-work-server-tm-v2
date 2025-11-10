@@ -1,6 +1,6 @@
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import TypeWorkPolicy from '#policies/type_work_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import { TypeWorkDto } from '#type_work/dtos/index'
 import TypeWork from '#type_work/models/type_work'
 import TypeWorkService from '#type_work/services/type_work_service'

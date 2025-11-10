@@ -1,9 +1,9 @@
 import HeadControllerDto from '#head_controller/dtos/head_controller'
 import HeadController from '#head_controller/models/head_controller'
 import { HeadControllersService } from '#head_controller/services/head_controller_service'
-import { accessErrorMessages } from '#helpers/access_error_messages'
 import { IParams } from '#interfaces/params'
 import HeadControllerPolicy from '#policies/head_controller_policy'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class HeadsController {

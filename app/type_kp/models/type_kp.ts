@@ -1,4 +1,4 @@
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
 import TelemechanicsDevice from '#telemechanic_device/models/telemechanics_device'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'

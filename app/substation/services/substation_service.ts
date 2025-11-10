@@ -1,13 +1,13 @@
 import { OrderByEnums } from '#enums/sort'
-import { transliterate } from '#helpers/transliterate'
 import { IParams } from '#interfaces/params'
 import { IQueryParams } from '#interfaces/query_params'
+import { transliterate } from '#shared/helpers/transliterate'
 import Substation from '#substation/models/substation'
 import { substationKeyDefectValidator, substationNoteValidator, substationValidator } from '#substation/validators/index'
 import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
+import { type Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import { type ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class SubstationService {
   static async getSubstations(

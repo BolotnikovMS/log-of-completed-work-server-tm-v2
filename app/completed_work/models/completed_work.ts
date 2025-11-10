@@ -1,4 +1,4 @@
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
 import Substation from '#substation/models/substation'
 import TypeWork from '#type_work/models/type_work'
 import User from '#user/models/user'
