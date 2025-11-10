@@ -1,4 +1,4 @@
-import { OrderByEnums } from '../enums/sort.js'
+import { OrderByEnums } from "#shared/enums/sort"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export interface IQueryParams {
