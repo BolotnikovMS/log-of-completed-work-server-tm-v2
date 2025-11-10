@@ -1,9 +1,9 @@
 import ChannelCategoryDto from '#channel_category/dtos/channel_category'
 import ChannelCategory from '#channel_category/models/channel_category'
 import ChannelCategoryService from '#channel_category/services/channel_category_service'
-import { IParams } from '#interfaces/params'
 import ChannelCategoryPolicy from '#policies/channel_category_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { IParams } from '#shared/interfaces/params'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelCategoriesController {

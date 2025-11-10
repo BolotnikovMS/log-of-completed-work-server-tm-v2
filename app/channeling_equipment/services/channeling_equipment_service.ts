@@ -1,7 +1,6 @@
 import ChannelingEquipment from '#channeling_equipment/models/channeling_equipment'
 import { channelingEquipmant } from '#channeling_equipment/validators/channeling_equipment'
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'

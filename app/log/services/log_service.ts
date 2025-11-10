@@ -1,7 +1,7 @@
 import { INewLogRecord, IQueryParamsLog } from '#domains/logs/interfaces/index'
-import { IParams } from '#interfaces/params'
 import Log from '#log/models/log'
 import { logParamsValidator } from '#log/validators/log'
+import { IParams } from '#shared/interfaces/params'
 import { Request } from '@adonisjs/core/http'
 import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 

@@ -1,8 +1,7 @@
-import { OrderByEnums } from '#enums/sort'
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
 import GsmOperator from '#gsm_operator/models/gsm_operator'
 import { gsmOperatorValidator } from '#gsm_operator/validators/gsm_operator'
+import { OrderByEnums } from '#shared/enums/sort'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
@@ -16,7 +15,7 @@ export default class GsmOperatorService {
 
     return gsmOperators
   }
-  
+
   static async getGsmOperatorById(params: IParams): Promise<GsmOperator> {
     const gsmOperator = await GsmOperator.findOrFail(params.id)
 

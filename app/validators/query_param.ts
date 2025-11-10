@@ -1,4 +1,4 @@
-import { OrderByEnums } from '#enums/sort'
+import { OrderByEnums } from '#shared/enums/sort'
 import vine from '@vinejs/vine'
 
 export const queryParamsValidator = vine.compile(

@@ -1,5 +1,4 @@
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import TypeWork from '#type_work/models/type_work'
 import { typeWorkValidator } from '#type_work/validators/type_work'
 import { Authenticator } from '@adonisjs/auth'

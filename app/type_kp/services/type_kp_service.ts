@@ -1,6 +1,5 @@
-import { OrderByEnums } from '#enums/sort'
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
+import { OrderByEnums } from '#shared/enums/sort'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import TypeKp from '#type_kp/models/type_kp'
 import { typeKpValidator } from '#type_kp/validators/type_kp'
 import { Authenticator } from '@adonisjs/auth'

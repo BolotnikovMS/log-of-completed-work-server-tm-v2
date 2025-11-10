@@ -1,5 +1,4 @@
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import User from '#user/models/user'
 import { blockUserAccountValidator, changePasswordValidator, changeUserRole, registerValidator } from '#user/validators/index'
 import { Request } from '@adonisjs/core/http'

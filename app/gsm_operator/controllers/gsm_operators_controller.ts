@@ -1,8 +1,8 @@
 import { GsmOperatorDto } from '#gsm_operator/dtos/index'
 import GsmOperatorService from '#gsm_operator/services/gsm_operator_service'
-import { IParams } from '#interfaces/params'
 import GsmOperatorPolicy from '#policies/gsm_operator_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { IParams } from '#shared/interfaces/params'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class GsmOperatorsController {

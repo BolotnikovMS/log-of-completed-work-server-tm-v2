@@ -1,9 +1,9 @@
-import { IParams } from '#interfaces/params'
 import { ObjectTypeDto, ObjectTypeShortDto } from '#object_type/dtos/index'
 import ObjectType from '#object_type/models/object_type'
 import ObjectTypeService from '#object_type/services/object_type_service'
 import ObjectTypePolicy from '#policies/object_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { IParams } from '#shared/interfaces/params'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ObjectTypesController {

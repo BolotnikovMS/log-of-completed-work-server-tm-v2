@@ -1,6 +1,6 @@
-import { IParams } from '#interfaces/params'
 import VoltageClassPolicy from '#policies/voltage_class_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { IParams } from '#shared/interfaces/params'
 import VoltageClassDto from '#voltage_class/dtos/voltage_class'
 import VoltageClass from '#voltage_class/models/voltage_class'
 import VoltageClassService from '#voltage_class/services/voltage_class_service'

@@ -1,6 +1,5 @@
-import { OrderByEnums } from '#enums/sort'
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
+import { OrderByEnums } from '#shared/enums/sort'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import VoltageClass from '#voltage_class/models/voltage_class'
 import { voltageClassValidator } from '#voltage_class/validators/voltage_class'
 import { Authenticator } from '@adonisjs/auth'

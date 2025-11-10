@@ -1,7 +1,7 @@
-import { IParams } from '#interfaces/params'
 import SubstationPolicy from '#policies/substation_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { IParams } from '#shared/interfaces/params'
 import { SubstationDto, SubstationInfoDto, SubstationListDto, SubstationSelectOptionDto } from '#substation/dtos/index'
 import Substation from '#substation/models/substation'
 import SubstationService from '#substation/services/substation_service'

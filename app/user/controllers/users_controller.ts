@@ -1,6 +1,6 @@
-import { IParams } from '#interfaces/params'
 import UserPolicy from '#policies/user_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { IParams } from '#shared/interfaces/params'
 import { UserBaseDto, UserFullDto, UserShortDto } from '#user/dtos/index'
 import User from '#user/models/user'
 import RoleService from '#user/services/role_service'

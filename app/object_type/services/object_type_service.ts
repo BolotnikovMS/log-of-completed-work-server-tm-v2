@@ -1,7 +1,6 @@
-import { IParams } from '#interfaces/params'
-import { IQueryParams } from '#interfaces/query_params'
 import ObjectType from '#object_type/models/object_type'
 import { objectTypeValidator } from '#object_type/validators/object_type'
+import { IParams, IQueryParams } from '#shared/interfaces/index'
 import { Authenticator } from '@adonisjs/auth'
 import { Authenticators } from '@adonisjs/auth/types'
 import { Request } from '@adonisjs/core/http'
