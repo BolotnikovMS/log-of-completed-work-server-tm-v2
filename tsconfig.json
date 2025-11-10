@@ -3,7 +3,7 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./build",
-    "verbatimModuleSyntax": true,
+    // "verbatimModuleSyntax": true,
     "paths": {
       "#controllers/*": [
         "./app/controllers/*.js"
@@ -52,12 +52,6 @@
       ],
       "#config/*": [
         "./config/*.js"
-      ],
-      "#interfaces/*": [
-        "./app/interfaces/*.js"
-      ],
-      "#helpers/*": [
-        "./app/helpers/*.js"
       ],
       "#routes/*": [
         "./start/routes/*.js"
