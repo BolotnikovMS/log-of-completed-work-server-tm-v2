@@ -1,5 +1,5 @@
+import { uniqueRule } from '#shared/rules/unique'
 import vine from '@vinejs/vine'
-import { uniqueRule } from '../rules/unique.js'
 
 export const text20 = vine.string().trim().minLength(2).maxLength(20)
 export const text30 = vine.string().trim().minLength(2).maxLength(30)
