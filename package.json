@@ -32,8 +32,6 @@
     "#tests/*": "./tests/*.js",
     "#config/*": "./config/*.js",
     "#routes/*": "./start/routes/*.js",
-    "#dtos/*": "./app/dtos/*.js",
-    "#domains/*": "./app/domains/*.js",
     "#substations/*": "./app/substations/*.js",
     "#district/*": "./app/district/*.js",
     "#substation/*": "./app/substation/*.js",
