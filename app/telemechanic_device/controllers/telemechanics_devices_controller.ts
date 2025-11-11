@@ -1,12 +1,11 @@
 import { TUrlParamId } from '#domains/params/types/index'
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { queryParamsValidator, urlParamIdValidator } from '#shared/validators/index'
 import TelemechanicsDeviceInfoDto from '#telemechanic_device/dtos/telemechanics_device_info'
 import TelemechanicsDeviceListDto from '#telemechanic_device/dtos/telemechanics_device_list'
 import { TelemechanicsDeviceService } from '#telemechanic_device/services/telemechanics_device_service'
 import { telemechanicsDeviceValidator } from '#telemechanic_device/validators/telemechanics_device'
-import { queryParamsValidator } from '#validators/query_param'
-import { urlParamIdValidator } from '#validators/url_params_id'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TelemechanicsDevicesController {

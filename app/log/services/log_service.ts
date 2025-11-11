@@ -1,4 +1,4 @@
-import { INewLogRecord, IQueryParamsLog } from '#domains/logs/interfaces/index'
+import { INewLogRecord, IQueryParamsLog } from '#log/interfaces/index'
 import Log from '#log/models/log'
 import { logParamsValidator } from '#log/validators/log'
 import { IParams } from '#shared/interfaces/params'
