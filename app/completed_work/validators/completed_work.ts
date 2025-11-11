@@ -1,4 +1,4 @@
-import { booleanCheck, dateText, text1000 } from '#validators/fields_check'
+import { booleanCheck, dateText, text1000 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const completedWorkValidator = vine.compile(

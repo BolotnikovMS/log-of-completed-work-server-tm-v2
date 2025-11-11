@@ -1,4 +1,4 @@
-import { email, text20, text30, username } from '#validators/fields_check'
+import { email, text20, text30, username } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const registerValidator = vine.compile(

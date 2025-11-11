@@ -1,5 +1,5 @@
+import { uniqueRule } from '#shared/rules/unique'
 import vine from '@vinejs/vine'
-import { uniqueRule } from '../../rules/unique.js'
 
 export const substationKeyDefectValidator = vine.compile(
   vine.object({

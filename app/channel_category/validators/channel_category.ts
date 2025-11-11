@@ -1,4 +1,4 @@
-import { text50 } from '#validators/fields_check'
+import { text50 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const channelCategoryValidator = vine.compile(

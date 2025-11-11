@@ -1,5 +1,5 @@
 import { ELogActionType } from '#domains/logs/enums/index'
-import { noStrictNumberCheck } from '#validators/fields_check'
+import { noStrictNumberCheck } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const logParamsValidator = vine.compile(

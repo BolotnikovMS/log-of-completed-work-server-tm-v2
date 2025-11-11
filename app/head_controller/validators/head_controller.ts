@@ -1,4 +1,4 @@
-import { text150, text30 } from '#validators/fields_check'
+import { text150, text30 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const headControllerValidator = vine.compile(

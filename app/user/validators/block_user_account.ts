@@ -1,4 +1,4 @@
-import { booleanCheck } from '#validators/fields_check'
+import { booleanCheck } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const blockUserAccountValidator = vine.compile(

@@ -1,4 +1,4 @@
-import { arrFiles, text50, typeFile } from '#validators/fields_check'
+import { arrFiles, text50, typeFile } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const fileValidator = vine.compile(

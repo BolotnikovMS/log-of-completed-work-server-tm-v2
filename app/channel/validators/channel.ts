@@ -1,4 +1,4 @@
-import { ipOptional, text1000 } from '#validators/fields_check'
+import { ipOptional, text1000 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
 export const channelValidator = vine.compile(
