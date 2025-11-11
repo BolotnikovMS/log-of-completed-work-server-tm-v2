@@ -1,5 +1,5 @@
-import { TLogAction } from '#domains/logs/types/index'
 import Log from '#log/models/log'
+import { TLogAction } from '#log/types/index'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 
 export default class LogInfoDto extends BaseModelDto {

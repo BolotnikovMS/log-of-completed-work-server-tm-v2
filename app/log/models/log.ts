@@ -1,4 +1,4 @@
-import type { TLogAction } from '#domains/logs/types/index'
+import type { TLogAction } from '#log/types/index'
 import User from '#user/models/user'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'

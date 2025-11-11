@@ -1,4 +1,4 @@
-import { ELogActionType } from '#domains/logs/enums/index'
+import { ELogActionType } from '#log/enums/index'
 import { noStrictNumberCheck } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
