@@ -1,6 +1,6 @@
-import { TUrlParamId } from '#domains/params/types/index'
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import { TUrlParamId } from '#shared/types/index'
 import { queryParamsValidator, urlParamIdValidator } from '#shared/validators/index'
 import TelemechanicsDeviceInfoDto from '#telemechanic_device/dtos/telemechanics_device_info'
 import TelemechanicsDeviceListDto from '#telemechanic_device/dtos/telemechanics_device_list'
