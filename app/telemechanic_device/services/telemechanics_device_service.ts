@@ -1,5 +1,5 @@
-import { ICreateTelemechanicsDevice, ITelemechanicsDevice } from '#domains/telemechanics_devices/interfaces/index'
-import { IQueryParams2 } from '#interfaces/query_params'
+import { IQueryParams2 } from '#shared/interfaces/query_params'
+import { ICreateTelemechanicsDevice, ITelemechanicsDevice } from '#telemechanic_device/interfaces/index'
 import TelemechanicsDevice from '#telemechanic_device/models/telemechanics_device'
 import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
