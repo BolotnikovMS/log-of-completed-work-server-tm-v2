@@ -1,6 +1,6 @@
-import { IQueryParams } from "#interfaces/query_params"
-import { ELogActionType } from "../enums/index.js"
-import { TLogAction } from "../types/index.js"
+import { ELogActionType } from '#log/enums/index'
+import { TLogAction } from '#log/types/index'
+import { IQueryParams } from '#shared/interfaces/query_params'
 
 export interface INewLogRecord {
   userId: number | null
