@@ -1,44 +1,35 @@
-import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
+import { IQueryParams } from '#shared/interfaces/index'
+import { INewVoltageClass, IUpdVoltageClass } from '#voltage_class/interfaces/index'
 import VoltageClass from '#voltage_class/models/voltage_class'
-import { voltageClassValidator } from '#voltage_class/validators/voltage_class'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class VoltageClassService {
-  static async getVoltageClasses(req: Request): Promise<{
-    meta: any,
-    data: ModelObject[]
-  }> {
-    const { sort, order, page, limit = -1 } = req.qs() as IQueryParams
+  static async getVoltageClasses(filters: IQueryParams) {
+    const { page, limit, order, sort} = filters
     const voltageClasses = await VoltageClass.query()
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .paginate(page, limit)
+      .if(sort && order, (query) => query.orderBy(sort!, order))
+      .paginate(page!, limit)
 
-    return voltageClasses.serialize()
+    return voltageClasses
   }
 
-  static async createDistrict(req: Request, auth: Authenticator<Authenticators>): Promise<VoltageClass> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(voltageClassValidator)
-    const voltageClass = await VoltageClass.create({ userId: user?.id, ...validatedData })
+  static async create(data: INewVoltageClass): Promise<VoltageClass> {
+    const voltageClass = await VoltageClass.create(data)
 
     return voltageClass
   }
 
-  static async updateDistrict(req: Request, params: IParams): Promise<VoltageClass> {
-    const voltageClass = await VoltageClass.findOrFail(params.id)
-    const validatedData = await req.validateUsing(voltageClassValidator)
-    const updVoltageClass = await voltageClass.merge(validatedData).save()
+  static async update(id: number, data: IUpdVoltageClass): Promise<VoltageClass> {
+    const voltageClass = await VoltageClass.findOrFail(id)
+    const updVoltageClass = await voltageClass.merge(data).save()
 
     return updVoltageClass
   }
 
-  static async deleteDistrict(params: IParams): Promise<void> {
-    const voltageClass = await VoltageClass.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const voltageClass = await VoltageClass.findOrFail(id)
 
     await voltageClass.delete()
+
+    return
   }
 }
