@@ -5,7 +5,7 @@ import { IQueryParams } from '#shared/interfaces/query_params'
 import { queryParamsValidator } from '#shared/validators/index'
 import VoltageClassDto from '#voltage_class/dtos/voltage_class'
 import VoltageClassService from '#voltage_class/services/voltage_class_service'
-import { voltageClassValidator } from '#voltage_class/validators/voltage_class'
+import { createVoltageClassValidator, updateVoltageClassValidator } from '#voltage_class/validators/index'
 import { HttpContext } from '@adonisjs/core/http'
 
 export default class VoltageClassesController {
@@ -23,8 +23,8 @@ export default class VoltageClassesController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const validatedData = await request.validateUsing(voltageClassValidator)
-    const voltageClass = await VoltageClassService.create({...validatedData, userId: auth.user!.id})
+    const validatedData = await request.validateUsing(createVoltageClassValidator)
+    const voltageClass = await VoltageClassService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(voltageClass)
   }
@@ -35,7 +35,7 @@ export default class VoltageClassesController {
     }
 
     const voltageClassParams = params as IParams
-    const validatedData = await request.validateUsing(voltageClassValidator)
+    const validatedData = await request.validateUsing(updateVoltageClassValidator)
     const updVoltageClass = await VoltageClassService.update(voltageClassParams.id, validatedData)
 
     return response.status(200).json(updVoltageClass)
