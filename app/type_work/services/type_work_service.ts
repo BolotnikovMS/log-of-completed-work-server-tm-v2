@@ -1,39 +1,35 @@
-import { IParams, IQueryParams } from '#shared/interfaces/index'
+import type { IQueryParams } from '#shared/interfaces/index'
+import type { CreateTypeWork, UpdateTypeWort } from '#type_work/interfaces/type_work'
 import TypeWork from '#type_work/models/type_work'
-import { typeWorkValidator } from '#type_work/validators/type_work'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class TypeWorkService {
-  static async getTypesWork(req: Request): Promise<{ meta: any; data: ModelObject[] }> {
-    const { page, limit = -1 } = req.qs() as IQueryParams
+  static async getTypesWork(filters: IQueryParams): Promise<ModelPaginatorContract<TypeWork>> {
+    const { page, limit } = filters
     const typesWork = await TypeWork.query()
-      .paginate(page, limit)
+      .paginate(page!, limit)
 
-    return typesWork.serialize()
+    return typesWork
   }
 
-  static async createTypeWork(req: Request, auth: Authenticator<Authenticators>): Promise<TypeWork> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(typeWorkValidator)
-    const typeWork = await TypeWork.create({ userId: user?.id, ...validatedData })
+  static async createTypeWork(data: CreateTypeWork): Promise<TypeWork> {
+    const typeWork = await TypeWork.create(data)
 
     return typeWork
   }
 
-  static async updateTypeWork(req: Request, params: IParams): Promise<TypeWork> {
-    const typeWork = await TypeWork.findOrFail(params.id)
-    const validatedData = await req.validateUsing(typeWorkValidator)
-    const updTypeWork = await typeWork.merge(validatedData).save()
+  static async updateTypeWork(id: number, data: UpdateTypeWort): Promise<TypeWork> {
+    const typeWork = await TypeWork.findOrFail(id)
+    const updTypeWork = await typeWork.merge(data).save()
 
     return updTypeWork
   }
 
-  static async deleteTypeWork(params: IParams): Promise<void> {
-    const typeWork = await TypeWork.findOrFail(params.id)
+  static async deleteTypeWork(id: number): Promise<void> {
+    const typeWork = await TypeWork.findOrFail(id)
 
     await typeWork.delete()
+
+    return
   }
 }

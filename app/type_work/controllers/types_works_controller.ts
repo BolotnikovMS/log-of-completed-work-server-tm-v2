@@ -1,15 +1,20 @@
 import TypeWorkPolicy from '#policies/type_work_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/params'
+import type { IQueryParams } from '#shared/interfaces/query_params'
+import { queryParamsValidator } from '#shared/validators/query_param'
 import { TypeWorkDto } from '#type_work/dtos/index'
-import TypeWork from '#type_work/models/type_work'
 import TypeWorkService from '#type_work/services/type_work_service'
+import { createTypeWorkValidator } from '#type_work/validators/create_type_work'
+import { updateTypeWorkValidator } from '#type_work/validators/update_type_work'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesWorksController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await TypeWorkService.getTypesWork(request)
-    const typesWork = { meta, data: data.map(typeWork => new TypeWorkDto(typeWork as TypeWork)) }
+    const filters = request.qs() as IQueryParams
+    const validatedFilters = await queryParamsValidator.validate(filters)
+    const data = await TypeWorkService.getTypesWork(validatedFilters)
+    const typesWork = TypeWorkDto.fromPaginator(data)
 
     return response.status(200).json(typesWork)
   }
@@ -19,7 +24,8 @@ export default class TypesWorksController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const typeWork = await TypeWorkService.createTypeWork(request, auth)
+    const validatedData = await request.validateUsing(createTypeWorkValidator)
+    const typeWork = await TypeWorkService.createTypeWork({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(typeWork)
   }
@@ -30,7 +36,8 @@ export default class TypesWorksController {
     }
 
     const typeWorkParams = params as IParams
-    const updTypeWork = await TypeWorkService.updateTypeWork(request, typeWorkParams)
+    const validatedData = await request.validateUsing(updateTypeWorkValidator)
+    const updTypeWork = await TypeWorkService.updateTypeWork(typeWorkParams.id, validatedData)
 
     return response.status(200).json(updTypeWork)
   }
@@ -41,7 +48,7 @@ export default class TypesWorksController {
     }
     const typeWorkParams = params as IParams
 
-    await TypeWorkService.deleteTypeWork(typeWorkParams)
+    await TypeWorkService.deleteTypeWork(typeWorkParams.id)
 
     return response.status(204)
   }
