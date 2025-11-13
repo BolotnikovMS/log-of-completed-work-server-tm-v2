@@ -1,10 +1,10 @@
-import { IQueryParams } from '#shared/interfaces/index'
-import { INewVoltageClass, IUpdVoltageClass } from '#voltage_class/interfaces/index'
+import type { IQueryParams } from '#shared/interfaces/index'
+import type { CreateVoltageClass, UpdateVoltageClass } from '#voltage_class/interfaces/voltage_class'
 import VoltageClass from '#voltage_class/models/voltage_class'
 
 export default class VoltageClassService {
   static async getVoltageClasses(filters: IQueryParams) {
-    const { page, limit, order, sort} = filters
+    const { page, limit, order, sort } = filters
     const voltageClasses = await VoltageClass.query()
       .if(sort && order, (query) => query.orderBy(sort!, order))
       .paginate(page!, limit)
@@ -12,13 +12,13 @@ export default class VoltageClassService {
     return voltageClasses
   }
 
-  static async create(data: INewVoltageClass): Promise<VoltageClass> {
+  static async create(data: CreateVoltageClass): Promise<VoltageClass> {
     const voltageClass = await VoltageClass.create(data)
 
     return voltageClass
   }
 
-  static async update(id: number, data: IUpdVoltageClass): Promise<VoltageClass> {
+  static async update(id: number, data: UpdateVoltageClass): Promise<VoltageClass> {
     const voltageClass = await VoltageClass.findOrFail(id)
     const updVoltageClass = await voltageClass.merge(data).save()
 
