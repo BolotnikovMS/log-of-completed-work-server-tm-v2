@@ -1,8 +1,8 @@
 import { text30 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
-export const typeKpValidator = vine.compile(
+export const updateTypeKpValidator = vine.compile(
   vine.object({
-    name: text30.escape(),
+    name: text30.escape().optional()
   })
 )
