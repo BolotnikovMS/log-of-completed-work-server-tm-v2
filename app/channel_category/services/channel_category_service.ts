@@ -1,47 +1,42 @@
+import type { CreateChannelCategory, UpdateChannelCategory } from '#channel_category/interfaces/channel_category'
 import ChannelCategory from '#channel_category/models/channel_category'
-import { channelCategoryValidator } from '#channel_category/validators/channel_category'
-import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { IQueryParams } from '#shared/interfaces/index'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ChannelCategoryService {
-  static async getChannelCategories(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
-    const { sort, order, page, limit } = req.qs() as IQueryParams
+  static async getChannelCategories(filters: IQueryParams): Promise<ModelPaginatorContract<ChannelCategory>> {
+    const { sort, order, page, limit } = filters
     const channelCategories = await ChannelCategory.query()
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .paginate(page, limit)
+      .if(sort && order, (query) => query.orderBy(sort!, order))
+      .paginate(page!, limit)
 
-    return channelCategories.serialize()
+    return channelCategories
   }
 
-  static async getChannelCategoryById(params: IParams): Promise<ChannelCategory> {
-    const channelCategory = await ChannelCategory.findOrFail(params.id)
+  static async findById(id: number): Promise<ChannelCategory> {
+    const channelCategory = await ChannelCategory.findOrFail(id)
 
     return channelCategory
   }
 
-  static async createChannelCategory(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelCategory> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(channelCategoryValidator)
-    const channelCategory = await ChannelCategory.create({ userId: user?.id, ...validatedData })
+  static async create(data: CreateChannelCategory): Promise<ChannelCategory> {
+    const channelCategory = await ChannelCategory.create(data)
 
     return channelCategory
   }
 
-  static async updateChannelCategory(req: Request, params: IParams): Promise<ChannelCategory> {
-    const channelCategory = await ChannelCategory.findOrFail(params.id)
-    const validatedData = await req.validateUsing(channelCategoryValidator)
-    const updChannelCategory = await channelCategory.merge(validatedData).save()
+  static async update(id: number, data: UpdateChannelCategory): Promise<ChannelCategory> {
+    const channelCategory = await ChannelCategory.findOrFail(id)
+    const updChannelCategory = await channelCategory.merge(data).save()
 
     return updChannelCategory
   }
 
-  static async deleteChannelCategory(params: IParams): Promise<void> {
-    const channelCategory = await ChannelCategory.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const channelCategory = await ChannelCategory.findOrFail(id)
 
     await channelCategory.delete()
+
+    return
   }
 }
