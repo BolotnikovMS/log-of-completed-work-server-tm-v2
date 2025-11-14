@@ -1,15 +1,19 @@
 import TypeKpPolicy from '#policies/type_kp_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/params'
+import type { IQueryParams } from '#shared/interfaces/query_params'
+import { queryParamsValidator } from '#shared/validators/query_param'
 import TypeKpDto from '#type_kp/dtos/type_kp'
-import TypeKp from '#type_kp/models/type_kp'
 import TypeKpService from '#type_kp/services/type_kp_service'
+import { createTypeKpValidator, updateTypeKpValidator } from '#type_kp/validators/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesKpsController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await TypeKpService.getTypesKps(request)
-    const typesKps = { meta, data: data.map(typeKp => new TypeKpDto(typeKp as TypeKp)) }
+    const filters = request.qs() as IQueryParams
+    const validatedFilters = await queryParamsValidator.validate(filters)
+    const data = await TypeKpService.getTypesKps(validatedFilters)
+    const typesKps = TypeKpDto.fromPaginator(data)
 
     return response.status(200).json(typesKps)
   }
@@ -19,7 +23,8 @@ export default class TypesKpsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const typeKp = await TypeKpService.createTypeKp(request, auth)
+    const validatedData = await request.validateUsing(createTypeKpValidator)
+    const typeKp = await TypeKpService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(typeKp)
   }
@@ -30,7 +35,8 @@ export default class TypesKpsController {
     }
 
     const typeKpParams = params as IParams
-    const updTypeKp = await TypeKpService.updateTypeKp(request, typeKpParams)
+    const validatedData = await request.validateUsing(updateTypeKpValidator)
+    const updTypeKp = await TypeKpService.update(typeKpParams.id, validatedData)
 
     return response.status(200).json(updTypeKp)
   }
@@ -42,7 +48,7 @@ export default class TypesKpsController {
 
     const typeKpParams = params as IParams
 
-    await TypeKpService.deleteTypeKp(typeKpParams)
+    await TypeKpService.delete(typeKpParams.id)
 
     return response.status(204)
   }
