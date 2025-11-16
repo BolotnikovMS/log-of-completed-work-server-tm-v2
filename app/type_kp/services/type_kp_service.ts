@@ -1,10 +1,10 @@
-import type { QueryParams } from '#shared/interfaces/index'
+import type { BaseQueryParams } from '#shared/interfaces/index'
 import type { CreateTypeKp, UpdateTypeKp } from '#type_kp/interfaces/type_kp'
 import TypeKp from '#type_kp/models/type_kp'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class TypeKpService {
-  static async getTypesKps(filters: QueryParams): Promise<ModelPaginatorContract<TypeKp>> {
+  static async getTypesKps(filters: BaseQueryParams): Promise<ModelPaginatorContract<TypeKp>> {
     const { sort, order, page, limit } = filters
     const typesKps = await TypeKp.query()
       .if(sort && order, (query) => query.orderBy(sort!, order))

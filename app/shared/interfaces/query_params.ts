@@ -1,6 +1,13 @@
 import { OrderByEnums } from "#shared/enums/sort"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
+export interface BaseQueryParams {
+  page?: number
+  limit?: number
+  search?: string
+  sort?: string
+  order?: OrderByEnums
+}
 export interface IQueryParams {
   page?: number
   size?: number

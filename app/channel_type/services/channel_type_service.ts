@@ -1,10 +1,10 @@
 import type { CreateChanneltype, UpdateChanneltype } from '#channel_type/interfaces/channel_type'
 import ChannelType from '#channel_type/models/channel_type'
-import type { QueryParams } from '#shared/interfaces/index'
+import type { BaseQueryParams } from '#shared/interfaces/index'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ChannelTypeService {
-  static async getChannelTypes(filters: QueryParams): Promise<ModelPaginatorContract<ChannelType>> {
+  static async getChannelTypes(filters: BaseQueryParams): Promise<ModelPaginatorContract<ChannelType>> {
     const { sort, order, page, limit } = filters
     const channelTypes = await ChannelType.query()
       .if(sort && order, (query) => query.orderBy(sort!, order))

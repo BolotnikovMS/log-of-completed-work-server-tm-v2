@@ -1,7 +1,7 @@
 import TypeWorkPolicy from '#policies/type_work_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { IParams } from '#shared/interfaces/params'
-import type { QueryParams } from '#shared/interfaces/query_params'
+import type { BaseQueryParams } from '#shared/interfaces/query_params'
 import { queryParamsValidator } from '#shared/validators/query_param'
 import { TypeWorkDto } from '#type_work/dtos/index'
 import TypeWorkService from '#type_work/services/type_work_service'
@@ -11,7 +11,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesWorksController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as QueryParams
+    const filters = request.qs() as BaseQueryParams
     const validatedFilters = await queryParamsValidator.validate(filters)
     const data = await TypeWorkService.getTypesWork(validatedFilters)
     const typesWork = TypeWorkDto.fromPaginator(data)
