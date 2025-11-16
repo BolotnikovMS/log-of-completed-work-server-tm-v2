@@ -1,7 +1,7 @@
 import TypeKpPolicy from '#policies/type_kp_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { IParams } from '#shared/interfaces/params'
-import type { IQueryParams } from '#shared/interfaces/query_params'
+import type { QueryParams } from '#shared/interfaces/query_params'
 import { queryParamsValidator } from '#shared/validators/query_param'
 import TypeKpDto from '#type_kp/dtos/type_kp'
 import TypeKpService from '#type_kp/services/type_kp_service'
@@ -10,7 +10,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TypesKpsController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as IQueryParams
+    const filters = request.qs() as QueryParams
     const validatedFilters = await queryParamsValidator.validate(filters)
     const data = await TypeKpService.getTypesKps(validatedFilters)
     const typesKps = TypeKpDto.fromPaginator(data)

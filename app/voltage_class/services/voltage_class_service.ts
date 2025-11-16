@@ -1,9 +1,9 @@
-import type { IQueryParams } from '#shared/interfaces/index'
+import type { QueryParams } from '#shared/interfaces/index'
 import type { CreateVoltageClass, UpdateVoltageClass } from '#voltage_class/interfaces/voltage_class'
 import VoltageClass from '#voltage_class/models/voltage_class'
 
 export default class VoltageClassService {
-  static async getVoltageClasses(filters: IQueryParams) {
+  static async getVoltageClasses(filters: QueryParams) {
     const { page, limit, order, sort } = filters
     const voltageClasses = await VoltageClass.query()
       .if(sort && order, (query) => query.orderBy(sort!, order))

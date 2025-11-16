@@ -1,10 +1,10 @@
-import type { IQueryParams } from '#shared/interfaces/index'
+import type { QueryParams } from '#shared/interfaces/index'
 import type { CreateTypeWork, UpdateTypeWort } from '#type_work/interfaces/type_work'
 import TypeWork from '#type_work/models/type_work'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class TypeWorkService {
-  static async getTypesWork(filters: IQueryParams): Promise<ModelPaginatorContract<TypeWork>> {
+  static async getTypesWork(filters: QueryParams): Promise<ModelPaginatorContract<TypeWork>> {
     const { page, limit } = filters
     const typesWork = await TypeWork.query()
       .paginate(page!, limit)

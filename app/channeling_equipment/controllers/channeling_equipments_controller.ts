@@ -3,11 +3,16 @@ import ChannelingEquipment from '#channeling_equipment/models/channeling_equipme
 import ChannelingEquipmentService from '#channeling_equipment/services/channeling_equipment_service'
 import ChannelingEquipmentPolicy from '#policies/channeling_equipment_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/params'
+import type { QueryParams } from '#shared/interfaces/query_params'
+import { queryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelingEquipmentsController {
   async index({ request, response }: HttpContext) {
+    const filters = request.qs() as QueryParams
+    const validatedFilters = await queryParamsValidator.validate(filters)
+
     const { meta, data } = await ChannelingEquipmentService.getChannelingEquipments(request)
     const channelingEquipments = { meta, data: data.map(channelEquipment => new ChannelingEquipmentDto(channelEquipment as ChannelingEquipment)) }
 
