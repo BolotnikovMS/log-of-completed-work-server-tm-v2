@@ -1,41 +1,36 @@
+import type { CreateChanneltype, UpdateChanneltype } from '#channel_type/interfaces/channel_type'
 import ChannelType from '#channel_type/models/channel_type'
-import { chanelTypeValidator } from '#channel_type/validators/channel_type'
-import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { IQueryParams } from '#shared/interfaces/index'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ChannelTypeService {
-  static async getChannelTypes(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
-    const { sort, order, page, limit } = req.qs() as IQueryParams
+  static async getChannelTypes(filters: IQueryParams): Promise<ModelPaginatorContract<ChannelType>> {
+    const { sort, order, page, limit } = filters
     const channelTypes = await ChannelType.query()
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .paginate(page, limit)
+      .if(sort && order, (query) => query.orderBy(sort!, order))
+      .paginate(page!, limit)
 
-    return channelTypes.serialize()
+    return channelTypes
   }
 
-  static async createChannelType(req: Request, auth: Authenticator<Authenticators>): Promise<ChannelType> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(chanelTypeValidator)
-    const channelType = await ChannelType.create({ userId: user?.id, ...validatedData })
+  static async create(data: CreateChanneltype): Promise<ChannelType> {
+    const channelType = await ChannelType.create(data)
 
     return channelType
   }
 
-  static async updateChannelType(req: Request, params: IParams): Promise<ChannelType> {
-    const channelType = await ChannelType.findOrFail(params.id)
-    const validatedData = await req.validateUsing(chanelTypeValidator)
-    const updChannelType = await channelType.merge(validatedData).save()
+  static async update(id: number, data: UpdateChanneltype): Promise<ChannelType> {
+    const channelType = await ChannelType.findOrFail(id)
+    const updChannelType = await channelType.merge(data).save()
 
     return updChannelType
   }
 
-  static async deleteChannelType(params: IParams): Promise<void> {
-    const channelType = await ChannelType.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const channelType = await ChannelType.findOrFail(id)
 
     await channelType.delete()
+
+    return
   }
 }

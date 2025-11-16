@@ -1,15 +1,19 @@
 import ChannelTypeDto from '#channel_type/dtos/channel_type'
-import ChannelType from '#channel_type/models/channel_type'
 import ChannelTypeService from '#channel_type/services/channel_type_service'
+import { createChannelTypeValidator } from '#channel_type/validators/create_channel_type'
+import { updateChannelTypeValidator } from '#channel_type/validators/index'
 import ChannelTypePolicy from '#policies/channel_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams, IQueryParams } from '#shared/interfaces/index'
+import { queryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelTypesController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await ChannelTypeService.getChannelTypes(request)
-    const channelTypes = { meta, data: data.map(channelType => new ChannelTypeDto(channelType as ChannelType)) }
+    const filters = request.qs() as IQueryParams
+    const validatedFilters = await queryParamsValidator.validate(filters)
+    const data = await ChannelTypeService.getChannelTypes(validatedFilters)
+    const channelTypes = ChannelTypeDto.fromPaginator(data)
 
     return response.status(200).json(channelTypes)
   }
@@ -19,7 +23,8 @@ export default class ChannelTypesController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const channelType = await ChannelTypeService.createChannelType(request, auth)
+    const validatedData = await request.validateUsing(createChannelTypeValidator)
+    const channelType = await ChannelTypeService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(channelType)
   }
@@ -30,7 +35,8 @@ export default class ChannelTypesController {
     }
 
     const channelTypeParams = params as IParams
-    const updChannelType = await ChannelTypeService.updateChannelType(request, channelTypeParams)
+    const validatedData = await request.validateUsing(updateChannelTypeValidator)
+    const updChannelType = await ChannelTypeService.update(channelTypeParams.id, validatedData)
 
     return response.status(200).json(updChannelType)
   }
@@ -42,7 +48,7 @@ export default class ChannelTypesController {
 
     const channelTypeParams = params as IParams
 
-    await ChannelTypeService.deleteChannelType(channelTypeParams)
+    await ChannelTypeService.delete(channelTypeParams.id)
 
     return response.status(204)
   }
