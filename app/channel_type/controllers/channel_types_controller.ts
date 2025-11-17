@@ -4,14 +4,14 @@ import { createChannelTypeValidator } from '#channel_type/validators/create_chan
 import { updateChannelTypeValidator } from '#channel_type/validators/index'
 import ChannelTypePolicy from '#policies/channel_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams, BaseQueryParams } from '#shared/interfaces/index'
-import { queryParamsValidator } from '#shared/validators/query_param'
+import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelTypesController {
   async index({ request, response }: HttpContext) {
     const filters = request.qs() as BaseQueryParams
-    const validatedFilters = await queryParamsValidator.validate(filters)
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
     const data = await ChannelTypeService.getChannelTypes(validatedFilters)
     const channelTypes = ChannelTypeDto.fromPaginator(data)
 

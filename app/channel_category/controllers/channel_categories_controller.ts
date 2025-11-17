@@ -5,13 +5,13 @@ import ChannelCategoryPolicy from '#policies/channel_category_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import { type IParams } from '#shared/interfaces/params'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
-import { queryParamsValidator } from '#shared/validators/query_param'
+import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelCategoriesController {
   async index({ request, response }: HttpContext) {
     const filters = request.qs() as BaseQueryParams
-    const validatedFilters = await queryParamsValidator.validate(filters)
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
     const data = await ChannelCategoryService.getChannelCategories(validatedFilters)
     const channelCategories = ChannelCategoryDto.fromPaginator(data)
 

@@ -1,7 +1,7 @@
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import { TUrlParamId } from '#shared/types/index'
-import { queryParamsValidator, urlParamIdValidator } from '#shared/validators/index'
+import { baseQueryParamsValidator, urlParamIdValidator } from '#shared/validators/index'
 import TelemechanicsDeviceInfoDto from '#telemechanic_device/dtos/telemechanics_device_info'
 import TelemechanicsDeviceListDto from '#telemechanic_device/dtos/telemechanics_device_list'
 import { TelemechanicsDeviceService } from '#telemechanic_device/services/telemechanics_device_service'
@@ -11,7 +11,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 export default class TelemechanicsDevicesController {
   async index({ request, response }: HttpContext) {
     const filters = request.qs()
-    const validatedFilters = await queryParamsValidator.validate(filters)
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
     const data = await TelemechanicsDeviceService.findAll(validatedFilters)
     const telemechanicsDevices = TelemechanicsDeviceListDto.fromPaginator(data)
 
