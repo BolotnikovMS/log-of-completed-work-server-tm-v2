@@ -1,27 +1,26 @@
 import ChannelingEquipmentDto from '#channeling_equipment/dtos/channeling_equipment'
-import ChannelingEquipment from '#channeling_equipment/models/channeling_equipment'
+import type { ChannelEquipQueryParams } from '#channeling_equipment/interfaces/index'
 import ChannelingEquipmentService from '#channeling_equipment/services/channeling_equipment_service'
+import { createChannelingEquipmant, queryParamsChannelingEquipmentValidator, updateChannelingEquipmant } from '#channeling_equipment/validators/index'
 import ChannelingEquipmentPolicy from '#policies/channeling_equipment_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { IParams } from '#shared/interfaces/params'
-import type { QueryParams } from '#shared/interfaces/query_params'
-import { queryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelingEquipmentsController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as QueryParams
-    const validatedFilters = await queryParamsValidator.validate(filters)
-
-    const { meta, data } = await ChannelingEquipmentService.getChannelingEquipments(request)
-    const channelingEquipments = { meta, data: data.map(channelEquipment => new ChannelingEquipmentDto(channelEquipment as ChannelingEquipment)) }
+    const filters = request.qs() as ChannelEquipQueryParams
+    const validatedFilters = await queryParamsChannelingEquipmentValidator.validate(filters)
+    const data = await ChannelingEquipmentService.getChannelingEquipments(validatedFilters)
+    const channelingEquipments = ChannelingEquipmentDto.fromPaginator(data)
 
     return response.status(200).json(channelingEquipments)
   }
 
   async getEquipment({ params, response }: HttpContext) {
     const equipmentParams = params as IParams
-    const equipment = new ChannelingEquipmentDto(await ChannelingEquipmentService.getChannelingEquipmentById(equipmentParams))
+    const data = await ChannelingEquipmentService.getChannelingEquipmentById(equipmentParams.id)
+    const equipment = new ChannelingEquipmentDto(data)
 
     return response.status(200).json(equipment)
   }
@@ -31,7 +30,8 @@ export default class ChannelingEquipmentsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const equipment = await ChannelingEquipmentService.createChannelingEquipment(request, auth)
+    const validatedData = await request.validateUsing(createChannelingEquipmant)
+    const equipment = await ChannelingEquipmentService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(equipment)
   }
@@ -42,7 +42,8 @@ export default class ChannelingEquipmentsController {
     }
 
     const equipmentParams = params as IParams
-    const updEquipment = await ChannelingEquipmentService.updateChannelingEquipment(request, equipmentParams)
+    const validatedData = await request.validateUsing(updateChannelingEquipmant)
+    const updEquipment = await ChannelingEquipmentService.update(equipmentParams.id, validatedData)
 
     return response.status(200).json(updEquipment)
   }
@@ -54,7 +55,7 @@ export default class ChannelingEquipmentsController {
 
     const equipmentParams = params as IParams
 
-    await ChannelingEquipmentService.deleteChannelingEquipment(equipmentParams)
+    await ChannelingEquipmentService.delete(equipmentParams.id)
 
     return response.status(204)
   }
