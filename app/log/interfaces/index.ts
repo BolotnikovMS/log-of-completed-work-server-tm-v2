@@ -1,21 +1,4 @@
-import { ELogActionType } from '#log/enums/index'
-import { TLogAction } from '#log/types/index'
-import { IQueryParams } from '#shared/interfaces/query_params'
+import type { CreateLogRecord } from './log.js'
+import type { QueryParamsLog } from './query_params_log.js'
 
-export interface INewLogRecord {
-  userId: number | null
-  url?: string
-  method?: string
-  statusCode?: number | null
-  action: TLogAction,
-  errorType?: string
-  errorMessage?: string
-  model?: string | null
-  data: any
-  changes?: any
-  ipAddress?: string
-}
-
-export interface IQueryParamsLog extends IQueryParams {
-  action: ELogActionType
-}
+export type { CreateLogRecord, QueryParamsLog }
