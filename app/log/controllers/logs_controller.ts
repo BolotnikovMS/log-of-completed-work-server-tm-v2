@@ -1,8 +1,10 @@
 import { LogInfoDto, LogShortDto } from '#log/dtos/index'
+import type { QueryParamsLog } from '#log/interfaces/index'
 import { LogService } from '#log/services/log_service'
+import { queryParamsLogValidator } from '#log/validators/query_params_log'
 import LogPolicy from '#policies/log_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LogsController {
@@ -11,7 +13,9 @@ export default class LogsController {
       return response.status(403).json({ message: accessErrorMessages.view })
     }
 
-    const data = await LogService.getLogs(request)
+    const filters = request.qs() as QueryParamsLog
+    const validatedFilters = await queryParamsLogValidator.validate(filters)
+    const data = await LogService.getLogs(validatedFilters)
     const logs = LogShortDto.fromPaginator(data)
 
     return response.status(200).json(logs)
@@ -23,7 +27,7 @@ export default class LogsController {
     }
 
     const logParams = params as IParams
-    const data = await LogService.getLogInfoById(logParams)
+    const data = await LogService.findById(logParams.id)
     const log = new LogInfoDto(data)
 
     return response.status(200).json(log)
