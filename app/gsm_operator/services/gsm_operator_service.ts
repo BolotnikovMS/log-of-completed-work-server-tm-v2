@@ -1,46 +1,42 @@
+import type { CreateGsmOperator, UpdateGsmOperator } from '#gsm_operator/interfaces/gsm_operator'
 import GsmOperator from '#gsm_operator/models/gsm_operator'
-import { gsmOperatorValidator } from '#gsm_operator/validators/gsm_operator'
-import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
+import type { BaseQueryParams } from '#shared/interfaces/query_params'
 
 export default class GsmOperatorService {
-  static async getGsmOperators(req: Request): Promise<GsmOperator[]> {
-    const { sort, order } = req.qs() as IQueryParams
-    const gsmOperators = await GsmOperator.query().if(sort && order, (query) =>
-      query.orderBy(sort, OrderByEnums[order])
-    )
+  static async getGsmOperators(filters: BaseQueryParams): Promise<GsmOperator[]> {
+    const { sort, order } = filters
+    const gsmOperators = await GsmOperator.query()
+      .if(sort && order, (query) =>
+        query.orderBy(sort!, order)
+      )
 
     return gsmOperators
   }
 
-  static async getGsmOperatorById(params: IParams): Promise<GsmOperator> {
-    const gsmOperator = await GsmOperator.findOrFail(params.id)
+  static async findById(id: number): Promise<GsmOperator> {
+    const gsmOperator = await GsmOperator.findOrFail(id)
 
     return gsmOperator
   }
 
-  static async createGsmOperator(req: Request, auth: Authenticator<Authenticators>): Promise<GsmOperator> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(gsmOperatorValidator)
-    const gsmOperator = await GsmOperator.create({ userId: user?.id, ...validatedData })
+  static async create(data: CreateGsmOperator): Promise<GsmOperator> {
+    const gsmOperator = await GsmOperator.create(data)
 
     return gsmOperator
   }
 
-  static async updateGsmOperator(req: Request, params: IParams): Promise<GsmOperator> {
-    const gsmOperator = await GsmOperator.findOrFail(params.id)
-    const validatedData = await req.validateUsing(gsmOperatorValidator)
-    const updGsmOperator = await gsmOperator.merge(validatedData).save()
+  static async update(id: number, data: UpdateGsmOperator): Promise<GsmOperator> {
+    const gsmOperator = await GsmOperator.findOrFail(id)
+    const updGsmOperator = await gsmOperator.merge(data).save()
 
     return updGsmOperator
   }
 
-  static async deleteGsmOperator(params: IParams): Promise<void> {
-    const gsmOperator = await GsmOperator.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const gsmOperator = await GsmOperator.findOrFail(id)
 
     await gsmOperator.delete()
+
+    return
   }
 }

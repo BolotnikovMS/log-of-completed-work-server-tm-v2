@@ -1,21 +1,26 @@
 import { GsmOperatorDto } from '#gsm_operator/dtos/index'
 import GsmOperatorService from '#gsm_operator/services/gsm_operator_service'
+import { createGsmOperatorValidator } from '#gsm_operator/validators/create_gsm_operator'
+import { updateGsmOperatorValidator } from '#gsm_operator/validators/update_gsm_operator'
 import GsmOperatorPolicy from '#policies/gsm_operator_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class GsmOperatorsController {
   async index({ request, response }: HttpContext) {
-    const data = await GsmOperatorService.getGsmOperators(request)
-    const gsmOperators = data.map(gsm => new GsmOperatorDto(gsm))
+    const filters = request.qs() as BaseQueryParams
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
+    const data = await GsmOperatorService.getGsmOperators(validatedFilters)
+    const gsmOperators = GsmOperatorDto.fromArray(data)
 
     return response.status(200).json(gsmOperators)
   }
 
   async getGsmOperator({ params, response }: HttpContext) {
     const gsmOperatorParams = params as IParams
-    const gsmOperator = await GsmOperatorService.getGsmOperatorById(gsmOperatorParams)
+    const gsmOperator = await GsmOperatorService.findById(gsmOperatorParams.id)
 
     return response.status(200).json(gsmOperator)
   }
@@ -25,7 +30,8 @@ export default class GsmOperatorsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const gsmOperator = await GsmOperatorService.createGsmOperator(request, auth)
+    const validatedData = await request.validateUsing(createGsmOperatorValidator)
+    const gsmOperator = await GsmOperatorService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(gsmOperator)
   }
@@ -36,7 +42,8 @@ export default class GsmOperatorsController {
     }
 
     const gsmOperatorParams = params as IParams
-    const updGsmOperator = await GsmOperatorService.updateGsmOperator(request, gsmOperatorParams)
+    const validatedData = await request.validateUsing(updateGsmOperatorValidator)
+    const updGsmOperator = await GsmOperatorService.update(gsmOperatorParams.id, validatedData)
 
     return response.status(200).json(updGsmOperator)
   }
@@ -48,7 +55,7 @@ export default class GsmOperatorsController {
 
     const gsmOperatorParams = params as IParams
 
-    await GsmOperatorService.deleteGsmOperator(gsmOperatorParams)
+    await GsmOperatorService.delete(gsmOperatorParams.id)
 
     return response.status(204)
   }
