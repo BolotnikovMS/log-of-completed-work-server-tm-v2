@@ -1,4 +1,4 @@
-export enum ELogActionType {
+export enum LogActionType {
   VIEW = 'view',
   CREATE = 'create',
   UPDATE = 'update',
