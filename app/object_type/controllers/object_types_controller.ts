@@ -1,22 +1,27 @@
 import { ObjectTypeDto, ObjectTypeShortDto } from '#object_type/dtos/index'
-import ObjectType from '#object_type/models/object_type'
 import ObjectTypeService from '#object_type/services/object_type_service'
+import { createObjectTypeValidator } from '#object_type/validators/create_object_type'
+import { updateObjectTypeValidator } from '#object_type/validators/update_object_type'
 import ObjectTypePolicy from '#policies/object_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ObjectTypesController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await ObjectTypeService.getObjectTypes(request)
-    const objectTypes = { meta, data: data.map(objectType => new ObjectTypeShortDto(objectType as ObjectType)) }
+    const filters = request.qs() as BaseQueryParams
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
+    const data = await ObjectTypeService.getObjectTypes(validatedFilters)
+    const objectTypes = ObjectTypeShortDto.fromPaginator(data)
 
     return response.status(200).json(objectTypes)
   }
 
   async getObjectType({ params, response }: HttpContext) {
     const objectTypeParams = params as IParams
-    const objectType = new ObjectTypeDto(await ObjectTypeService.getObjectTypeById(objectTypeParams))
+    const data = await ObjectTypeService.findById(objectTypeParams.id)
+    const objectType = new ObjectTypeDto(data)
 
     return response.status(200).json(objectType)
   }
@@ -26,7 +31,8 @@ export default class ObjectTypesController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const objectType = await ObjectTypeService.createObjectType(request, auth)
+    const validatedData = await request.validateUsing(createObjectTypeValidator)
+    const objectType = await ObjectTypeService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(objectType)
   }
@@ -37,7 +43,8 @@ export default class ObjectTypesController {
     }
 
     const objectTypeParams = params as IParams
-    const updObjectType = await ObjectTypeService.updateObjectType(request, objectTypeParams)
+    const validatedData = await request.validateUsing(updateObjectTypeValidator)
+    const updObjectType = await ObjectTypeService.update(objectTypeParams.id, validatedData)
 
     return response.status(200).json(updObjectType)
   }
@@ -49,7 +56,7 @@ export default class ObjectTypesController {
 
     const objectTypeParams = params as IParams
 
-    await ObjectTypeService.deleteObjectType(objectTypeParams)
+    await ObjectTypeService.delete(objectTypeParams.id)
 
     return response.status(204)
   }

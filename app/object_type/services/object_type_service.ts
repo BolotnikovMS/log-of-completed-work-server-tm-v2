@@ -1,48 +1,41 @@
+import type { CreateTypeObject, UpdateTypeObject } from '#object_type/interfaces/object_type'
 import ObjectType from '#object_type/models/object_type'
-import { objectTypeValidator } from '#object_type/validators/object_type'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { BaseQueryParams } from '#shared/interfaces/query_params'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ObjectTypeService {
-  static async getObjectTypes(req: Request): Promise<{
-    meta: any,
-    data: ModelObject[]
-  }> {
-    const { page, limit = -1 } = req.qs() as IQueryParams
+  static async getObjectTypes(filters: BaseQueryParams): Promise<ModelPaginatorContract<ObjectType>> {
+    const { page, limit } = filters
     const objectTypes = await ObjectType.query()
-      .paginate(page, limit)
+      .paginate(page!, limit)
 
-    return objectTypes.serialize()
+    return objectTypes
   }
 
-  static async getObjectTypeById(params: IParams): Promise<ObjectType> {
-    const objectType = await ObjectType.findOrFail(params.id)
+  static async findById(id: number): Promise<ObjectType> {
+    const objectType = await ObjectType.findOrFail(id)
 
     return objectType
   }
 
-  static async createObjectType(req: Request, auth: Authenticator<Authenticators>): Promise<ObjectType> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(objectTypeValidator)
-    const objectType = await ObjectType.create({ userId: user?.id, ...validatedData })
+  static async create(data: CreateTypeObject): Promise<ObjectType> {
+    const objectType = await ObjectType.create(data)
 
     return objectType
   }
 
-  static async updateObjectType(req: Request, params: IParams): Promise<ObjectType> {
-    const objectType = await ObjectType.findOrFail(params.id)
-    const validatedData = await req.validateUsing(objectTypeValidator)
-    const updObjectType = await objectType.merge(validatedData).save()
+  static async update(id: number, data: UpdateTypeObject): Promise<ObjectType> {
+    const objectType = await ObjectType.findOrFail(id)
+    const updObjectType = await objectType.merge(data).save()
 
     return updObjectType
   }
 
-  static async deleteObjectType(params: IParams): Promise<void> {
-    const objectType = await ObjectType.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const objectType = await ObjectType.findOrFail(id)
 
     await objectType.delete()
+
+    return
   }
 }
