@@ -1,34 +1,38 @@
 import { DistrictDto, DistrictShortDto } from '#district/dtos/index'
 import District from '#district/models/district'
 import DistrictService from '#district/services/district_service'
+import { createDistrictValidator } from '#district/validators/create_district'
+import { updateDistrictValidator } from '#district/validators/update_district'
 import DistrictPolicy from '#policies/district_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import SubstationListDto from '#substation/dtos/substation_lists'
-import Substation from '#substation/models/substation'
 import SubstationService from '#substation/services/substation_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DistrictsController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await DistrictService.getDistricts(request)
-    const districts = { meta, data: data.map(district => new DistrictShortDto(district as District)) }
+    const filters = request.qs() as BaseQueryParams
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
+    const data = await DistrictService.getDistricts(validatedFilters)
+    const districts = DistrictShortDto.fromPaginator(data)
 
     return response.status(200).json(districts)
   }
 
   async getSubstations({ params, request, response }: HttpContext) {
     const district = await District.findOrFail(params.id)
-    const { meta, data } = await SubstationService.getSubstations(request, district.id)
-    const substations = { meta, data: data.map(substation => new SubstationListDto(substation as Substation)) }
+    const data = await SubstationService.getSubstations(request, district.id)
+    const substations = SubstationListDto.fromPaginator(data)
 
     return response.status(200).json(substations)
   }
 
   async getDistrict({ params, response }: HttpContext) {
     const districtParams = params as IParams
-    const data = await DistrictService.getDistrictById(districtParams)
-    const district = new DistrictDto(data as District)
+    const data = await DistrictService.findById(districtParams.id)
+    const district = new DistrictDto(data)
 
     return response.status(200).json(district)
   }
@@ -38,7 +42,8 @@ export default class DistrictsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const district = await DistrictService.createDistrict(request, auth)
+    const validatedData = await request.validateUsing(createDistrictValidator)
+    const district = await DistrictService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(district)
   }
@@ -49,7 +54,8 @@ export default class DistrictsController {
     }
 
     const districtParams = params as IParams
-    const updDistrict = await DistrictService.updateDistrict(request, districtParams)
+    const validatedData = await request.validateUsing(updateDistrictValidator)
+    const updDistrict = await DistrictService.update(districtParams.id, validatedData)
 
     return response.status(200).json(updDistrict)
   }
@@ -61,7 +67,7 @@ export default class DistrictsController {
 
     const districtParams = params as IParams
 
-    await DistrictService.deleteDistrict(districtParams)
+    await DistrictService.delete(districtParams.id)
 
     return response.status(204)
   }

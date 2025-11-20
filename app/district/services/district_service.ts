@@ -1,53 +1,45 @@
+import type { CreateDistrict, UpdateDistrict } from '#district/interfaces/districts'
 import District from '#district/models/district'
-import { districtValidator } from '#district/validators/district'
-import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { BaseQueryParams } from '#shared/interfaces/query_params'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class DistrictService {
-  static async getDistricts(req: Request): Promise<{
-    meta: any,
-    data: ModelObject[]
-  }> {
-    const { sort, order, page, limit = -1, search } = req.qs() as IQueryParams
+  static async getDistricts(filters: BaseQueryParams): Promise<ModelPaginatorContract<District>> {
+    const { sort, order, page, limit, search } = filters
     const districts = await District.query()
       .if(search, (query) => query.whereLike('name', `%${search}%`))
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .paginate(page, limit)
+      .if(sort && order, (query) => query.orderBy(sort!, order))
+      .paginate(page!, limit)
     // const total: number = (await District.query().count('* as total'))[0].$extras.total
     // const total: number = districts.length
 
-    return districts.serialize()
+    return districts
   }
 
-  static async getDistrictById(params: IParams): Promise<District> {
-    const district = await District.findOrFail(params.id)
+  static async findById(id: number): Promise<District> {
+    const district = await District.findOrFail(id)
 
     return district
   }
 
-  static async createDistrict(req: Request, auth: Authenticator<Authenticators>): Promise<District> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(districtValidator)
-    const district = await District.create({ userId: user?.id, ...validatedData })
+  static async create(data: CreateDistrict): Promise<District> {
+    const district = await District.create(data)
 
     return district
   }
 
-  static async updateDistrict(req: Request, params: IParams): Promise<District> {
-    const district = await District.findOrFail(params.id)
-    const validatedData = await req.validateUsing(districtValidator)
-    const updDistrict = await district.merge(validatedData).save()
+  static async update(id: number, data: UpdateDistrict): Promise<District> {
+    const district = await District.findOrFail(id)
+    const updDistrict = await district.merge(data).save()
 
     return updDistrict
   }
 
-  static async deleteDistrict(params: IParams): Promise<void> {
-    const district = await District.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const district = await District.findOrFail(id)
 
     await district.delete()
+
+    return
   }
 }
