@@ -1,45 +1,37 @@
-import { OrderByEnums } from '#shared/enums/sort'
-import { transliterate } from '#shared/helpers/transliterate'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
+import type { CreateSubstation, SubstationQueryParams, UpdateNoteSubstation, UpdateSubstation } from '#substation/interfaces/index'
+import type { KeyDefectSubstation } from '#substation/interfaces/substation'
 import Substation from '#substation/models/substation'
-import { substationKeyDefectValidator, substationNoteValidator, substationValidator } from '#substation/validators/index'
-import { Authenticator } from '@adonisjs/auth'
-import { type Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { type ModelObject } from '@adonisjs/lucid/types/model'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class SubstationService {
   static async getSubstations(
-    req: Request,
+    filters?: SubstationQueryParams,
     districtId?: number,
-  ): Promise<{
-    meta: any,
-    data: ModelObject[]
-  }> {
-    const { sort = 'name', order = 'asc', page, limit = -1, search, district, channelType, channelCategory, objectType, typeKp, headController } = req.qs() as IQueryParams
-    const districtValue = districtId || district
+  ): Promise<ModelPaginatorContract<Substation>> {
+    // const { sort = 'name', order = 'asc', page, limit, search, district, channelType, channelCategory, objectType, typeKp, headController } = filters
+    const districtValue = districtId || filters?.district
     const substations = await Substation.query()
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
+      .if(filters?.sort && filters?.order, (query) => query.orderBy(filters?.sort!, filters?.order!))
       .if(districtValue, (query) => query.where('district_id', '=', districtValue!))
-      .if(search, (query) => query.whereLike('nameSearch', `%${search}%`))
-      .if(objectType, (query) => query.where('object_type_id', '=', objectType))
-      .if(channelType || channelCategory, query => {
+      .if(filters?.search, (query) => query.whereLike('nameSearch', `%${filters?.search}%`))
+      .if(filters?.objectType, (query) => query.where('object_type_id', '=', filters?.objectType!))
+      .if(filters?.channelType || filters?.channelCategory, query => {
         query.whereHas('channels', query => {
-          if (channelType) {
-            query.where('channelTypeId', '=', channelType)
+          if (filters?.channelType) {
+            query.where('channelTypeId', '=', filters?.channelType)
           }
-          if (channelCategory) {
-            query.where('channelCategoryId', '=', channelCategory)
+          if (filters?.channelCategory) {
+            query.where('channelCategoryId', '=', filters?.channelCategory)
           }
         })
       })
-      .if(typeKp || headController, query => {
+      .if(filters?.typeKp || filters?.headController, query => {
         query.whereHas('telemechanics_device', query => {
-          if (typeKp) {
-            query.where('typeKpId', '=', typeKp)
+          if (filters?.typeKp) {
+            query.where('typeKpId', '=', filters?.typeKp)
           }
-          if (headController) {
-            query.where('headControllerId', '=', headController)
+          if (filters?.headController) {
+            query.where('headControllerId', '=', filters?.headController)
           }
         })
       })
@@ -55,31 +47,31 @@ export default class SubstationService {
       })
       .preload('telemechanics_device', query => {
         query
-          .if(typeKp || headController, query => {
-            if (typeKp) {
-              query.where('typeKpId', '=', typeKp)
+          .if(filters?.typeKp || filters?.headController, query => {
+            if (filters?.typeKp) {
+              query.where('typeKpId', '=', filters?.typeKp)
             }
-            if (headController) {
-              query.where('headControllerId', '=', headController)
+            if (filters?.headController) {
+              query.where('headControllerId', '=', filters?.headController)
             }
           })
           .select('id', 'typeKpId', 'headControllerId', 'controllerFirmwareVersion', 'note')
           .preload('type_kp', query => query.select('id', 'name'))
           .preload('head_controller', query => query.select('id', 'name'))
       })
-      .paginate(page, limit)
+      .paginate(filters?.page!, filters?.limit)
 
-    return substations.serialize()
+    return substations
   }
 
-  static async getSubstationById(params: IParams): Promise<Substation> {
-    const substation = await Substation.findOrFail(params.id)
+  static async findById(id: number): Promise<Substation> {
+    const substation = await Substation.findOrFail(id)
 
     return substation
   }
 
-  static async getSubstationInfo(params: Record<string, any>): Promise<{ substation: Substation, numberCompletedWorks: number }> {
-    const substation = await Substation.findOrFail(params.id)
+  static async getInfo(id: number): Promise<{ substation: Substation, numberCompletedWorks: number }> {
+    const substation = await Substation.findOrFail(id)
 
     await substation.load('district')
     await substation.load('voltage_class')
@@ -97,47 +89,38 @@ export default class SubstationService {
     return { substation, numberCompletedWorks: substation.$extras.numberCompletedWorks }
   }
 
-  static async createSubstation(req: Request, auth: Authenticator<Authenticators>): Promise<Substation> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(substationValidator)
-    const substation = await Substation.create({
-      userId: user?.id,
-      nameSearch: transliterate(validatedData.name),
-      ...validatedData,
-    })
+  static async create(data: CreateSubstation): Promise<Substation> {
+    const substation = await Substation.create(data)
 
     return substation
   }
 
-  static async update(req: Request, params: IParams): Promise<Substation> {
-    const substation = await Substation.findOrFail(params.id)
-    const validatedData = await req.validateUsing(substationValidator)
-    const updSubstation = await substation
-      .merge({ nameSearch: transliterate(validatedData.name), ...validatedData })
-      .save()
+  static async update(id: number, data: UpdateSubstation): Promise<Substation> {
+    const substation = await Substation.findOrFail(id)
+    const updSubstation = await substation.merge(data).save()
 
     return updSubstation
   }
 
-  static async updateNote(req: Request, params: IParams): Promise<Substation> {
-    const substation = await Substation.findOrFail(params.id)
-    const validatedData = await req.validateUsing(substationNoteValidator)
-    const updSubstation = await substation.merge(validatedData).save()
+  static async updateNote(id: number, data: UpdateNoteSubstation): Promise<Substation> {
+    const substation = await Substation.findOrFail(id)
+    const updSubstation = await substation.merge(data).save()
 
     return updSubstation
   }
 
-  static async deleteSubstation(params: IParams): Promise<void> {
-    const substation = await Substation.findOrFail(params.id)
+  static async delete(id: number): Promise<void> {
+    const substation = await Substation.findOrFail(id)
 
     await substation.related('works').query().delete()
     await substation.delete()
+
+    return
   }
 
-  static async updateKeyDefectSubstation(req: Request, params: IParams): Promise<Substation> {
-    const substation = await Substation.findOrFail(params.id)
-    const validatedData = await req.validateUsing(substationKeyDefectValidator)
-    const updSubstation = await substation.merge(validatedData).save()
+  static async updateKeyDefect(id: number, data: KeyDefectSubstation): Promise<Substation> {
+    const substation = await Substation.findOrFail(id)
+    const updSubstation = await substation.merge(data).save()
 
     return updSubstation
   }
