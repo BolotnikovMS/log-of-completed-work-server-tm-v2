@@ -31,11 +31,3 @@ export interface IQueryParams {
   inControl?: string
   objectType?: string
 }
-
-export interface IQueryParams2 {
-  page?: number
-  limit?: number
-  sort?: string
-  order?: OrderByEnums
-  search?: string
-}
