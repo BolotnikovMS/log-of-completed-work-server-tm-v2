@@ -1,11 +1,10 @@
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { TUrlParamId } from '#shared/types/index'
-import { baseQueryParamsValidator, urlParamIdValidator } from '#shared/validators/index'
-import TelemechanicsDeviceInfoDto from '#telemechanic_device/dtos/telemechanics_device_info'
-import TelemechanicsDeviceListDto from '#telemechanic_device/dtos/telemechanics_device_list'
+import type { IParams } from '#shared/interfaces/params'
+import { baseQueryParamsValidator } from '#shared/validators/index'
+import { TelemechanicsDeviceInfoDto, TelemechanicsDeviceListDto } from '#telemechanic_device/dtos/index'
 import { TelemechanicsDeviceService } from '#telemechanic_device/services/telemechanics_device_service'
-import { telemechanicsDeviceValidator } from '#telemechanic_device/validators/telemechanics_device'
+import { createTelemechanicsDeviceValidator, updateTelemechanicsDeviceValidator } from '#telemechanic_device/validators/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class TelemechanicsDevicesController {
@@ -19,15 +18,17 @@ export default class TelemechanicsDevicesController {
   }
 
   async getTelemechanicsDeviceById({ response, params }: HttpContext) {
-    const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const telemechanicsDevice = await TelemechanicsDeviceService.findById(id)
+    // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
+    const telemechanicDeviceParam = params as IParams
+    const telemechanicsDevice = await TelemechanicsDeviceService.findById(telemechanicDeviceParam.id)
 
     return response.status(200).json(telemechanicsDevice)
   }
 
   async getTelemechanicsDeviceInfoById({ response, params }: HttpContext) {
-    const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const data = await TelemechanicsDeviceService.findInfoById(id)
+    // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
+    const telemechanicDeviceParam = params as IParams
+    const data = await TelemechanicsDeviceService.findInfoById(telemechanicDeviceParam.id)
     const telemechanicsDevice = new TelemechanicsDeviceInfoDto(data)
 
     return response.status(200).json(telemechanicsDevice)
@@ -39,10 +40,10 @@ export default class TelemechanicsDevicesController {
     }
 
     const { user } = auth
-    const validatedData = await request.validateUsing(telemechanicsDeviceValidator)
+    const validatedData = await request.validateUsing(createTelemechanicsDeviceValidator)
     const telemechanicsDevice = await TelemechanicsDeviceService.create({
-      userId: user?.id!,
       ...validatedData,
+      userId: user?.id!
     })
 
     return response.status(201).json(telemechanicsDevice)
@@ -53,9 +54,10 @@ export default class TelemechanicsDevicesController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const validatedData = await request.validateUsing(telemechanicsDeviceValidator)
-    const updTelemechanicsDevice = await TelemechanicsDeviceService.update(id, validatedData)
+    // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
+    const telemechanicDeviceParam = params as IParams
+    const validatedData = await request.validateUsing(updateTelemechanicsDeviceValidator)
+    const updTelemechanicsDevice = await TelemechanicsDeviceService.update(telemechanicDeviceParam.id, validatedData)
 
     return response.status(200).json(updTelemechanicsDevice)
   }
@@ -65,9 +67,10 @@ export default class TelemechanicsDevicesController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
+    // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
+    const telemechanicDeviceParam = params as IParams
 
-    await TelemechanicsDeviceService.delete(id)
+    await TelemechanicsDeviceService.delete(telemechanicDeviceParam.id)
 
     return response.status(204)
   }

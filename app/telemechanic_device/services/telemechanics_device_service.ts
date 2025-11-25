@@ -1,12 +1,10 @@
-import { IQueryParams2 } from '#shared/interfaces/query_params'
-import { ICreateTelemechanicsDevice, ITelemechanicsDevice } from '#telemechanic_device/interfaces/index'
+import type { BaseQueryParams } from '#shared/interfaces/query_params'
+import type { CreateTelemechanicsDevice, UpdateTelemechanicsDevice } from '#telemechanic_device/interfaces/telemechanics_device'
 import TelemechanicsDevice from '#telemechanic_device/models/telemechanics_device'
-import { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export class TelemechanicsDeviceService {
-  static async findAll(
-    filters: IQueryParams2
-  ): Promise<ModelPaginatorContract<TelemechanicsDevice>> {
+  static async findAll(filters: BaseQueryParams): Promise<ModelPaginatorContract<TelemechanicsDevice>> {
     const { page, limit } = filters
     const telemechanicsDevices = await TelemechanicsDevice.query()
       .preload('substation', (query) => {
@@ -43,13 +41,13 @@ export class TelemechanicsDeviceService {
     return telemechanicsDevice
   }
 
-  static async create(data: ICreateTelemechanicsDevice): Promise<TelemechanicsDevice> {
+  static async create(data: CreateTelemechanicsDevice): Promise<TelemechanicsDevice> {
     const telemechanicsDevice = await TelemechanicsDevice.create(data)
 
     return telemechanicsDevice
   }
 
-  static async update(id: number, data: ITelemechanicsDevice): Promise<TelemechanicsDevice> {
+  static async update(id: number, data: UpdateTelemechanicsDevice): Promise<TelemechanicsDevice> {
     const telemechanicsDevice = await TelemechanicsDevice.findOrFail(id)
     const updTelemechanicsDevice = await telemechanicsDevice.merge(data).save()
 
