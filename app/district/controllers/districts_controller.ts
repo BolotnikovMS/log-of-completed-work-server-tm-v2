@@ -23,7 +23,9 @@ export default class DistrictsController {
 
   async getSubstations({ params, request, response }: HttpContext) {
     const district = await District.findOrFail(params.id)
-    const data = await SubstationService.getSubstations(request, district.id)
+    const filters = request.qs() as BaseQueryParams
+    const validatedFilters = await baseQueryParamsValidator.validate(filters)
+    const data = await SubstationService.getSubstations(validatedFilters, district.id)
     const substations = SubstationListDto.fromPaginator(data)
 
     return response.status(200).json(substations)
