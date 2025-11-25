@@ -1,20 +1,5 @@
-export interface ICSVSubstationKeyRow {
-  id: string
-  keyDefectSubstation: string
-}
+import type { ICSVSubstationKeyRow, IErrorParseCSVSubstationKey, IProcessCSVFile, IResultParseCSVSubstationKey } from './import_csv_substations_key.js'
+import type { SubstationQueryParams } from './qury_params_substations.js'
+import type { CreateSubstation, UpdateNoteSubstation, UpdateSubstation } from './substation.js'
 
-export interface IResultParseCSVSubstationKey {
-  id: number
-  keyDefectSubstation: number | null
-}
-
-export interface IErrorParseCSVSubstationKey {
-  status?: number
-  row: number
-  message: string
-}
-
-export interface IProcessCSVFile {
-  validRows: IResultParseCSVSubstationKey[]
-  errors: IErrorParseCSVSubstationKey[]
-}
+export type { CreateSubstation, ICSVSubstationKeyRow, IErrorParseCSVSubstationKey, IProcessCSVFile, IResultParseCSVSubstationKey, SubstationQueryParams, UpdateNoteSubstation, UpdateSubstation }
