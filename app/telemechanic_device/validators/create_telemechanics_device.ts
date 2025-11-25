@@ -1,7 +1,7 @@
 import { text1000, text150 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
-export const telemechanicsDeviceValidator = vine.compile(
+export const createTelemechanicsDeviceValidator = vine.compile(
   vine.object({
     substationId: vine
       .number({ strict: true })
