@@ -1,20 +1,15 @@
+import type { ChannelQueryParams, CreateChannel, UpdateChannel } from '#channel/interfaces/index'
 import Channel from '#channel/models/channel'
-import { channelValidator } from '#channel/validators/channel'
-import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ChannelService {
-  static async getChannels(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
-    const { sort = 'substationId', order = 'asc', page, limit, substation, channelType, channelCategory } = req.qs() as IQueryParams
+  static async getChannels(filters: ChannelQueryParams): Promise<ModelPaginatorContract<Channel>> {
+    const { sort = 'substationId', order = 'asc', page, limit, substation, channelType, channelCategory } = filters
     const channels = await Channel.query()
-      .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .if(substation, (query) => query.where('substationId', '=', substation))
-      .if(channelType, (query) => query.where('channelTypeId', '=', channelType))
-      .if(channelCategory, (query) => query.where('channelCategoryId', '=', channelCategory))
+      .if(sort && order, (query) => query.orderBy(sort, order))
+      .if(substation, (query) => query.where('substationId', '=', substation!))
+      .if(channelType, (query) => query.where('channelTypeId', '=', channelType!))
+      .if(channelCategory, (query) => query.where('channelCategoryId', '=', channelCategory!))
       .preload('substation', (query) => {
         query.preload('voltage_class')
         query.preload('object_type')
@@ -23,13 +18,13 @@ export default class ChannelService {
       .preload('channel_type')
       .preload('channel_equipment')
       .preload('gsm_operator')
-      .paginate(page, limit)
+      .paginate(page!, limit)
 
-    return channels.serialize()
+    return channels
   }
 
-  static async getChannelById(params: IParams): Promise<Channel> {
-    const channel = await Channel.findOrFail(params.id)
+  static async findById(id: number): Promise<Channel> {
+    const channel = await Channel.findOrFail(id)
 
     await channel.load('substation', query => {
       query.preload('voltage_class')
@@ -43,25 +38,24 @@ export default class ChannelService {
     return channel
   }
 
-  static async createChannel(req: Request, auth: Authenticator<Authenticators>): Promise<Channel> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(channelValidator)
-    const channel = await Channel.create({ userId: user?.id, ...validatedData })
+  static async create(data: CreateChannel): Promise<Channel> {
+    const channel = await Channel.create(data)
 
     return channel
   }
 
-  static async updateChannel(req: Request, params: IParams): Promise<Channel> {
-    const channel = await Channel.findOrFail(params.id)
-    const validatedData = await req.validateUsing(channelValidator)
-    const updChannel = await channel.merge(validatedData).save()
+  static async update(id: number, data: UpdateChannel): Promise<Channel> {
+    const channel = await Channel.findOrFail(id)
+    const updChannel = await channel.merge(data).save()
 
     return updChannel
   }
 
-  static async deleteChannel(params: IParams): Promise<void> {
-    const channel = await Channel.findOrFail(params.id)
+  static async deleteChannel(id: number): Promise<void> {
+    const channel = await Channel.findOrFail(id)
 
     await channel.delete()
+
+    return
   }
 }

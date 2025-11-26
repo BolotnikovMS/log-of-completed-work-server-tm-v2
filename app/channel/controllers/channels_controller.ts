@@ -1,30 +1,33 @@
 import { ChannelDto, ChannelInfoDto, ChannelListDto } from '#channel/dtos/index'
-import Channel from '#channel/models/channel'
+import type { ChannelQueryParams } from '#channel/interfaces/query_params_channels'
 import ChannelService from '#channel/services/channel_service'
+import { createChannelValidator, queryParamsChannelValidator, updateChannelValidator } from '#channel/validators/index'
 import ChannelPolicy from '#policies/channel_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await ChannelService.getChannels(request)
-    const channels = { meta, data: data.map(channel => new ChannelListDto(channel as Channel)) }
+    const filters = request.qs() as ChannelQueryParams
+    const validatedFilters = await queryParamsChannelValidator.validate(filters)
+    const data = await ChannelService.getChannels(validatedFilters)
+    const channels = ChannelListDto.fromPaginator(data)
 
     return response.status(200).json(channels)
   }
 
   async getChannel({ params, response }: HttpContext) {
     const channelParams = params as IParams
-    const channel = new ChannelDto(await ChannelService.getChannelById(channelParams))
+    const channel = new ChannelDto(await ChannelService.findById(channelParams.id))
 
     return response.status(200).json(channel)
   }
 
   async getChannelInfo({ params, response }: HttpContext) {
     const channelParams = params as IParams
-    const channel = new ChannelInfoDto(await ChannelService.getChannelById(channelParams))
+    const channel = new ChannelInfoDto(await ChannelService.findById(channelParams.id))
 
     return response.status(200).json(channel)
   }
@@ -34,7 +37,11 @@ export default class ChannelsController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const channel = await ChannelService.createChannel(request, auth)
+    const validatedData = await request.validateUsing(createChannelValidator)
+    const channel = await ChannelService.create({
+      ...validatedData,
+      userId: auth.user!.id
+    })
 
     return response.status(201).json(channel)
   }
@@ -45,7 +52,8 @@ export default class ChannelsController {
     }
 
     const channelParams = params as IParams
-    const updChannel = await ChannelService.updateChannel(request, channelParams)
+    const validatedData = await request.validateUsing(updateChannelValidator)
+    const updChannel = await ChannelService.update(channelParams.id, validatedData)
 
     return response.status(200).json(updChannel)
   }
@@ -57,7 +65,7 @@ export default class ChannelsController {
 
     const channelParams = params as IParams
 
-    await ChannelService.deleteChannel(channelParams)
+    await ChannelService.deleteChannel(channelParams.id)
 
     return response.status(204)
   }
