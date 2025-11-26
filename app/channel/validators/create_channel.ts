@@ -1,7 +1,7 @@
 import { ipOptional, text1000 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
-export const channelValidator = vine.compile(
+export const createChannelValidator = vine.compile(
   vine.object({
     substationId: vine
       .number({ strict: true })
