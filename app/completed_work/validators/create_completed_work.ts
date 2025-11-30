@@ -1,7 +1,7 @@
 import { booleanCheck, dateText, text1000 } from '#shared/validators/fields_check'
 import vine from '@vinejs/vine'
 
-export const completedWorkValidator = vine.compile(
+export const createCompletedWorkValidator = vine.compile(
   vine.object({
     substationId: vine
       .number({ strict: true })
@@ -24,7 +24,7 @@ export const completedWorkValidator = vine.compile(
       .min(1)
       .exists({ table: 'type_works', column: 'id' }),
     // dateCompletion: vine.date({
-    //   formats: 'DD.MM.YYYY',
+    //   formats: 'YYYY-MM-DD',
     // }),
     dateCompletion: dateText,
     inControl: booleanCheck.optional(),
