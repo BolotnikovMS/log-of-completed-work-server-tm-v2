@@ -1,17 +1,11 @@
+import type { CreateCompletedWork, UpdateCompletedWork } from '#completed_work/interfaces/completed_work'
+import type { CompletedWorkParams } from '#completed_work/interfaces/index'
 import CompletedWork from '#completed_work/models/completed_work'
-import { completedWorkValidator } from '#completed_work/validators/completed_work'
 import { OrderByEnums } from '#shared/enums/sort'
-import { IParams, IQueryParams } from '#shared/interfaces/index'
-import { Authenticator } from '@adonisjs/auth'
-import { Authenticators } from '@adonisjs/auth/types'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class CompletedWorkService {
-  static async getCompletedWorks(req: Request): Promise<{
-    meta: any
-    data: ModelObject[]
-  }> {
+  static async getCompletedWorks(filters: CompletedWorkParams): Promise<ModelPaginatorContract<CompletedWork>> {
     const {
       sort = 'dateCompletion',
       order = 'desc',
@@ -23,15 +17,15 @@ export default class CompletedWorkService {
       executor,
       typeWork,
       inControl
-    } = req.qs() as IQueryParams
+    } = filters
     const works = await CompletedWork.query()
       .if(dateStart && dateEnd, (query) =>
-        query.whereBetween('dateCompletion', [dateStart, dateEnd])
+        query.whereBetween('dateCompletion', [dateStart!, dateEnd!])
       )
-      .if(executor, query => query.where('workProducerId', '=', executor))
-      .if(substation, (query) => query.where('substationId', '=', substation))
+      .if(executor, query => query.where('workProducerId', '=', executor!))
+      .if(substation, (query) => query.where('substationId', '=', substation!))
       .if(sort && order, (query) => query.orderBy(sort, OrderByEnums[order]))
-      .if(typeWork, query => query.whereIn('typeWorkId', [...typeWork]))
+      .if(typeWork, query => query.whereIn('typeWorkId', [...typeWork!]))
       .if(inControl, query => query.where('inControl', Boolean(inControl)))
       .preload('substation', (query) => {
         query.preload('voltage_class')
@@ -40,19 +34,19 @@ export default class CompletedWorkService {
       .preload('work_producer')
       .preload('author')
       .preload('type_work')
-      .paginate(page, limit)
+      .paginate(page!, limit)
 
-    return works.serialize()
+    return works
   }
 
-  static async getCompletedWorkById(params: IParams): Promise<CompletedWork> {
-    const work = await CompletedWork.findOrFail(params.id)
+  static async findById(id: number): Promise<CompletedWork> {
+    const work = await CompletedWork.findOrFail(id)
 
     return work
   }
 
-  static async getCompletedWorkInfo(params: IParams): Promise<CompletedWork> {
-    const completedWork = await CompletedWork.findOrFail(params.id)
+  static async findInfoById(id: number): Promise<CompletedWork> {
+    const completedWork = await CompletedWork.findOrFail(id)
 
     await completedWork.load('substation', (query) => {
       query.preload('voltage_class')
@@ -65,20 +59,24 @@ export default class CompletedWorkService {
     return completedWork
   }
 
-  static async createWork(req: Request, auth: Authenticator<Authenticators>): Promise<CompletedWork> {
-    const { user } = auth
-    const validatedData = await req.validateUsing(completedWorkValidator)
-    const completedWork = await CompletedWork.create({
-      userId: user?.id,
-      ...validatedData,
-    })
+  static async create(data: CreateCompletedWork): Promise<CompletedWork> {
+    const completedWork = await CompletedWork.create(data)
 
     return completedWork
   }
 
-  static async deleteWork(params: IParams): Promise<void> {
-    const completedWork = await CompletedWork.findOrFail(params.id)
+  static async update(id: number, data: UpdateCompletedWork): Promise<CompletedWork> {
+    const completedWork = await CompletedWork.findOrFail(id)
+    const updCompletedWork = await completedWork.merge(data).save()
+
+    return updCompletedWork
+  }
+
+  static async delete(id: number): Promise<void> {
+    const completedWork = await CompletedWork.findOrFail(id)
 
     await completedWork.delete()
+
+    return
   }
 }

@@ -1,31 +1,34 @@
 import { CompletedWorkDto, CompletedWorkInfoDto, CompletedWorkListDto } from '#completed_work/dtos/index'
+import type { CompletedWorkParams } from '#completed_work/interfaces/index'
 import CompletedWork from '#completed_work/models/completed_work'
 import CompletedWorkService from '#completed_work/services/completed_wokr_service'
-import { completedWorkValidator } from '#completed_work/validators/completed_work'
+import { createCompletedWorkValidator, queryParamsCompletedWorkValidator, updateCompletedWorkValidator } from '#completed_work/validators/index'
 import CompletedWorkPolicy from '#policies/completed_work_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CompletedWorksController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await CompletedWorkService.getCompletedWorks(request)
-    const works = { meta, data: data.map(work => new CompletedWorkListDto(work as CompletedWork)) }
+    const filters = request.qs() as CompletedWorkParams
+    const validatedFilters = await queryParamsCompletedWorkValidator.validate(filters)
+    const data = await CompletedWorkService.getCompletedWorks(validatedFilters)
+    const works = CompletedWorkListDto.fromPaginator(data)
 
     return response.status(200).json(works)
   }
 
   async getCompletedWork({ params, response }: HttpContext) {
     const completedWorkParams = params as IParams
-    const completedWork = await CompletedWorkService.getCompletedWorkById(completedWorkParams)
+    const completedWork = await CompletedWorkService.findById(completedWorkParams.id)
 
     return response.status(200).json(new CompletedWorkDto(completedWork))
   }
 
   async getCompletedWorkInfo({ params, response }: HttpContext) {
     const completedWorkParams = params as IParams
-    const completedWork = await CompletedWorkService.getCompletedWorkInfo(completedWorkParams)
+    const completedWork = await CompletedWorkService.findInfoById(completedWorkParams.id)
 
     return response.status(200).json(new CompletedWorkInfoDto(completedWork))
   }
@@ -35,19 +38,22 @@ export default class CompletedWorksController {
       return response.status(403).json({ message: accessErrorMessages.create })
     }
 
-    const completedWork = await CompletedWorkService.createWork(request, auth)
+    const validatedData = await request.validateUsing(createCompletedWorkValidator)
+    const completedWork = await CompletedWorkService.create({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(completedWork)
   }
 
   async update({ params, request, response, bouncer }: HttpContext) {
-    const completedWork = await CompletedWork.findOrFail(params.id)
+    const completedWorkParams = params as IParams
+    const completedWork = await CompletedWork.findOrFail(completedWorkParams.id)
 
     if (await bouncer.with(CompletedWorkPolicy).denies('edit', completedWork)) {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
-    const validatedData = await request.validateUsing(completedWorkValidator)
-    const updCompletedWork = await completedWork.merge({ ...validatedData }).save()
+
+    const validatedData = await request.validateUsing(updateCompletedWorkValidator)
+    const updCompletedWork = await CompletedWorkService.update(completedWorkParams.id, validatedData)
 
     return response.status(200).json(updCompletedWork)
   }
@@ -59,7 +65,7 @@ export default class CompletedWorksController {
 
     const completedWorkParams = params as IParams
 
-    await CompletedWorkService.deleteWork(completedWorkParams)
+    await CompletedWorkService.delete(completedWorkParams.id)
 
     return response.status(204)
   }
