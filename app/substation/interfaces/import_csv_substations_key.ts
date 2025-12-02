@@ -1,20 +1,20 @@
-export interface ICSVSubstationKeyRow {
+export interface CSVSubstationKeyRow {
   id: string
   keyDefectSubstation: string
 }
 
-export interface IResultParseCSVSubstationKey {
+export interface ResultParseCSVSubstationKey {
   id: number
   keyDefectSubstation: number | null
 }
 
-export interface IErrorParseCSVSubstationKey {
+export interface ErrorParseCSVSubstationKey {
   status?: number
   row: number
   message: string
 }
 
-export interface IProcessCSVFile {
-  validRows: IResultParseCSVSubstationKey[]
-  errors: IErrorParseCSVSubstationKey[]
+export interface ProcessCSVFile {
+  validRows: ResultParseCSVSubstationKey[]
+  errors: ErrorParseCSVSubstationKey[]
 }
