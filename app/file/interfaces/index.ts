@@ -1,1 +1,3 @@
-export interface IUpdFile { clientName: string }
+import type { UpdFile } from './file.js'
+
+export type { UpdFile }
