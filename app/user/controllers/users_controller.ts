@@ -1,24 +1,28 @@
 import UserPolicy from '#policies/user_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { IParams } from '#shared/interfaces/params'
+import type { IParams } from '#shared/interfaces/index'
 import { UserBaseDto, UserFullDto, UserShortDto } from '#user/dtos/index'
+import type { UserQueryParams } from '#user/interfaces/index'
 import User from '#user/models/user'
 import RoleService from '#user/services/role_service'
 import UserService from '#user/services/user_service'
+import { blockUserAccountValidator, changePasswordValidator, changeUserRole, queryParamsUsersValidator, registerValidator } from '#user/validators/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
   async index({ request, response }: HttpContext) {
-    const { meta, data } = await UserService.getUsers(request)
-    const users = { meta, data: data.map(user => new UserBaseDto(user as User)) }
+    const filters = request.qs() as UserQueryParams
+    const validatedFilters = await queryParamsUsersValidator.validate(filters)
+    const data = await UserService.getUsers(validatedFilters)
+    const users = UserBaseDto.fromPaginator(data)
 
     return response.status(200).json(users)
   }
 
-  async getShortUsers({ request, response }: HttpContext) {
+  async getShortUsers({ response }: HttpContext) {
     try {
-      const { meta, data } = await UserService.getUsers(request)
-      const shortUsers = { meta, data: data.map(user => new UserShortDto(user as User)) }
+      const data = await UserService.getUsers()
+      const shortUsers = UserShortDto.fromPaginator(data)
 
       return response.status(200).json(shortUsers)
     } catch (error) {
@@ -33,7 +37,7 @@ export default class UsersController {
   async getUser({ response, params }: HttpContext) {
     try {
       const userParams = params as IParams
-      const user = await UserService.getUserById(userParams)
+      const user = await UserService.findById(userParams.id)
 
       return response.status(200).json(new UserFullDto(user))
     } catch (error) {
@@ -61,7 +65,9 @@ export default class UsersController {
     }
 
     try {
-      await UserService.createUserAccount(request)
+      const validatedData = await request.validateUsing(registerValidator)
+
+      await UserService.createAccount(validatedData)
 
       return response.status(201).json('Аккаунт пользователя создан!')
     } catch (error) {
@@ -75,7 +81,8 @@ export default class UsersController {
       return response.status(403).json({ message: accessErrorMessages.noRights })
     }
 
-    const resetPassword = await UserService.changePassword(request, params.id)
+    const validatedData = await request.validateUsing(changePasswordValidator)
+    const resetPassword = await UserService.changePassword(params.id, validatedData)
 
     if (resetPassword) {
       return response.status(200).json('Пароль пользователя успешно изменен!')
@@ -90,8 +97,9 @@ export default class UsersController {
     }
 
     const userParams = params as IParams
+    const validatedData = await request.validateUsing(blockUserAccountValidator)
 
-    await UserService.blockUserAccount(request, userParams)
+    await UserService.blockAccount(userParams.id, validatedData)
 
     return response.status(200).json('Статус УЗ пользователя успешно изменен!')
   }
@@ -106,7 +114,9 @@ export default class UsersController {
 
     if (!user.active) return response.status(400).json({ message: 'УЗ пользователя заблокирована!' })
 
-    await UserService.changeRole(request, user)
+    const validatedData = await request.validateUsing(changeUserRole)
+
+    await UserService.changeRole(id, validatedData)
 
     return response.status(200).json('Роль пользователя изменена!')
   }

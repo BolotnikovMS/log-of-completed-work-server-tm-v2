@@ -1,60 +1,59 @@
-import { IParams, IQueryParams } from '#shared/interfaces/index'
+import type { BlockUserAccount, ChangeUserPassword, ChangeUserRole, CreateUser, UserQueryParams } from '#user/interfaces/index'
 import User from '#user/models/user'
-import { blockUserAccountValidator, changePasswordValidator, changeUserRole, registerValidator } from '#user/validators/index'
-import { Request } from '@adonisjs/core/http'
-import { ModelObject } from '@adonisjs/lucid/types/model'
 
 export default class UserService {
-  static async getUsers(req: Request): Promise<{ meta: any, data: ModelObject[] }> {
-    const { active, cleanUser, page, limit } = req.qs() as IQueryParams
+  static async getUsers(filters?: UserQueryParams) {
+    // const { active, cleanUser, page, limit } = filters
+    console.log(Boolean(filters?.active))
     const users = await User.query()
-      .if(Boolean(active), (query) => query.where('active', '=', 1))
-      .if(Boolean(cleanUser), (query) => {
+      .if(Boolean(filters?.active), (query) => query.where('active', '=', 1))
+      .if(Boolean(filters?.cleanUser), (query) => {
         query.where((queryWhere) => {
           queryWhere.where('active', '=', 1)
           queryWhere.where('id', '!=', 1)
         })
       })
       .preload('role')
-      .paginate(page, limit)
+      .paginate(filters?.page!, filters?.limit)
 
-    return users.serialize()
+    return users
   }
 
-  static async getUserById(params: IParams): Promise<User> {
-    const user = await User.findOrFail(params.id)
+  static async findById(id: number): Promise<User> {
+    const user = await User.findOrFail(id)
 
-    await user.preload('role')
+    await user.load('role')
 
     return user
   }
 
-  static async createUserAccount(req: Request): Promise<void> {
-    const validatedData = await req.validateUsing(registerValidator)
+  static async createAccount(data: CreateUser): Promise<void> {
+    await User.create(data)
 
-    await User.create(validatedData)
+    return
   }
 
-  static async changePassword(req: Request, userId: number): Promise<User | boolean> {
-    const user = await User.findOrFail(userId)
+  static async changePassword(id: number, data: ChangeUserPassword): Promise<User | boolean> {
+    const user = await User.findOrFail(id)
 
     if (!user.active) return false
 
-    const validatedData = await req.validateUsing(changePasswordValidator)
-
-    return await user.merge(validatedData).save()
+    return await user.merge(data).save()
   }
 
-  static async blockUserAccount(req: Request, params: IParams): Promise<void> {
-    const user = await User.findOrFail(params.id)
-    const validatedData = await req.validateUsing(blockUserAccountValidator)
+  static async blockAccount(id: number, data: BlockUserAccount): Promise<void> {
+    const user = await User.findOrFail(id)
 
-    await user.merge(validatedData).save()
+    await user.merge(data).save()
+
+    return
   }
 
-  static async changeRole(req: Request, user: User): Promise<void> {
-    const validatedData = await req.validateUsing(changeUserRole)
+  static async changeRole(id: number, data: ChangeUserRole): Promise<void> {
+    const user = await User.findOrFail(id)
 
-    await user.merge(validatedData).save()
+    await user.merge(data).save()
+
+    return
   }
 }
