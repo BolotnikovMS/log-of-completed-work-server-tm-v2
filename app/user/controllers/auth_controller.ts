@@ -1,6 +1,6 @@
 import User from '#user/models/user'
 import UserService from '#user/services/user_service'
-import { loginValidator } from '#user/validators/index'
+import { changePasswordValidator, loginValidator } from '#user/validators/index'
 import type { HttpContext } from '@adonisjs/core/http'
 import hash from '@adonisjs/core/services/hash'
 import DB from '@adonisjs/lucid/services/db'
@@ -13,8 +13,7 @@ export default class AuthController {
 
       if (!user.active) return response.status(400).json('Учетная запись заблокирована!')
 
-      if (!(await hash.verify(user.password, password)))
-        return response.status(400).json('Неверные учетные данные!')
+      if (!(await hash.verify(user.password, password))) return response.status(400).json('Неверные учетные данные!')
 
       await user.load('role')
       await DB.from('auth_access_tokens').where('tokenable_id', user.id).delete()
@@ -79,11 +78,10 @@ export default class AuthController {
   async changePassword({ request, response, auth }: HttpContext) {
     const user = await auth.authenticate()
 
-    if (!user.active) {
-      return response.status(401).json('Учетная запись заблокирована!')
-    }
+    if (!user.active) return response.status(401).json('Учетная запись заблокирована!')
 
-    const changePassword = await UserService.changePassword(request, user.id)
+    const validatedData = await request.validateUsing(changePasswordValidator)
+    const changePassword = await UserService.changePassword(user.id, validatedData)
 
     if (changePassword) {
       return response.status(200).json('Пароль пользователя успешно изменен!')
