@@ -4,7 +4,7 @@ import vine from '@vinejs/vine'
 export const uploadFileSubstationValidator = vine.compile(
   vine.object({
     substationId: vine
-      .number({ strict: true })
+      .number()
       .positive()
       .withoutDecimals()
       .min(1)
