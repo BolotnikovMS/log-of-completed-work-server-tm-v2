@@ -1,8 +1,8 @@
-import type { INewLogRecord } from '#log/interfaces/index'
+import type { CreateLogRecord } from '#log/interfaces/index'
 import type { TLogAction } from '#log/types/index'
 import { HttpContext, Request } from "@adonisjs/core/http"
 
-export const logGeneration = (ctx: HttpContext, error?: any): INewLogRecord => {
+export const logGeneration = (ctx: HttpContext, error?: any): CreateLogRecord => {
   const { request } = ctx
   let action: TLogAction
 
