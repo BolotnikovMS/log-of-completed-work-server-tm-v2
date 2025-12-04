@@ -1,12 +1,12 @@
-import { IUpdFile } from '#file/interfaces/index'
+import type { UpdFile } from '#file/interfaces/index'
 import File from '#file/models/file'
-import { fileSubstationKeyValidator, fileValidator } from '#file/validators/files'
+import type { FileSubstation, FileSubstationKey } from '#file/types/index'
+// import { fileSubstationKeyValidator } from '#file/validators/files'
 import { getFileNameWithoutExtension } from '#shared/helpers/get_file_name_without_extension'
-import { ICSVSubstationKeyRow, IErrorParseCSVSubstationKey, IResultParseCSVSubstationKey } from '#substation/interfaces/index'
+import type { CSVSubstationKeyRow, ErrorParseCSVSubstationKey, ResultParseCSVSubstationKey } from '#substation/interfaces/index'
 import { csvDataSubstationKeyValidator } from '#substation/validators/substation_keys_defect_file'
 import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { cuid } from '@adonisjs/core/helpers'
-import { Request } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import db from '@adonisjs/lucid/services/db'
 import csv from 'csv-parser'
@@ -15,24 +15,43 @@ import { unlink } from 'node:fs/promises'
 import path from 'node:path'
 
 export default class FilesServices {
-  static async uploadFile(req: Request, userId: number | undefined): Promise<string> {
-    const data = { ...req.body(), substationId: +req.body().substationId, ...req.__raw_files }
-    const validateData = await fileValidator.validate(data)
+  // static async uploadFile(req: Request, userId: number | undefined): Promise<string> {
+  //   const data = { ...req.body(), substationId: +req.body().substationId, ...req.__raw_files }
+  //   const validateData = await fileValidator.validate(data)
 
-    validateData?.file.forEach(async (fileItem) => {
+  //   validateData?.file.forEach(async (fileItem) => {
+  //     const newFileName = `${cuid()}.${fileItem.extname}`
+
+  //     await File.create({
+  //       userId: userId,
+  //       substationId: validateData.substationId,
+  //       filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
+  //       clientName: getFileNameWithoutExtension(fileItem.clientName, fileItem.extname || ''),
+  //       typeFile: validateData.typeFile,
+  //       extname: fileItem.extname,
+  //       size: +(fileItem.size / 1024).toFixed(3),
+  //     })
+
+  //     await fileItem.move(app.publicPath(`uploads/files/${validateData.typeFile}`), {
+  //       name: newFileName,
+  //       overwrite: true,
+  //     })
+  //   })
+  static async uploadFile(data: FileSubstation): Promise<string> {
+    data?.file.forEach(async (fileItem) => {
       const newFileName = `${cuid()}.${fileItem.extname}`
 
       await File.create({
-        userId: userId,
-        substationId: validateData.substationId,
-        filePath: `/uploads/files/${validateData.typeFile}/${newFileName}`,
+        userId: data.userId,
+        substationId: data.substationId,
+        filePath: `/uploads/files/${data.typeFile}/${newFileName}`,
         clientName: getFileNameWithoutExtension(fileItem.clientName, fileItem.extname || ''),
-        typeFile: validateData.typeFile,
+        typeFile: data.typeFile,
         extname: fileItem.extname,
         size: +(fileItem.size / 1024).toFixed(3),
       })
 
-      await fileItem.move(app.publicPath(`uploads/files/${validateData.typeFile}`), {
+      await fileItem.move(app.publicPath(`uploads/files/${data.typeFile}`), {
         name: newFileName,
         overwrite: true,
       })
@@ -86,11 +105,11 @@ export default class FilesServices {
 
     return filePath
   }
-  static async uploadCSVFileSubstationKey(req: Request) {
-    const { csvFile } = await req.validateUsing(fileSubstationKeyValidator)
+  static async uploadCSVFileSubstationKey(data: FileSubstationKey) {
+    const { csvFile } = data
     const filePath = await this.#moveFileInTmp(csvFile)
-    const results: IResultParseCSVSubstationKey[] = []
-    const errors: IErrorParseCSVSubstationKey[] = []
+    const results: ResultParseCSVSubstationKey[] = []
+    const errors: ErrorParseCSVSubstationKey[] = []
 
     if (!filePath) {
       return { message: 'Ошибка при загрузке файла!' }
@@ -107,7 +126,7 @@ export default class FilesServices {
             separator: ';'
           })
         )
-          .on('data', async (data: ICSVSubstationKeyRow) => {
+          .on('data', async (data: CSVSubstationKeyRow) => {
             try {
               const { id, keyDefectSubstation } = data
               const validatedData = await csvDataSubstationKeyValidator.validate({
@@ -170,7 +189,7 @@ export default class FilesServices {
       await unlink(filePath)
     }
   }
-  static async updateNameFile(id: number, data: IUpdFile): Promise<File> {
+  static async updateNameFile(id: number, data: UpdFile): Promise<File> {
     const file = await File.findOrFail(id)
     const updFile = await file.merge(data).save()
 
