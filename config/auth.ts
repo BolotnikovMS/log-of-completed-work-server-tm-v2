@@ -1,5 +1,5 @@
 import { tokensGuard, tokensUserProvider } from '@adonisjs/auth/access_tokens'
-import { Authenticators, InferAuthEvents } from '@adonisjs/auth/types'
+import type { Authenticators, InferAuthEvents } from '@adonisjs/auth/types'
 
 import { defineConfig } from '@adonisjs/auth'
 

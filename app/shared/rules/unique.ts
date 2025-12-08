@@ -1,6 +1,6 @@
 import db from '@adonisjs/lucid/services/db'
 import vine from '@vinejs/vine'
-import { FieldContext } from '@vinejs/vine/types'
+import type { FieldContext } from '@vinejs/vine/types'
 
 type TOptions = {
   table: string
