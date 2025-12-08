@@ -1,5 +1,5 @@
 import Log from '#log/models/log'
-import { TLogAction } from '#log/types/index'
+import type { LogAction } from '#log/types/index'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 
 export default class LogInfoDto extends BaseModelDto {
@@ -8,7 +8,7 @@ export default class LogInfoDto extends BaseModelDto {
   declare url: string | null
   declare method: string | null
   declare statusCode: number | null
-  declare action: TLogAction
+  declare action: LogAction
   declare errorType: string | null
   declare errorMessage: string | null
   declare model: string | null

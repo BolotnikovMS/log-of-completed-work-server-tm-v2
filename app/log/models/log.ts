@@ -1,4 +1,4 @@
-import type { TLogAction } from '#log/types/index'
+import type { LogAction } from '#log/types/index'
 import User from '#user/models/user'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
@@ -21,7 +21,7 @@ export default class Log extends BaseModel {
   declare statusCode: number | null
 
   @column()
-  declare action: TLogAction
+  declare action: LogAction
 
   @column()
   declare errorType: string | null

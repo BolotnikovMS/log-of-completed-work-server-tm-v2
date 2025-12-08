@@ -1,1 +1,1 @@
-export type TLogAction = 'view' | 'create' | 'update' | 'delete' | 'auth' | 'validation' | 'error'
+export type LogAction = 'view' | 'create' | 'update' | 'delete' | 'auth' | 'validation' | 'error'

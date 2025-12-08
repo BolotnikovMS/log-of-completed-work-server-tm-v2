@@ -1,5 +1,5 @@
 import Log from '#log/models/log'
-import { TLogAction } from '#log/types/index'
+import type { LogAction } from '#log/types/index'
 import { BaseModelDto } from '@adocasts.com/dto/base'
 
 export default class LogShortDto extends BaseModelDto {
@@ -7,7 +7,7 @@ export default class LogShortDto extends BaseModelDto {
   declare user: string | null
   declare url: string | null
   declare method: string | null
-  declare action: TLogAction
+  declare action: LogAction
   declare createdAt: string
 
   constructor(log?: Log) {
