@@ -71,7 +71,9 @@ export default class ChannelsController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const buffer = await ReportService.createExcelChannels(request)
+    const filters = request.qs() as ChannelQueryParams
+    const validatedFilters = await queryParamsChannelValidator.validate(filters)
+    const buffer = await ReportService.createExcelChannels(validatedFilters)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
