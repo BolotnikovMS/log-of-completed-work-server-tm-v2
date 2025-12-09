@@ -71,7 +71,9 @@ export default class CompletedWorksController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const buffer = await ReportService.createExcelCompletedWorks(request)
+    const filters = request.qs() as CompletedWorkParams
+    const validatedFilters = await queryParamsCompletedWorkValidator.validate(filters)
+    const buffer = await ReportService.createExcelCompletedWorks(validatedFilters)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')

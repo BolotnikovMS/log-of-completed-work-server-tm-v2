@@ -95,7 +95,9 @@ export default class SubstationsController {
   }
 
   async downloadSubstationsExcel({ request, response }: HttpContext) {
-    const buffer = await ReportService.createExcelSubstations(request)
+    const filters = request.qs() as SubstationQueryParams
+    const validatedFilters = await queryParamsSubstationsValidator.validate(filters)
+    const buffer = await ReportService.createExcelSubstations(validatedFilters)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
@@ -103,7 +105,9 @@ export default class SubstationsController {
   }
 
   async downloadSubstationsSubstationsTelemechanicsDevicesExcel({ request, response }: HttpContext) {
-    const buffer = await ReportService.createExcelSubstationsTelemechanicsDevices(request)
+    const filters = request.qs() as SubstationQueryParams
+    const validatedFilters = await queryParamsSubstationsValidator.validate(filters)
+    const buffer = await ReportService.createExcelSubstationsTelemechanicsDevices(validatedFilters)
 
     response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response.header('Content-Disposition', 'attachment; filename=example.xlsx')
