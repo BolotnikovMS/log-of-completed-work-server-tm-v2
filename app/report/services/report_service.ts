@@ -1,14 +1,13 @@
 import { ChannelDto } from '#channel/dtos/index'
-import Channel from '#channel/models/channel'
+import type { ChannelQueryParams } from '#channel/interfaces/query_params_channels'
 import ChannelService from '#channel/services/channel_service'
 import { CompletedWorkInfoDto } from '#completed_work/dtos/index'
-import CompletedWork from '#completed_work/models/completed_work'
+import type { CompletedWorkParams } from '#completed_work/interfaces/query_params_completed_works'
 import CompletedWorkService from '#completed_work/services/completed_wokr_service'
 import { SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#report/dtos/index'
-import Substation from '#substation/models/substation'
+import type { SubstationQueryParams } from '#substation/interfaces/qury_params_substations'
 import SubstationService from '#substation/services/substation_service'
-import { Request } from '@adonisjs/core/http'
-import ExcelJS, { Cell } from 'exceljs'
+import ExcelJS, { type Cell } from 'exceljs'
 
 export default class ReportService {
   static #applyStylesRowTitle(worksheet: ExcelJS.Worksheet): void {
@@ -43,9 +42,9 @@ export default class ReportService {
     }
   }
 
-  static async createExcelCompletedWorks(req: Request): Promise<ExcelJS.Buffer> {
-    const works = await CompletedWorkService.getCompletedWorks(req)
-    const transformData = works.data.map(work => new CompletedWorkInfoDto(work as CompletedWork))
+  static async createExcelCompletedWorks(filters: CompletedWorkParams): Promise<ExcelJS.Buffer> {
+    const works = await CompletedWorkService.getCompletedWorks(filters)
+    const transformData = CompletedWorkInfoDto.fromPaginator(works)
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -61,7 +60,7 @@ export default class ReportService {
 
     this.#applyStylesRowTitle(worksheet)
 
-    transformData.forEach(work => {
+    transformData.data.forEach(work => {
       worksheet.addRow({
         author: work.author,
         workProducer: work.work_producer,
@@ -80,9 +79,9 @@ export default class ReportService {
     return buffer
   }
 
-  static async createExcelSubstations(req: Request): Promise<ExcelJS.Buffer> {
-    const substations = await SubstationService.getSubstations(req)
-    const transformData = substations.data.map(substation => new SubstationsReportDto(substation as Substation))
+  static async createExcelSubstations(filters: SubstationQueryParams): Promise<ExcelJS.Buffer> {
+    const substations = await SubstationService.getSubstations(filters)
+    const transformData = SubstationsReportDto.fromPaginator(substations)
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -102,7 +101,7 @@ export default class ReportService {
 
     this.#applyStylesRowTitle(worksheet)
 
-    transformData.forEach(substation => {
+    transformData.data.forEach(substation => {
       if (substation.channels && substation.channels.length > 0) {
         substation.channels?.forEach(channel => {
           worksheet.addRow({
@@ -143,9 +142,9 @@ export default class ReportService {
     return buffer
   }
 
-  static async createExcelSubstationsTelemechanicsDevices(req: Request): Promise<ExcelJS.Buffer> {
-    const substations = await SubstationService.getSubstations(req)
-    const transformData = substations.data.map(substation => new SubstationsTelemechanicsDevicesReportDto(substation as Substation))
+  static async createExcelSubstationsTelemechanicsDevices(filters: SubstationQueryParams): Promise<ExcelJS.Buffer> {
+    const substations = await SubstationService.getSubstations(filters)
+    const transformData = SubstationsTelemechanicsDevicesReportDto.fromPaginator(substations)
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -164,7 +163,7 @@ export default class ReportService {
 
     this.#applyStylesRowTitle(worksheet)
 
-    transformData.forEach(substation => {
+    transformData.data.forEach(substation => {
       if (substation.telemechanics_device && substation.telemechanics_device.length > 0) {
         substation.telemechanics_device?.forEach((device, i) => {
           worksheet.addRow({
@@ -203,9 +202,9 @@ export default class ReportService {
     return buffer
   }
 
-  static async createExcelChannels(req: Request): Promise<ExcelJS.Buffer> {
-    const channels = await ChannelService.getChannels(req)
-    const transformData = channels.data.map(channel => new ChannelDto(channel as Channel))
+  static async createExcelChannels(filters: ChannelQueryParams): Promise<ExcelJS.Buffer> {
+    const channels = await ChannelService.getChannels(filters)
+    const transformData = ChannelDto.fromPaginator(channels)
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet('Sheet 1')
 
@@ -221,7 +220,7 @@ export default class ReportService {
 
     this.#applyStylesRowTitle(worksheet)
 
-    transformData.forEach(channel => {
+    transformData.data.forEach(channel => {
       worksheet.addRow({
         substation: channel.substation,
         channelCategory: channel.channel_category,
