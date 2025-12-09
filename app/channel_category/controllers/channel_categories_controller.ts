@@ -3,7 +3,7 @@ import ChannelCategoryService from '#channel_category/services/channel_category_
 import { createChannelCategoryValidator, updateChannelCategoryValidator } from '#channel_category/validators/index'
 import ChannelCategoryPolicy from '#policies/channel_category_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import { type IParams } from '#shared/interfaces/params'
+import { type Params } from '#shared/interfaces/params'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -19,7 +19,7 @@ export default class ChannelCategoriesController {
   }
 
   async getChannelCategory({ params, response }: HttpContext) {
-    const channelCategoryParams = params as IParams
+    const channelCategoryParams = params as Params
     const channelCategory = await ChannelCategoryService.findById(channelCategoryParams.id)
 
     return response.status(200).json(channelCategory)
@@ -42,7 +42,7 @@ export default class ChannelCategoriesController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const channelCategoryParams = params as IParams
+    const channelCategoryParams = params as Params
     const validatedData = await request.validateUsing(updateChannelCategoryValidator)
     const updChannelCategory = await ChannelCategoryService.update(channelCategoryParams.id, validatedData)
 
@@ -54,7 +54,7 @@ export default class ChannelCategoriesController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const channelCategoryParams = params as IParams
+    const channelCategoryParams = params as Params
 
     await ChannelCategoryService.delete(channelCategoryParams.id)
 

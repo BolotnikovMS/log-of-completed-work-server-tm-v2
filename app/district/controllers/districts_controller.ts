@@ -5,7 +5,7 @@ import { createDistrictValidator } from '#district/validators/create_district'
 import { updateDistrictValidator } from '#district/validators/update_district'
 import DistrictPolicy from '#policies/district_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import type { BaseQueryParams, Params } from '#shared/interfaces/index'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import SubstationListDto from '#substation/dtos/substation_lists'
 import SubstationService from '#substation/services/substation_service'
@@ -32,7 +32,7 @@ export default class DistrictsController {
   }
 
   async getDistrict({ params, response }: HttpContext) {
-    const districtParams = params as IParams
+    const districtParams = params as Params
     const data = await DistrictService.findById(districtParams.id)
     const district = new DistrictDto(data)
 
@@ -55,7 +55,7 @@ export default class DistrictsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const districtParams = params as IParams
+    const districtParams = params as Params
     const validatedData = await request.validateUsing(updateDistrictValidator)
     const updDistrict = await DistrictService.update(districtParams.id, validatedData)
 
@@ -67,7 +67,7 @@ export default class DistrictsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const districtParams = params as IParams
+    const districtParams = params as Params
 
     await DistrictService.delete(districtParams.id)
 

@@ -4,7 +4,7 @@ import { createChannelTypeValidator } from '#channel_type/validators/create_chan
 import { updateChannelTypeValidator } from '#channel_type/validators/index'
 import ChannelTypePolicy from '#policies/channel_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import type { BaseQueryParams, Params } from '#shared/interfaces/index'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -34,7 +34,7 @@ export default class ChannelTypesController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const channelTypeParams = params as IParams
+    const channelTypeParams = params as Params
     const validatedData = await request.validateUsing(updateChannelTypeValidator)
     const updChannelType = await ChannelTypeService.update(channelTypeParams.id, validatedData)
 
@@ -46,7 +46,7 @@ export default class ChannelTypesController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const channelTypeParams = params as IParams
+    const channelTypeParams = params as Params
 
     await ChannelTypeService.delete(channelTypeParams.id)
 

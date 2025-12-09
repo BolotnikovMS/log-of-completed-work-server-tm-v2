@@ -3,7 +3,7 @@ import { HeadControllersService } from '#head_controller/services/head_controlle
 import { createHeadControllerValidator, updateHeadControllerValidator } from '#head_controller/validators/index'
 import HeadControllerPolicy from '#policies/head_controller_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import type { BaseQueryParams, Params } from '#shared/interfaces/index'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -33,7 +33,7 @@ export default class HeadsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const headControllerParams = params as IParams
+    const headControllerParams = params as Params
     const validatedData = await request.validateUsing(updateHeadControllerValidator)
     const updHeadController = await HeadControllersService.update(headControllerParams.id, validatedData)
 
@@ -45,7 +45,7 @@ export default class HeadsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const headControllerParams = params as IParams
+    const headControllerParams = params as Params
 
     await HeadControllersService.delete(headControllerParams.id)
 

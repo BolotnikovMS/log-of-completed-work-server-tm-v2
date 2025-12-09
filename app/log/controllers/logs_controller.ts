@@ -4,7 +4,7 @@ import { LogService } from '#log/services/log_service'
 import { queryParamsLogValidator } from '#log/validators/query_params_log'
 import LogPolicy from '#policies/log_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class LogsController {
@@ -26,7 +26,7 @@ export default class LogsController {
       return response.status(403).json({ message: accessErrorMessages.view })
     }
 
-    const logParams = params as IParams
+    const logParams = params as Params
     const data = await LogService.findById(logParams.id)
     const log = new LogInfoDto(data)
 

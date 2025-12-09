@@ -3,7 +3,7 @@ import FilesServices from '#file/services/file_upload_service'
 import { fileSubstationKeyValidator, fileUpdateNameValidator, uploadFileSubstationValidator } from '#file/validators/index'
 import FilePolicy from '#policies/file_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 import * as fs from 'node:fs'
@@ -60,7 +60,7 @@ export default class FilesController {
     }
 
     const validatedData = await request.validateUsing(fileUpdateNameValidator)
-    const fileParams = params as IParams
+    const fileParams = params as Params
 
     await FilesServices.updateNameFile(fileParams.id, validatedData)
 

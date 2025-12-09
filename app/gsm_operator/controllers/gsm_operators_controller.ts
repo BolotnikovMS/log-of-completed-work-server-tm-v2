@@ -4,7 +4,7 @@ import { createGsmOperatorValidator } from '#gsm_operator/validators/create_gsm_
 import { updateGsmOperatorValidator } from '#gsm_operator/validators/update_gsm_operator'
 import GsmOperatorPolicy from '#policies/gsm_operator_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import type { BaseQueryParams, Params } from '#shared/interfaces/index'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -19,7 +19,7 @@ export default class GsmOperatorsController {
   }
 
   async getGsmOperator({ params, response }: HttpContext) {
-    const gsmOperatorParams = params as IParams
+    const gsmOperatorParams = params as Params
     const gsmOperator = await GsmOperatorService.findById(gsmOperatorParams.id)
 
     return response.status(200).json(gsmOperator)
@@ -41,7 +41,7 @@ export default class GsmOperatorsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const gsmOperatorParams = params as IParams
+    const gsmOperatorParams = params as Params
     const validatedData = await request.validateUsing(updateGsmOperatorValidator)
     const updGsmOperator = await GsmOperatorService.update(gsmOperatorParams.id, validatedData)
 
@@ -53,7 +53,7 @@ export default class GsmOperatorsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const gsmOperatorParams = params as IParams
+    const gsmOperatorParams = params as Params
 
     await GsmOperatorService.delete(gsmOperatorParams.id)
 

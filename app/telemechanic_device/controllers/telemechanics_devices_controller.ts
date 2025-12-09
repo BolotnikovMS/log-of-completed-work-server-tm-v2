@@ -1,6 +1,6 @@
 import TelemechanicsDevicePolicy from '#policies/telemechanics_device_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/params'
+import type { Params } from '#shared/interfaces/params'
 import { baseQueryParamsValidator } from '#shared/validators/index'
 import { TelemechanicsDeviceInfoDto, TelemechanicsDeviceListDto } from '#telemechanic_device/dtos/index'
 import { TelemechanicsDeviceService } from '#telemechanic_device/services/telemechanics_device_service'
@@ -19,7 +19,7 @@ export default class TelemechanicsDevicesController {
 
   async getTelemechanicsDeviceById({ response, params }: HttpContext) {
     // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const telemechanicDeviceParam = params as IParams
+    const telemechanicDeviceParam = params as Params
     const telemechanicsDevice = await TelemechanicsDeviceService.findById(telemechanicDeviceParam.id)
 
     return response.status(200).json(telemechanicsDevice)
@@ -27,7 +27,7 @@ export default class TelemechanicsDevicesController {
 
   async getTelemechanicsDeviceInfoById({ response, params }: HttpContext) {
     // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const telemechanicDeviceParam = params as IParams
+    const telemechanicDeviceParam = params as Params
     const data = await TelemechanicsDeviceService.findInfoById(telemechanicDeviceParam.id)
     const telemechanicsDevice = new TelemechanicsDeviceInfoDto(data)
 
@@ -55,7 +55,7 @@ export default class TelemechanicsDevicesController {
     }
 
     // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const telemechanicDeviceParam = params as IParams
+    const telemechanicDeviceParam = params as Params
     const validatedData = await request.validateUsing(updateTelemechanicsDeviceValidator)
     const updTelemechanicsDevice = await TelemechanicsDeviceService.update(telemechanicDeviceParam.id, validatedData)
 
@@ -68,7 +68,7 @@ export default class TelemechanicsDevicesController {
     }
 
     // const { id }: TUrlParamId = await urlParamIdValidator.validate(params)
-    const telemechanicDeviceParam = params as IParams
+    const telemechanicDeviceParam = params as Params
 
     await TelemechanicsDeviceService.delete(telemechanicDeviceParam.id)
 

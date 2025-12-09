@@ -1,6 +1,6 @@
 import TypeWorkPolicy from '#policies/type_work_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/params'
+import type { Params } from '#shared/interfaces/params'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import { TypeWorkDto } from '#type_work/dtos/index'
@@ -35,7 +35,7 @@ export default class TypesWorksController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const typeWorkParams = params as IParams
+    const typeWorkParams = params as Params
     const validatedData = await request.validateUsing(updateTypeWorkValidator)
     const updTypeWork = await TypeWorkService.updateTypeWork(typeWorkParams.id, validatedData)
 
@@ -46,7 +46,7 @@ export default class TypesWorksController {
     if (await bouncer.with(TypeWorkPolicy).denies('delete')) {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
-    const typeWorkParams = params as IParams
+    const typeWorkParams = params as Params
 
     await TypeWorkService.deleteTypeWork(typeWorkParams.id)
 

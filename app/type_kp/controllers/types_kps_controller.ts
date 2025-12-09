@@ -1,6 +1,6 @@
 import TypeKpPolicy from '#policies/type_kp_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/params'
+import type { Params } from '#shared/interfaces/params'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import TypeKpDto from '#type_kp/dtos/type_kp'
@@ -34,7 +34,7 @@ export default class TypesKpsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const typeKpParams = params as IParams
+    const typeKpParams = params as Params
     const validatedData = await request.validateUsing(updateTypeKpValidator)
     const updTypeKp = await TypeKpService.update(typeKpParams.id, validatedData)
 
@@ -46,7 +46,7 @@ export default class TypesKpsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const typeKpParams = params as IParams
+    const typeKpParams = params as Params
 
     await TypeKpService.delete(typeKpParams.id)
 

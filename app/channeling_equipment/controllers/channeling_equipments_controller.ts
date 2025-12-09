@@ -4,7 +4,7 @@ import ChannelingEquipmentService from '#channeling_equipment/services/channelin
 import { createChannelingEquipmant, queryParamsChannelingEquipmentValidator, updateChannelingEquipmant } from '#channeling_equipment/validators/index'
 import ChannelingEquipmentPolicy from '#policies/channeling_equipment_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/params'
+import type { Params } from '#shared/interfaces/params'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelingEquipmentsController {
@@ -18,7 +18,7 @@ export default class ChannelingEquipmentsController {
   }
 
   async getEquipment({ params, response }: HttpContext) {
-    const equipmentParams = params as IParams
+    const equipmentParams = params as Params
     const data = await ChannelingEquipmentService.getChannelingEquipmentById(equipmentParams.id)
     const equipment = new ChannelingEquipmentDto(data)
 
@@ -41,7 +41,7 @@ export default class ChannelingEquipmentsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const equipmentParams = params as IParams
+    const equipmentParams = params as Params
     const validatedData = await request.validateUsing(updateChannelingEquipmant)
     const updEquipment = await ChannelingEquipmentService.update(equipmentParams.id, validatedData)
 
@@ -53,7 +53,7 @@ export default class ChannelingEquipmentsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const equipmentParams = params as IParams
+    const equipmentParams = params as Params
 
     await ChannelingEquipmentService.delete(equipmentParams.id)
 

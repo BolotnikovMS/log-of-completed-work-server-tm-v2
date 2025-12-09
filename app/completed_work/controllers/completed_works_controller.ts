@@ -6,7 +6,7 @@ import { createCompletedWorkValidator, queryParamsCompletedWorkValidator, update
 import CompletedWorkPolicy from '#policies/completed_work_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CompletedWorksController {
@@ -20,14 +20,14 @@ export default class CompletedWorksController {
   }
 
   async getCompletedWork({ params, response }: HttpContext) {
-    const completedWorkParams = params as IParams
+    const completedWorkParams = params as Params
     const completedWork = await CompletedWorkService.findById(completedWorkParams.id)
 
     return response.status(200).json(new CompletedWorkDto(completedWork))
   }
 
   async getCompletedWorkInfo({ params, response }: HttpContext) {
-    const completedWorkParams = params as IParams
+    const completedWorkParams = params as Params
     const completedWork = await CompletedWorkService.findInfoById(completedWorkParams.id)
 
     return response.status(200).json(new CompletedWorkInfoDto(completedWork))
@@ -45,7 +45,7 @@ export default class CompletedWorksController {
   }
 
   async update({ params, request, response, bouncer }: HttpContext) {
-    const completedWorkParams = params as IParams
+    const completedWorkParams = params as Params
     const completedWork = await CompletedWork.findOrFail(completedWorkParams.id)
 
     if (await bouncer.with(CompletedWorkPolicy).denies('edit', completedWork)) {
@@ -63,7 +63,7 @@ export default class CompletedWorksController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const completedWorkParams = params as IParams
+    const completedWorkParams = params as Params
 
     await CompletedWorkService.delete(completedWorkParams.id)
 

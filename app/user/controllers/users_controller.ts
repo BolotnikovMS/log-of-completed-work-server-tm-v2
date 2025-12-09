@@ -1,6 +1,6 @@
 import UserPolicy from '#policies/user_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import { UserBaseDto, UserFullDto, UserShortDto } from '#user/dtos/index'
 import type { UserQueryParams } from '#user/interfaces/index'
 import User from '#user/models/user'
@@ -36,7 +36,7 @@ export default class UsersController {
 
   async getUser({ response, params }: HttpContext) {
     try {
-      const userParams = params as IParams
+      const userParams = params as Params
       const user = await UserService.findById(userParams.id)
 
       return response.status(200).json(new UserFullDto(user))
@@ -96,7 +96,7 @@ export default class UsersController {
       return response.status(403).json({ message: accessErrorMessages.noRights })
     }
 
-    const userParams = params as IParams
+    const userParams = params as Params
     const validatedData = await request.validateUsing(blockUserAccountValidator)
 
     await UserService.blockAccount(userParams.id, validatedData)
@@ -109,7 +109,7 @@ export default class UsersController {
       return response.status(403).json({ message: accessErrorMessages.noRights })
     }
 
-    const { id } = params as IParams
+    const { id } = params as Params
     const user = await User.findOrFail(id)
 
     if (!user.active) return response.status(400).json({ message: 'УЗ пользователя заблокирована!' })

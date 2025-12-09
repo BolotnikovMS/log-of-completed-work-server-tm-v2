@@ -1,7 +1,7 @@
 import SubstationPolicy from '#policies/substation_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages, transliterate } from '#shared/helpers/index'
-import type { IParams } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import { SubstationDto, SubstationInfoDto, SubstationListDto, SubstationSelectOptionDto } from '#substation/dtos/index'
 import type { SubstationQueryParams } from '#substation/interfaces/index'
 import SubstationService from '#substation/services/substation_service'
@@ -26,14 +26,14 @@ export default class SubstationsController {
   }
 
   async getSubstation({ params, response }: HttpContext) {
-    const substationParam = params as IParams
+    const substationParam = params as Params
     const data = await SubstationService.findById(substationParam.id)
 
     return response.status(200).json(new SubstationDto(data))
   }
 
   async getSubstationInfo({ params, response }: HttpContext) {
-    const substationParam = params as IParams
+    const substationParam = params as Params
     const data = await SubstationService.getInfo(substationParam.id)
 
     return response.status(200).json({ ...new SubstationInfoDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
@@ -59,7 +59,7 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const substationParam = params as IParams
+    const substationParam = params as Params
     const validatedData = await request.validateUsing(updateSubstationValidator)
     const updSubstation = await SubstationService.update(substationParam.id, {
       ...validatedData,
@@ -74,7 +74,7 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const substationParam = params as IParams
+    const substationParam = params as Params
     const validatedData = await request.validateUsing(substationNoteValidator)
     const updSubstation = await SubstationService.updateNote(substationParam.id, validatedData)
 
@@ -87,7 +87,7 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const substationParam = params as IParams
+    const substationParam = params as Params
 
     await SubstationService.delete(substationParam.id)
 
@@ -119,7 +119,7 @@ export default class SubstationsController {
       return response.status(403).json({ message: accessErrorMessages.noRights })
     }
 
-    const substationParam = params as IParams
+    const substationParam = params as Params
     const validatedData = await request.validateUsing(substationKeyDefectValidator)
     const updSubstation = await SubstationService.updateKeyDefect(substationParam.id, validatedData)
 

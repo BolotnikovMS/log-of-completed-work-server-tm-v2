@@ -5,7 +5,7 @@ import { createChannelValidator, queryParamsChannelValidator, updateChannelValid
 import ChannelPolicy from '#policies/channel_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { IParams } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {
@@ -19,14 +19,14 @@ export default class ChannelsController {
   }
 
   async getChannel({ params, response }: HttpContext) {
-    const channelParams = params as IParams
+    const channelParams = params as Params
     const channel = new ChannelDto(await ChannelService.findById(channelParams.id))
 
     return response.status(200).json(channel)
   }
 
   async getChannelInfo({ params, response }: HttpContext) {
-    const channelParams = params as IParams
+    const channelParams = params as Params
     const channel = new ChannelInfoDto(await ChannelService.findById(channelParams.id))
 
     return response.status(200).json(channel)
@@ -51,7 +51,7 @@ export default class ChannelsController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const channelParams = params as IParams
+    const channelParams = params as Params
     const validatedData = await request.validateUsing(updateChannelValidator)
     const updChannel = await ChannelService.update(channelParams.id, validatedData)
 
@@ -63,7 +63,7 @@ export default class ChannelsController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const channelParams = params as IParams
+    const channelParams = params as Params
 
     await ChannelService.deleteChannel(channelParams.id)
 

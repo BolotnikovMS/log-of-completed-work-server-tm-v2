@@ -4,7 +4,7 @@ import { createObjectTypeValidator } from '#object_type/validators/create_object
 import { updateObjectTypeValidator } from '#object_type/validators/update_object_type'
 import ObjectTypePolicy from '#policies/object_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { BaseQueryParams, IParams } from '#shared/interfaces/index'
+import type { BaseQueryParams, Params } from '#shared/interfaces/index'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import type { HttpContext } from '@adonisjs/core/http'
 
@@ -19,7 +19,7 @@ export default class ObjectTypesController {
   }
 
   async getObjectType({ params, response }: HttpContext) {
-    const objectTypeParams = params as IParams
+    const objectTypeParams = params as Params
     const data = await ObjectTypeService.findById(objectTypeParams.id)
     const objectType = new ObjectTypeDto(data)
 
@@ -42,7 +42,7 @@ export default class ObjectTypesController {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
-    const objectTypeParams = params as IParams
+    const objectTypeParams = params as Params
     const validatedData = await request.validateUsing(updateObjectTypeValidator)
     const updObjectType = await ObjectTypeService.update(objectTypeParams.id, validatedData)
 
@@ -54,7 +54,7 @@ export default class ObjectTypesController {
       return response.status(403).json({ message: accessErrorMessages.delete })
     }
 
-    const objectTypeParams = params as IParams
+    const objectTypeParams = params as Params
 
     await ObjectTypeService.delete(objectTypeParams.id)
 
