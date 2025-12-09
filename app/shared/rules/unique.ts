@@ -2,7 +2,7 @@ import db from '@adonisjs/lucid/services/db'
 import vine from '@vinejs/vine'
 import type { FieldContext } from '@vinejs/vine/types'
 
-type TOptions = {
+type Options = {
   table: string
   column: string
   caseInsensitive?: boolean
@@ -11,12 +11,12 @@ type TOptions = {
 /**
  * Description
  * @param {unknown} value. Значение для проверки на уникальность в таблице бд.
- * @param {TOptions} options. Набор параметров. Название таблицы в бд, имя столбца, чувствительность к регистру.
+ * @param {Options} options. Набор параметров. Название таблицы в бд, имя столбца, чувствительность к регистру.
  * @param {FieldContext} field. Название поля.
  * @returns {any}
  */
 
-async function unique(value: unknown, options: TOptions, field: FieldContext) {
+async function unique(value: unknown, options: Options, field: FieldContext) {
   if (typeof value !== 'string' && typeof value !== 'number') {
     return
   }
