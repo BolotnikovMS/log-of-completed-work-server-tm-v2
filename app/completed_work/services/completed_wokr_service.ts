@@ -1,6 +1,6 @@
-import type { CreateCompletedWork, UpdateCompletedWork } from '#completed_work/interfaces/completed_work'
 import type { CompletedWorkParams } from '#completed_work/interfaces/index'
 import CompletedWork from '#completed_work/models/completed_work'
+import type { CreateCompletedWork, UpdateCompletedWork } from '#completed_work/types/completed_work'
 import { OrderByEnums } from '#shared/enums/sort'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 

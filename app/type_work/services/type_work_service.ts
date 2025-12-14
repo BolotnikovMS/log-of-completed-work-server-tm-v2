@@ -1,6 +1,6 @@
 import type { BaseQueryParams } from '#shared/interfaces/index'
-import type { CreateTypeWork, UpdateTypeWort } from '#type_work/interfaces/type_work'
 import TypeWork from '#type_work/models/type_work'
+import type { CreateTypeWork, UpdateTypeWort } from '#type_work/types/type_work'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class TypeWorkService {

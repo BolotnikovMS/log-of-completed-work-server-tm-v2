@@ -1,6 +1,6 @@
-import type { CreateSubstation, SubstationQueryParams, UpdateNoteSubstation, UpdateSubstation } from '#substation/interfaces/index'
-import type { KeyDefectSubstation } from '#substation/interfaces/substation'
+import type { SubstationQueryParams } from '#substation/interfaces/index'
 import Substation from '#substation/models/substation'
+import type { CreateSubstation, KeyDefectSubstation, UpdateNoteSubstation, UpdateSubstation } from '#substation/types/substation'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class SubstationService {

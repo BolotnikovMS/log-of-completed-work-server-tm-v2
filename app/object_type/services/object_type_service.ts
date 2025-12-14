@@ -1,5 +1,5 @@
-import type { CreateTypeObject, UpdateTypeObject } from '#object_type/interfaces/object_type'
 import ObjectType from '#object_type/models/object_type'
+import type { CreateTypeObject, UpdateTypeObject } from '#object_type/types/object_type'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 

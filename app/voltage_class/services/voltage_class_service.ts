@@ -1,6 +1,6 @@
 import type { BaseQueryParams } from '#shared/interfaces/index'
-import type { CreateVoltageClass, UpdateVoltageClass } from '#voltage_class/interfaces/voltage_class'
 import VoltageClass from '#voltage_class/models/voltage_class'
+import type { CreateVoltageClass, UpdateVoltageClass } from '#voltage_class/types/voltage_class'
 
 export default class VoltageClassService {
   static async getVoltageClasses(filters: BaseQueryParams) {

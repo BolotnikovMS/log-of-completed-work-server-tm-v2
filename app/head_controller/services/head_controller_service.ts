@@ -1,5 +1,5 @@
-import type { CreateHeadController, UpdateHeadController } from '#head_controller/interfaces/head_controller'
 import HeadController from '#head_controller/models/head_controller'
+import type { CreateHeadController, UpdateHeadController } from '#head_controller/types/head_controller'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 
 export class HeadControllersService {

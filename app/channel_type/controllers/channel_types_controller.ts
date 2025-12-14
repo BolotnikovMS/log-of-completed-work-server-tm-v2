@@ -1,7 +1,6 @@
 import ChannelTypeDto from '#channel_type/dtos/channel_type'
 import ChannelTypeService from '#channel_type/services/channel_type_service'
-import { createChannelTypeValidator } from '#channel_type/validators/create_channel_type'
-import { updateChannelTypeValidator } from '#channel_type/validators/index'
+import { createChannelTypeValidator, updateChannelTypeValidator } from '#channel_type/validators/index'
 import ChannelTypePolicy from '#policies/channel_type_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { BaseQueryParams, Params } from '#shared/interfaces/index'

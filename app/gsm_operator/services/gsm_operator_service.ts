@@ -1,5 +1,5 @@
-import type { CreateGsmOperator, UpdateGsmOperator } from '#gsm_operator/interfaces/gsm_operator'
 import GsmOperator from '#gsm_operator/models/gsm_operator'
+import type { CreateGsmOperator, UpdateGsmOperator } from '#gsm_operator/types/gsm_operator'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 
 export default class GsmOperatorService {

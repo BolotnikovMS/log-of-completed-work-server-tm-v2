@@ -1,6 +1,6 @@
-import type { CreateChannelingEquipment, UpdateChannelingEquipment } from '#channeling_equipment/interfaces/channeling_equipment'
 import type { ChannelEquipQueryParams } from '#channeling_equipment/interfaces/index'
 import ChannelingEquipment from '#channeling_equipment/models/channeling_equipment'
+import type { CreateChannelingEquipment, UpdateChannelingEquipment } from '#channeling_equipment/types/channeling_equipment'
 
 export default class ChannelingEquipmentService {
   static async getChannelingEquipments(filters: ChannelEquipQueryParams) {

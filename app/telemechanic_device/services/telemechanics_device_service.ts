@@ -1,6 +1,6 @@
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
-import type { CreateTelemechanicsDevice, UpdateTelemechanicsDevice } from '#telemechanic_device/interfaces/telemechanics_device'
 import TelemechanicsDevice from '#telemechanic_device/models/telemechanics_device'
+import type { CreateTelemechanicsDevice, UpdateTelemechanicsDevice } from '#telemechanic_device/types/telemechanics_device'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export class TelemechanicsDeviceService {

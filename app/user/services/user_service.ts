@@ -1,5 +1,6 @@
-import type { BlockUserAccount, ChangeUserPassword, ChangeUserRole, CreateUser, UserQueryParams } from '#user/interfaces/index'
+import type { UserQueryParams } from '#user/interfaces/index'
 import User from '#user/models/user'
+import type { BlockUserAccount, ChangeUserPassword, ChangeUserRole, CreateUser } from '#user/types/user'
 
 export default class UserService {
   static async getUsers(filters?: UserQueryParams) {

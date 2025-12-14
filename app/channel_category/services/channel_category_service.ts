@@ -1,5 +1,5 @@
-import type { CreateChannelCategory, UpdateChannelCategory } from '#channel_category/interfaces/channel_category'
 import ChannelCategory from '#channel_category/models/channel_category'
+import type { CreateChannelCategory, UpdateChannelCategory } from '#channel_category/types/channel_category'
 import type { BaseQueryParams } from '#shared/interfaces/index'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 

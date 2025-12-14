@@ -1,5 +1,5 @@
-import type { CreateDistrict, UpdateDistrict } from '#district/interfaces/districts'
 import District from '#district/models/district'
+import type { CreateDistrict, UpdateDistrict } from '#district/types/district'
 import type { BaseQueryParams } from '#shared/interfaces/query_params'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 

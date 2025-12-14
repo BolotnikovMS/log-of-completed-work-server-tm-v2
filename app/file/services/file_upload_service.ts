@@ -1,7 +1,5 @@
-import type { UpdFile } from '#file/interfaces/index'
 import File from '#file/models/file'
-import type { FileSubstation, FileSubstationKey } from '#file/types/index'
-// import { fileSubstationKeyValidator } from '#file/validators/files'
+import type { FileSubstation, FileSubstationKey, UpdFileName } from '#file/types/file'
 import { getFileNameWithoutExtension } from '#shared/helpers/get_file_name_without_extension'
 import type { CSVSubstationKeyRow, ErrorParseCSVSubstationKey, ResultParseCSVSubstationKey } from '#substation/interfaces/index'
 import { csvDataSubstationKeyValidator } from '#substation/validators/substation_keys_defect_file'
@@ -189,7 +187,7 @@ export default class FilesServices {
       await unlink(filePath)
     }
   }
-  static async updateNameFile(id: number, data: UpdFile): Promise<File> {
+  static async updateNameFile(id: number, data: UpdFileName): Promise<File> {
     const file = await File.findOrFail(id)
     const updFile = await file.merge(data).save()
 

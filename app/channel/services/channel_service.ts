@@ -1,5 +1,6 @@
-import type { ChannelQueryParams, CreateChannel, UpdateChannel } from '#channel/interfaces/index'
+import type { ChannelQueryParams } from '#channel/interfaces/index'
 import Channel from '#channel/models/channel'
+import type { CreateChannel, UpdateChannel } from '#channel/types/channel'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ChannelService {

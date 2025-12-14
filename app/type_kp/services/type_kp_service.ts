@@ -1,6 +1,6 @@
 import type { BaseQueryParams } from '#shared/interfaces/index'
-import type { CreateTypeKp, UpdateTypeKp } from '#type_kp/interfaces/type_kp'
 import TypeKp from '#type_kp/models/type_kp'
+import type { CreateTypeKp, UpdateTypeKp } from '#type_kp/types/type_kp'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class TypeKpService {
