@@ -22,7 +22,7 @@ export default class SubstationsController {
     const data = await SubstationService.getSubstations()
     const substations = SubstationSelectOptionDto.fromPaginator(data)
 
-    return response.status(200).json(substations)
+    return response.status(200).json(substations.data)
   }
 
   async getSubstation({ params, response }: HttpContext) {
