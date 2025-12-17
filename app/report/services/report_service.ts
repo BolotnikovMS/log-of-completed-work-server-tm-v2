@@ -2,8 +2,8 @@ import { ChannelDto } from '#channel/dtos/index'
 import type { ChannelQueryParams } from '#channel/interfaces/query_params_channels'
 import ChannelService from '#channel/services/channel_service'
 import { CompletedWorkInfoDto } from '#completed_work/dtos/index'
-import type { CompletedWorkParams } from '#completed_work/interfaces/query_params_completed_works'
-import CompletedWorkService from '#completed_work/services/completed_wokr_service'
+import CompletedWorkService from '#completed_work/services/completed_work_service'
+import type { QueryParamsCompletedWork } from '#completed_work/types/query_params_completed_work'
 import { SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#report/dtos/index'
 import type { SubstationQueryParams } from '#substation/interfaces/qury_params_substations'
 import SubstationService from '#substation/services/substation_service'
@@ -42,7 +42,7 @@ export default class ReportService {
     }
   }
 
-  static async createExcelCompletedWorks(filters: CompletedWorkParams): Promise<ExcelJS.Buffer> {
+  static async createExcelCompletedWorks(filters: QueryParamsCompletedWork): Promise<ExcelJS.Buffer> {
     const works = await CompletedWorkService.getCompletedWorks(filters)
     const transformData = CompletedWorkInfoDto.fromPaginator(works)
     const workbook = new ExcelJS.Workbook()
