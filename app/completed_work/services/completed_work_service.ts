@@ -8,8 +8,8 @@ export default class CompletedWorkService {
     const {
       sort = 'dateCompletion',
       order = 'desc',
-      page,
-      limit,
+      page = 1,
+      limit = 30,
       substation,
       dateStart,
       dateEnd,
