@@ -1,3 +1,4 @@
+import { numberOrNumbersRule } from '#shared/rules/number_or_numbers'
 import { booleanCheck, dateText, noStrictNumberCheck } from '#shared/validators/fields_check'
 import { baseQueryParamsSchema } from '#shared/validators/query_param'
 import vine from '@vinejs/vine'
@@ -8,7 +9,7 @@ const completedWorkQueryParamsSchema = {
   dateStart: dateText.optional(),
   dateEnd: dateText.optional(),
   executor: noStrictNumberCheck.optional(),
-  typeWork: vine.array(noStrictNumberCheck).optional(),
+  typeWork: vine.any().optional().use(numberOrNumbersRule({})),
   inControl: booleanCheck.optional()
 }
 
