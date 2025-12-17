@@ -1,7 +1,6 @@
 import { CompletedWorkDto, CompletedWorkInfoDto, CompletedWorkListDto } from '#completed_work/dtos/index'
-import type { CompletedWorkParams } from '#completed_work/interfaces/index'
 import CompletedWork from '#completed_work/models/completed_work'
-import CompletedWorkService from '#completed_work/services/completed_wokr_service'
+import CompletedWorkService from '#completed_work/services/completed_work_service'
 import { createCompletedWorkValidator, queryParamsCompletedWorkValidator, updateCompletedWorkValidator } from '#completed_work/validators/index'
 import CompletedWorkPolicy from '#policies/completed_work_policy'
 import ReportService from '#report/services/report_service'
@@ -11,7 +10,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class CompletedWorksController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as CompletedWorkParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsCompletedWorkValidator.validate(filters)
     const data = await CompletedWorkService.getCompletedWorks(validatedFilters)
     const works = CompletedWorkListDto.fromPaginator(data)
@@ -71,7 +70,7 @@ export default class CompletedWorksController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const filters = request.qs() as CompletedWorkParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsCompletedWorkValidator.validate(filters)
     const buffer = await ReportService.createExcelCompletedWorks(validatedFilters)
 
