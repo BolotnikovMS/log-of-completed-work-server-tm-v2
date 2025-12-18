@@ -5,8 +5,8 @@ import { CompletedWorkInfoDto } from '#completed_work/dtos/index'
 import CompletedWorkService from '#completed_work/services/completed_work_service'
 import type { QueryParamsCompletedWork } from '#completed_work/types/query_params_completed_work'
 import { SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#report/dtos/index'
-import type { SubstationQueryParams } from '#substation/interfaces/qury_params_substations'
 import SubstationService from '#substation/services/substation_service'
+import type { QueryParamsSubstation } from '#substation/types/qury_params_substations'
 import ExcelJS, { type Cell } from 'exceljs'
 
 export default class ReportService {
@@ -79,7 +79,7 @@ export default class ReportService {
     return buffer
   }
 
-  static async createExcelSubstations(filters: SubstationQueryParams): Promise<ExcelJS.Buffer> {
+  static async createExcelSubstations(filters: QueryParamsSubstation): Promise<ExcelJS.Buffer> {
     const substations = await SubstationService.getSubstations(filters)
     const transformData = SubstationsReportDto.fromPaginator(substations)
     const workbook = new ExcelJS.Workbook()
@@ -138,7 +138,7 @@ export default class ReportService {
     return buffer
   }
 
-  static async createExcelSubstationsTelemechanicsDevices(filters: SubstationQueryParams): Promise<ExcelJS.Buffer> {
+  static async createExcelSubstationsTelemechanicsDevices(filters: QueryParamsSubstation): Promise<ExcelJS.Buffer> {
     const substations = await SubstationService.getSubstations(filters)
     const transformData = SubstationsTelemechanicsDevicesReportDto.fromPaginator(substations)
     const workbook = new ExcelJS.Workbook()

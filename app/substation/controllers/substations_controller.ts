@@ -3,14 +3,13 @@ import ReportService from '#report/services/report_service'
 import { accessErrorMessages, transliterate } from '#shared/helpers/index'
 import type { Params } from '#shared/interfaces/index'
 import { SubstationDto, SubstationInfoDto, SubstationListDto, SubstationSelectOptionDto } from '#substation/dtos/index'
-import type { SubstationQueryParams } from '#substation/interfaces/index'
 import SubstationService from '#substation/services/substation_service'
 import { createSubstationValidator, queryParamsSubstationsValidator, substationKeyDefectValidator, substationNoteValidator, updateSubstationValidator } from '#substation/validators/index'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SubstationsController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as SubstationQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsSubstationsValidator.validate(filters)
     const data = await SubstationService.getSubstations(validatedFilters)
     const substations = SubstationListDto.fromPaginator(data)
@@ -95,7 +94,7 @@ export default class SubstationsController {
   }
 
   async downloadSubstationsExcel({ request, response }: HttpContext) {
-    const filters = request.qs() as SubstationQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsSubstationsValidator.validate(filters)
     const buffer = await ReportService.createExcelSubstations(validatedFilters)
 
@@ -105,7 +104,7 @@ export default class SubstationsController {
   }
 
   async downloadSubstationsSubstationsTelemechanicsDevicesExcel({ request, response }: HttpContext) {
-    const filters = request.qs() as SubstationQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsSubstationsValidator.validate(filters)
     const buffer = await ReportService.createExcelSubstationsTelemechanicsDevices(validatedFilters)
 

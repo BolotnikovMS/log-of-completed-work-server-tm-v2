@@ -1,11 +1,10 @@
-import type { SubstationQueryParams } from '#substation/interfaces/index'
 import Substation from '#substation/models/substation'
-import type { CreateSubstation, KeyDefectSubstation, UpdateNoteSubstation, UpdateSubstation } from '#substation/types/substation'
+import type { CreateSubstation, KeyDefectSubstation, QueryParamsSubstation, UpdateNoteSubstation, UpdateSubstation } from '#substation/types/index'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class SubstationService {
   static async getSubstations(
-    filters?: SubstationQueryParams,
+    filters?: QueryParamsSubstation,
     districtId?: number,
   ): Promise<ModelPaginatorContract<Substation>> {
     // const { sort = 'name', order = 'asc', page, limit, search, district, channelType, channelCategory, objectType, typeKp, headController } = filters
