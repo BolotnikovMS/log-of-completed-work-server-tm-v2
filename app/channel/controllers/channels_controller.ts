@@ -1,5 +1,4 @@
 import { ChannelDto, ChannelInfoDto, ChannelListDto } from '#channel/dtos/index'
-import type { ChannelQueryParams } from '#channel/interfaces/query_params_channels'
 import ChannelService from '#channel/services/channel_service'
 import { createChannelValidator, queryParamsChannelValidator, updateChannelValidator } from '#channel/validators/index'
 import ChannelPolicy from '#policies/channel_policy'
@@ -10,7 +9,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelsController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as ChannelQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsChannelValidator.validate(filters)
     const data = await ChannelService.getChannels(validatedFilters)
     const channels = ChannelListDto.fromPaginator(data)
@@ -71,7 +70,7 @@ export default class ChannelsController {
   }
 
   async downloadExcel({ request, response }: HttpContext) {
-    const filters = request.qs() as ChannelQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsChannelValidator.validate(filters)
     const buffer = await ReportService.createExcelChannels(validatedFilters)
 

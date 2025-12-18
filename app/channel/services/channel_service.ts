@@ -1,10 +1,9 @@
-import type { ChannelQueryParams } from '#channel/interfaces/index'
 import Channel from '#channel/models/channel'
-import type { CreateChannel, UpdateChannel } from '#channel/types/channel'
+import type { CreateChannel, QueryParamsChannel, UpdateChannel } from '#channel/types/index'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class ChannelService {
-  static async getChannels(filters: ChannelQueryParams): Promise<ModelPaginatorContract<Channel>> {
+  static async getChannels(filters: QueryParamsChannel): Promise<ModelPaginatorContract<Channel>> {
     const { sort = 'substationId', order = 'asc', page, limit, substation, channelType, channelCategory } = filters
     const channels = await Channel.query()
       .if(sort && order, (query) => query.orderBy(sort, order))

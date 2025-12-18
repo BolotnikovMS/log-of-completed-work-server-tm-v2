@@ -1,6 +1,6 @@
 import { ChannelDto } from '#channel/dtos/index'
-import type { ChannelQueryParams } from '#channel/interfaces/query_params_channels'
 import ChannelService from '#channel/services/channel_service'
+import type { QueryParamsChannel } from '#channel/types/query_params_channels'
 import { CompletedWorkInfoDto } from '#completed_work/dtos/index'
 import CompletedWorkService from '#completed_work/services/completed_work_service'
 import type { QueryParamsCompletedWork } from '#completed_work/types/query_params_completed_work'
@@ -198,7 +198,7 @@ export default class ReportService {
     return buffer
   }
 
-  static async createExcelChannels(filters: ChannelQueryParams): Promise<ExcelJS.Buffer> {
+  static async createExcelChannels(filters: QueryParamsChannel): Promise<ExcelJS.Buffer> {
     const channels = await ChannelService.getChannels(filters)
     const transformData = ChannelDto.fromPaginator(channels)
     const workbook = new ExcelJS.Workbook()
