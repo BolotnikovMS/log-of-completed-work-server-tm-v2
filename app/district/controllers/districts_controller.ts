@@ -4,15 +4,16 @@ import DistrictService from '#district/services/district_service'
 import { createDistrictValidator, updateDistrictValidator } from '#district/validators/index'
 import DistrictPolicy from '#policies/district_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
-import type { BaseQueryParams, Params } from '#shared/interfaces/index'
+import type { Params } from '#shared/interfaces/index'
 import { baseQueryParamsValidator } from '#shared/validators/query_param'
 import SubstationListDto from '#substation/dtos/substation_lists'
 import SubstationService from '#substation/services/substation_service'
+import { queryParamsSubstationsValidator } from '#substation/validators/query_params_substations'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class DistrictsController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as BaseQueryParams
+    const filters = request.qs()
     const validatedFilters = await baseQueryParamsValidator.validate(filters)
     const data = await DistrictService.getDistricts(validatedFilters)
     const districts = DistrictShortDto.fromPaginator(data)
@@ -22,8 +23,8 @@ export default class DistrictsController {
 
   async getSubstations({ params, request, response }: HttpContext) {
     const district = await District.findOrFail(params.id)
-    const filters = request.qs() as BaseQueryParams
-    const validatedFilters = await baseQueryParamsValidator.validate(filters)
+    const filters = request.qs()
+    const validatedFilters = await queryParamsSubstationsValidator.validate(filters)
     const data = await SubstationService.getSubstations(validatedFilters, district.id)
     const substations = SubstationListDto.fromPaginator(data)
 
