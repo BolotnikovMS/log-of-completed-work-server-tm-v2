@@ -1,5 +1,4 @@
 import ChannelingEquipmentDto from '#channeling_equipment/dtos/channeling_equipment'
-import type { ChannelEquipQueryParams } from '#channeling_equipment/interfaces/index'
 import ChannelingEquipmentService from '#channeling_equipment/services/channeling_equipment_service'
 import { createChannelingEquipmant, queryParamsChannelingEquipmentValidator, updateChannelingEquipmant } from '#channeling_equipment/validators/index'
 import ChannelingEquipmentPolicy from '#policies/channeling_equipment_policy'
@@ -9,7 +8,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ChannelingEquipmentsController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as ChannelEquipQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsChannelingEquipmentValidator.validate(filters)
     const data = await ChannelingEquipmentService.getChannelingEquipments(validatedFilters)
     const channelingEquipments = ChannelingEquipmentDto.fromPaginator(data)

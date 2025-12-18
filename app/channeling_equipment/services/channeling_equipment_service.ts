@@ -1,9 +1,8 @@
-import type { ChannelEquipQueryParams } from '#channeling_equipment/interfaces/index'
 import ChannelingEquipment from '#channeling_equipment/models/channeling_equipment'
-import type { CreateChannelingEquipment, UpdateChannelingEquipment } from '#channeling_equipment/types/channeling_equipment'
+import type { CreateChannelingEquipment, QueryParamsChannelEquip, UpdateChannelingEquipment } from '#channeling_equipment/types/index'
 
 export default class ChannelingEquipmentService {
-  static async getChannelingEquipments(filters: ChannelEquipQueryParams) {
+  static async getChannelingEquipments(filters: QueryParamsChannelEquip) {
     const { page, limit, channelType } = filters
     const channelingEquipments = await ChannelingEquipment.query()
       .if(channelType, (query) => query.where('channelTypeId', '=', channelType!))
