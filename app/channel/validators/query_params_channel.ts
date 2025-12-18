@@ -4,7 +4,7 @@ import vine from '@vinejs/vine'
 
 const channelQueryParamsSchema = {
   ...baseQueryParamsSchema,
-  substations: noStrictNumberCheck.optional(),
+  substation: noStrictNumberCheck.optional(),
   channelType: noStrictNumberCheck.optional(),
   channelCategory: noStrictNumberCheck.optional(),
 }
