@@ -1,6 +1,6 @@
 import { LogInfoDto, LogShortDto } from '#log/dtos/index'
-import type { QueryParamsLog } from '#log/interfaces/index'
 import { LogService } from '#log/services/log_service'
+import type { QueryParamsLog } from '#log/types/index'
 import { queryParamsLogValidator } from '#log/validators/query_params_log'
 import LogPolicy from '#policies/log_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'

@@ -1,5 +1,6 @@
-import type { CreateLogRecord, QueryParamsLog } from '#log/interfaces/index'
+import type { CreateLogRecord } from '#log/interfaces/index'
 import Log from '#log/models/log'
+import type { QueryParamsLog } from '#log/types/index'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export class LogService {
