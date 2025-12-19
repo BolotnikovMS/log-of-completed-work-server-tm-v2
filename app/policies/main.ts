@@ -13,6 +13,7 @@
 */
 
 export const policies = {
+  TelemechanicsDevicePolicy: () => import('#policies/telemechanics_device_policy'),
   LogPolicy: () => import('#policies/log_policy'),
   FilePolicy: () => import('#policies/file_policy'),
   ObjectTypePolicy: () => import('#policies/object_type_policy'),

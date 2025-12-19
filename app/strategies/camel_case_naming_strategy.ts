@@ -1,6 +1,5 @@
-import { LucidModel, NamingStrategyContract } from '@adonisjs/lucid/types/model'
-
-import { ModelRelations } from '@adonisjs/lucid/types/relations'
+import type { LucidModel, NamingStrategyContract } from '@adonisjs/lucid/types/model'
+import type { ModelRelations } from '@adonisjs/lucid/types/relations'
 import string from '@poppinss/utils/string'
 
 /**

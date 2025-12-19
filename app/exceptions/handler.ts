@@ -1,5 +1,5 @@
-import { logGeneration } from '#helpers/logs'
-import { LogService } from '#services/log_service'
+import { LogService } from '#log/services/log_service'
+import { logGeneration } from '#shared/helpers/logs'
 import { ExceptionHandler, HttpContext } from '@adonisjs/core/http'
 import app from '@adonisjs/core/services/app'
 

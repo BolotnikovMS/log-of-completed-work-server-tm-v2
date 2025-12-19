@@ -1,4 +1,4 @@
-import DashboardController from "#controllers/dashboard_controller"
+import DashboardController from "#dashboard/controllers/dashboard_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 

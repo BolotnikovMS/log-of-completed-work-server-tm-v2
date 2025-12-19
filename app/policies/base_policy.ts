@@ -1,5 +1,5 @@
-import { RolesEnum } from '#enums/roles'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import User from '#user/models/user'
 import { BasePolicy as BouncerBasePolicy } from '@adonisjs/bouncer'
 import logger from '@adonisjs/core/services/logger'
 

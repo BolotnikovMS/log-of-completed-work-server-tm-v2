@@ -1,4 +1,4 @@
-import ChannelingEquipmentsController from "#controllers/channeling_equipments_controller"
+import ChannelingEquipmentsController from "#channeling_equipment/controllers/channeling_equipments_controller"
 import { middleware } from "#start/kernel"
 import router from "@adonisjs/core/services/router"
 
