@@ -1,4 +1,4 @@
-import { randomStr } from '#helpers/random_str'
+import { randomStr } from '#shared/helpers/random_str'
 import { test } from '@japa/runner'
 
 test.group('Helpers random string', () => {

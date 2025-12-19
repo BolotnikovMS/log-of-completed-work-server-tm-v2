@@ -1,4 +1,4 @@
-import { transliterate } from '#helpers/transliterate'
+import { transliterate } from '#shared/helpers/transliterate'
 import { test } from '@japa/runner'
 
 test.group('Helpers transliterate', () => {

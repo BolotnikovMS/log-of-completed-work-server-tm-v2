@@ -1,4 +1,4 @@
-import { replacementEscapeSymbols } from '#helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
 import { test } from '@japa/runner'
 
 test.group('Helpers replacement escape symbols', () => {
