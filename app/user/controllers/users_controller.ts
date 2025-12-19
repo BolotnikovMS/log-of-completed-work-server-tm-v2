@@ -2,7 +2,6 @@ import UserPolicy from '#policies/user_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { Params } from '#shared/interfaces/index'
 import { UserBaseDto, UserFullDto, UserShortDto } from '#user/dtos/index'
-import type { UserQueryParams } from '#user/interfaces/index'
 import User from '#user/models/user'
 import RoleService from '#user/services/role_service'
 import UserService from '#user/services/user_service'
@@ -11,7 +10,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class UsersController {
   async index({ request, response }: HttpContext) {
-    const filters = request.qs() as UserQueryParams
+    const filters = request.qs()
     const validatedFilters = await queryParamsUsersValidator.validate(filters)
     const data = await UserService.getUsers(validatedFilters)
     const users = UserBaseDto.fromPaginator(data)

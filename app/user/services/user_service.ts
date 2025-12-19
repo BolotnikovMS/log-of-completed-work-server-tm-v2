@@ -1,11 +1,10 @@
-import type { UserQueryParams } from '#user/interfaces/index'
 import User from '#user/models/user'
-import type { BlockUserAccount, ChangeUserPassword, ChangeUserRole, CreateUser } from '#user/types/user'
+import type { BlockUserAccount, ChangeUserPassword, ChangeUserRole, CreateUser, QueryParamsUser } from '#user/types/index'
 
 export default class UserService {
-  static async getUsers(filters?: UserQueryParams) {
+  static async getUsers(filters?: QueryParamsUser) {
     // const { active, cleanUser, page, limit } = filters
-    console.log(Boolean(filters?.active))
+    // console.log(Boolean(filters?.active))
     const users = await User.query()
       .if(Boolean(filters?.active), (query) => query.where('active', '=', 1))
       .if(Boolean(filters?.cleanUser), (query) => {
