@@ -1,7 +1,7 @@
-import { RolesEnum } from '#enums/roles'
-import { accessErrorMessages } from '#helpers/access_error_messages'
-import TypeWork from '#models/type_work'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import TypeWork from '#type_work/models/type_work'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -19,7 +19,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
   }
   const incorrectData = [
     { name: 'T', errorMessages: { errors: [{ message: 'Минимальная длина 2 символа.' }] } },
-    { name: 'a'.repeat(241), errorMessages: { errors: [{ message: 'Максимальная длина 240 символов.' }] } },
+    { name: 'a'.repeat(51), errorMessages: { errors: [{ message: 'Максимальная длина 51 символ.' }] } },
     { name: '', errorMessages: { errors: [{ message: 'Поле является обязательным.' }] } },
     { name: '     ', errorMessages: { errors: [{ message: 'Минимальная длина 2 символа.' }] } }
   ]
@@ -54,7 +54,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
   })
 
   test('Добавление новой записи с ролью Moderator и некорректными значениями.')
-    // min - 2, max - 240
+    // min - 2, max - 50
     .with(incorrectData)
     .run(async ({ client, assert }, testItem) => {
       const resp = await client
@@ -70,7 +70,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
     })
 
   test('Добавление новой записи с ролью Admin и некорректными значениями.')
-    // min - 2, max - 240
+    // min - 2, max - 50
     .with(incorrectData)
     .run(async ({ client, assert }, testItem) => {
       const resp = await client
@@ -86,7 +86,7 @@ test.group('⛔️ Негативные тесты. Тесты для прове
     })
 
   test('Удаление записи с ролью User или Moderator.')
-    .with(() =>  [user, moderator])
+    .with(() => [user, moderator])
     .run(async ({ client, assert }, userItem) => {
       if (recordTypeWork) {
         const resp = await client

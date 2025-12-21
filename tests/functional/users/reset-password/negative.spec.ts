@@ -1,13 +1,13 @@
-import { RolesEnum } from '#enums/roles'
-import { accessErrorMessages } from '#helpers/access_error_messages'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
 test.group('⛔️ Негативные тесты. Тесты для проверки функционала "Сброса пароля пользователя".', group => {
   const userId = 3
   const urlApi = `/api/v1.0/users/reset-password/${userId}`
-    const incorrectUrlApi = `/api/v1.0/users/reset-password/99999999`
+  const incorrectUrlApi = `/api/v1.0/users/reset-password/99999999`
   let admin: User
   let moderator: User
   let user: User

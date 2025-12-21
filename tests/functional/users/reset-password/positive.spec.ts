@@ -1,5 +1,5 @@
-import { RolesEnum } from '#enums/roles'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 

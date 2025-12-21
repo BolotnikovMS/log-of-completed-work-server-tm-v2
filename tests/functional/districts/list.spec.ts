@@ -1,5 +1,5 @@
-import { accessErrorMessages } from '#helpers/access_error_messages'
-import User from '#models/user'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 

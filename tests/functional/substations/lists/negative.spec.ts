@@ -1,6 +1,6 @@
-import { RolesEnum } from '#enums/roles'
-import { accessErrorMessages } from '#helpers/access_error_messages'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import { accessErrorMessages } from '#shared/helpers/access_error_messages'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -69,12 +69,12 @@ test.group('⛔️ Негативные тесты. Тесты для прове
 
   test('{$i} - Обновление ключа некорректным значением - "{keyDefectSubstation}".')
     .with(incorrectData)
-    .run(async ({ client, assert}, item) => {
+    .run(async ({ client, assert }, item) => {
       const resp = await client
-      .patch(urlApi)
-      .json(item)
-      .withGuard('api')
-      .loginAs(admin)
+        .patch(urlApi)
+        .json(item)
+        .withGuard('api')
+        .loginAs(admin)
 
       resp.assertStatus(422)
       resp.assertHeader('content-type', 'application/json; charset=utf-8')

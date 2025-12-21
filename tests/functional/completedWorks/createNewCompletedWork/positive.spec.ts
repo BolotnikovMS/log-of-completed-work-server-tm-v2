@@ -1,9 +1,9 @@
-import { RolesEnum } from '#enums/roles'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import db from '@adonisjs/lucid/services/db'
 import { test } from '@japa/runner'
-import { TDatasetsCreateWork } from '../types.js'
+import type { TDatasetsCreateWork } from '../types.js'
 
 test.group('✅ Позитивные тесты. Тесты для проверки функционала "Добавление выполненной работы".', group => {
   group.setup(async () => {
@@ -17,7 +17,7 @@ test.group('✅ Позитивные тесты. Тесты для провер�
       {
         testData: 1,
         expectedProperties: ['id', 'userId', 'substationId', 'description', 'note', 'workProducerId', 'typeWorkId', 'dateCompletion', 'inControl', 'createdAt', 'updatedAt'],
-        payload : {
+        payload: {
           substationId: substationId,
           description: "Test api new work",
           note: "Test api note",

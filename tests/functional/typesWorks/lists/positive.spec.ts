@@ -1,6 +1,6 @@
-import { RolesEnum } from '#enums/roles'
-import TypeWork from '#models/type_work'
-import User from '#models/user'
+import { RolesEnum } from '#shared/enums/roles'
+import TypeWork from '#type_work/models/type_work'
+import User from '#user/models/user'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { test } from '@japa/runner'
 
@@ -150,6 +150,6 @@ test.group('✅ Позитивные тесты. Тесты для провер�
       .withGuard('api')
       .loginAs(admin)
 
-      respDeleteRecord.assertStatus(204)
+    respDeleteRecord.assertStatus(204)
   })
 })
