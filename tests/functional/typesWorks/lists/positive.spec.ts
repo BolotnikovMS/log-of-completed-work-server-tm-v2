@@ -16,14 +16,14 @@ test.group('✅ Позитивные тесты. Тесты для провер�
   const borderlineData = [
     { name: 'Te' },
     { name: 'Tes' },
-    { name: 'a'.repeat(240) },
-    { name: 'a'.repeat(239) }
+    { name: 'a'.repeat(50) },
+    { name: 'a'.repeat(49) }
   ]
   const updateBorderlineData = [
     { name: 'Up' },
     { name: 'Upt' },
-    { name: 'u'.repeat(240) },
-    { name: 'u'.repeat(239) }
+    { name: 'u'.repeat(50) },
+    { name: 'u'.repeat(49) }
   ]
 
   group.setup(async () => {
