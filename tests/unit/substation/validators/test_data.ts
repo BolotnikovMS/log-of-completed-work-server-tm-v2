@@ -385,4 +385,55 @@ export const incorrectData = [
     descrTest: 'rdu - Объект',
     errMessage: 'Поле rdu должно быть true/false.'
   },
+  //active
+  {
+    active: 'true',
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: false,
+    descrTest: 'active - Строка "false"',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: 1,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: false,
+    descrTest: 'active - Число 1',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: 'yes',
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: false,
+    descrTest: 'active - Строка "yes"',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: null,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: false,
+    descrTest: 'active - null',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: {},
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: false,
+    descrTest: 'active - Объект',
+    errMessage: 'Поле active должно быть true/false.'
+  },
 ]
