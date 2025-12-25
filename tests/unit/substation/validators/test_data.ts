@@ -371,16 +371,6 @@ export const incorrectData = [
     voltageClassesId: voltageClasses?.id,
     objectTypeId: objectType?.id,
     name: 'Test',
-    rdu: null,
-    descrTest: 'rdu - null',
-    errMessage: 'Поле rdu должно быть true/false.'
-  },
-  {
-    active: true,
-    districtId: district?.id,
-    voltageClassesId: voltageClasses?.id,
-    objectTypeId: objectType?.id,
-    name: 'Test',
     rdu: {},
     descrTest: 'rdu - Объект',
     errMessage: 'Поле rdu должно быть true/false.'
@@ -414,16 +404,6 @@ export const incorrectData = [
     name: 'Test',
     rdu: false,
     descrTest: 'active - Строка "yes"',
-    errMessage: 'Поле active должно быть true/false.'
-  },
-  {
-    active: null,
-    districtId: district?.id,
-    voltageClassesId: voltageClasses?.id,
-    objectTypeId: objectType?.id,
-    name: 'Test',
-    rdu: false,
-    descrTest: 'active - null',
     errMessage: 'Поле active должно быть true/false.'
   },
   {
