@@ -5,6 +5,7 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'required': 'Поле является обязательным.',
   'minLength': 'Минимальная длина {{ min }} символа.',
   'maxLength': 'Максимальная длина {{ max }} символов.',
+  'string': 'Поле {{ field }} должно быть строкой.',
   'ipAddress': 'Введенный ip адрес должен быть в формате xxx.xxx.xxx.xxx.',
   'date': 'Дата и время должны иметь формат: dd.mm.yyyy.',
   'unique': 'Поле {{ field }} должно быть уникальным.',
