@@ -334,4 +334,55 @@ export const incorrectData = [
     descrTest: 'name - Только пробелы',
     errMessage: 'Минимальная длина 2 символа.'
   },
+  //rdu
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: 'false',
+    descrTest: 'rdu - Строка "false"',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: 1,
+    descrTest: 'rdu - Число 1',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: 'yes',
+    descrTest: 'rdu - Строка "yes"',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: null,
+    descrTest: 'rdu - null',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: {},
+    descrTest: 'rdu - Объект',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
 ]
