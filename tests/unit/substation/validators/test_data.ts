@@ -7,13 +7,60 @@ const voltageClasses = await VoltageClass.query().orderBy('id', 'desc').first()
 const objectType = await ObjectType.query().orderBy('id', 'desc').first()
 
 export const positiveCreateTestData = [
-  { active: true, districtId: district?.id, voltageClassesId: voltageClasses?.id, objectTypeId: objectType?.id, name: 'Test', rdu: false, descrTest: 'Эквивалентность' },
-  { active: false, districtId: district?.id, voltageClassesId: voltageClasses?.id, objectTypeId: objectType?.id, name: 'Te', rdu: false, descrTest: 'Левая граница' },
-  { active: true, districtId: district?.id, voltageClassesId: voltageClasses?.id, objectTypeId: objectType?.id, name: 'T'.repeat(50), rdu: true, descrTest: 'Правая граница' },
-  { active: true, districtId: district?.id, voltageClassesId: voltageClasses?.id, objectTypeId: objectType?.id, name: 'T'.repeat(49), rdu: true, descrTest: 'Значение до правой границы' },
-  { active: true, districtId: district?.id, voltageClassesId: voltageClasses?.id, objectTypeId: objectType?.id, name: '    Test     ', rdu: true, descrTest: 'Значение с пробелами' },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Test',
+    rdu: false,
+    descrTest: 'Эквивалентность'
+  },
+  {
+    active: false,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'Te',
+    rdu: false,
+    descrTest: 'Левая граница'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'T'.repeat(50),
+    rdu: true,
+    descrTest: 'Правая граница'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: 'T'.repeat(49),
+    rdu: true,
+    descrTest: 'Значение до правой границы'
+  },
+  {
+    active: true,
+    districtId: district?.id,
+    voltageClassesId: voltageClasses?.id,
+    objectTypeId: objectType?.id,
+    name: '    Test     ',
+    rdu: true,
+    descrTest: 'Значение с пробелами'
+  },
 ]
-export const positiveCreateTestDataXSS = { active: true, districtId: district?.id, voltageClassesId: voltageClasses?.id, objectTypeId: objectType?.id, name: '<script>alert("1")</script>', rdu: false }
+export const positiveCreateTestDataXSS = {
+  active: true,
+  districtId: district?.id,
+  voltageClassesId: voltageClasses?.id,
+  objectTypeId: objectType?.id,
+  name: '<script>alert("1")</script>',
+  rdu: false
+}
 
 export const incorrectCreateTestData = [
   // districtId
