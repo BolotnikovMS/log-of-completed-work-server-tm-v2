@@ -3,7 +3,7 @@ import vine from '@vinejs/vine'
 
 export const baseQueryParamsSchema = {
   page: vine.number().positive().withoutDecimals().min(1).optional(),
-  limit: vine.number().positive().withoutDecimals().min(1).optional(),
+  limit: vine.number().withoutDecimals().optional(),
   sort: vine.string().optional(),
   order: vine.enum(OrderByEnums).optional(),
   search: vine.string().optional(),
