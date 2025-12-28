@@ -469,7 +469,7 @@ export const positiveUpdateTestData = [
   { descrTest: 'Полностью пустой payload (всё optional)' },
   {
     active: true,
-    descrTest: 'Один валидный параметр (проверка, что optional работает - active)'
+    descrTest: 'Один валидный параметр (проверка, что optional работает) - active'
   },
   {
     districtId: district?.id,
@@ -505,8 +505,8 @@ export const positiveUpdateTestData = [
     name: 'A'.repeat(50),
     descrTest: 'Правая граница'
   },
-  {
-    name: '    Test     ',
-    descrTest: 'Значение с пробелами'
-  },
 ]
+
+export const positiveUpdateTestDataXSS = {
+  name: '<script>alert("1")</script>'
+}
