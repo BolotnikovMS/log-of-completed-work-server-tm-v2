@@ -417,3 +417,49 @@ export const incorrectCreateTestData = [
     errMessage: 'Поле active должно быть true/false.'
   },
 ]
+
+export const positiveUpdateTestData = [
+  { descrTest: 'Полностью пустой payload (всё optional)' },
+  {
+    active: true,
+    descrTest: 'Один валидный параметр (проверка, что optional работает - active)'
+  },
+  {
+    districtId: district?.id,
+    descrTest: 'Один валидный параметр (проверка, что optional работает) - districtId'
+  },
+  {
+    voltageClassesId: voltageClasses?.id,
+    descrTest: 'Один валидный параметр (проверка, что optional работает) - voltageClassesId'
+  },
+  {
+    objectTypeId: objectType?.id,
+    descrTest: 'Один валидный параметр (проверка, что optional работает) - objectTypeId'
+  },
+  {
+    name: 'Test Update',
+    descrTest: 'Один валидный параметр (проверка, что optional работает) - name'
+  },
+  {
+    rdu: false,
+    descrTest: 'Один валидный параметр (проверка, что optional работает) - rdu'
+  },
+  {
+    active: false,
+    objectTypeId: objectType?.id,
+    name: 'Test upd',
+    descrTest: 'Комбинации полей'
+  },
+  {
+    name: 'Te',
+    descrTest: 'Левая граница'
+  },
+  {
+    name: 'A'.repeat(50),
+    descrTest: 'Правая граница'
+  },
+  {
+    name: '    Test     ',
+    descrTest: 'Значение с пробелами'
+  },
+]
