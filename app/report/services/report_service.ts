@@ -209,7 +209,7 @@ export default class ReportService {
       { header: 'Категория канала', key: 'channelCategory', width: 30 },
       { header: 'Тип канала', key: 'channelType', width: 20 },
       { header: 'Тип оборудования', key: 'channelEquipment', width: 25 },
-      { header: 'GSM оператор', key: 'gsmOperator', width: 20 },
+      { header: 'Оператор', key: 'operator', width: 20 },
       { header: 'IP адрес', key: 'ipAddress', width: 20 },
       { header: 'Примечание', key: 'note', width: 50 },
     ]
@@ -222,7 +222,7 @@ export default class ReportService {
         channelCategory: channel.channel_category,
         channelType: channel.channel_type,
         channelEquipment: channel.channel_equipment ?? 'Не указан',
-        gsmOperator: channel.gsm ?? 'Не указан',
+        operator: channel.gsm ?? 'Не указан',
         ipAddress: channel.ipAddress ?? 'Не указан',
         note: channel.note
       })
