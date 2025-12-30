@@ -510,3 +510,193 @@ export const positiveUpdateTestData = [
 export const positiveUpdateTestDataXSS = {
   name: '<script>alert("1")</script>'
 }
+
+export const incorrectUpdateTestData = [
+  // districtId
+  {
+    districtId: '1',
+    descrTest: 'districtId - Не число (строка)',
+    errMessage: 'В поле districtId должно быть введено число.'
+  },
+  {
+    districtId: true,
+    descrTest: 'districtId - Не число (булево)',
+    errMessage: 'В поле districtId должно быть введено число.'
+  },
+  {
+    districtId: {},
+    descrTest: 'districtId - Не число (объект)',
+    errMessage: 'В поле districtId должно быть введено число.'
+  },
+  {
+    districtId: -4,
+    descrTest: 'districtId - Отрицательное',
+    errMessage: 'В поле districtId должно быть введено положительное число.'
+  },
+  {
+    districtId: 1.4,
+    descrTest: 'districtId - Дробное',
+    errMessage: 'В поле districtId должно быть введено целое число.'
+  },
+  {
+    districtId: 0,
+    descrTest: 'districtId - Ноль',
+    errMessage: 'Значение поля districtId должно быть не меньше 1.'
+  },
+  {
+    districtId: district?.id! + 1,
+    rdu: false, descrTest: 'districtId - Не существует в БД',
+    errMessage: 'Выбранный districtId является недопустимым.'
+  },
+  //voltageClassesId
+  {
+    voltageClassesId: '1',
+    descrTest: 'voltageClassesId - Не число (строка)',
+    errMessage: 'В поле voltageClassesId должно быть введено число.'
+  },
+  {
+    voltageClassesId: true,
+    descrTest: 'voltageClassesId - Не число (булево)',
+    errMessage: 'В поле voltageClassesId должно быть введено число.'
+  },
+  {
+    voltageClassesId: {},
+    descrTest: 'voltageClassesId - Не число (объект)',
+    errMessage: 'В поле voltageClassesId должно быть введено число.'
+  },
+  {
+    voltageClassesId: -3,
+    descrTest: 'voltageClassesId - Отрицательное',
+    errMessage: 'В поле voltageClassesId должно быть введено положительное число.'
+  },
+  {
+    voltageClassesId: 1.2,
+    descrTest: 'voltageClassesId - Дробное',
+    errMessage: 'В поле voltageClassesId должно быть введено целое число.'
+  },
+  {
+    voltageClassesId: 0,
+    descrTest: 'voltageClassesId - Ноль',
+    errMessage: 'Значение поля voltageClassesId должно быть не меньше 1.'
+  },
+  {
+    voltageClassesId: voltageClasses?.id! + 1,
+    rdu: false,
+    descrTest: 'voltageClassesId - Не существует в БД',
+    errMessage: 'Выбранный voltageClassesId является недопустимым.'
+  },
+  // objectTypeId
+  {
+    objectTypeId: '3',
+    descrTest: 'objectTypeId - Не число (строка)',
+    errMessage: 'В поле objectTypeId должно быть введено число.'
+  },
+  {
+    objectTypeId: false,
+    descrTest: 'objectTypeId - Не число (булево)',
+    errMessage: 'В поле objectTypeId должно быть введено число.'
+  },
+  {
+    objectTypeId: {},
+    descrTest: 'objectTypeId - Не число (объект)',
+    errMessage: 'В поле objectTypeId должно быть введено число.'
+  },
+  {
+    objectTypeId: -2,
+    descrTest: 'objectTypeId - Отрицательное',
+    errMessage: 'В поле objectTypeId должно быть введено положительное число.'
+  },
+  {
+    objectTypeId: 4.3,
+    descrTest: 'objectTypeId - Дробное',
+    errMessage: 'В поле objectTypeId должно быть введено целое число.'
+  },
+  {
+    objectTypeId: 0,
+    descrTest: 'objectTypeId - Ноль',
+    errMessage: 'Значение поля objectTypeId должно быть не меньше 1.'
+  },
+  {
+    objectTypeId: objectType?.id! + 1,
+    descrTest: 'objectTypeId - Не существует в БД',
+    errMessage: 'Выбранный objectTypeId является недопустимым.'
+  },
+  // name
+  {
+    name: 'T',
+    descrTest: 'name - Менее 2 символов',
+    errMessage: 'Минимальная длина 2 символа.'
+  },
+  {
+    name: 'T'.repeat(155),
+    descrTest: 'name - Более 50 символов',
+    errMessage: 'Максимальная длина 50 символов.'
+  },
+  {
+    name: {},
+    descrTest: 'name - Не строка (объект)',
+    errMessage: 'Поле name должно быть строкой.'
+  },
+  {
+    name: 432,
+    descrTest: 'name - Не строка (число)',
+    errMessage: 'Поле name должно быть строкой.'
+  },
+  {
+    name: true,
+    descrTest: 'name - Не строка (булево)',
+    errMessage: 'Поле name должно быть строкой.'
+  },
+  {
+    name: '',
+    descrTest: 'name - Пустая строка',
+    errMessage: 'Минимальная длина 2 символа.'
+  },
+  {
+    name: '    ',
+    descrTest: 'name - Только пробелы',
+    errMessage: 'Минимальная длина 2 символа.'
+  },
+  //rdu
+  {
+    rdu: 'false',
+    descrTest: 'rdu - Строка "false"',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    rdu: 1,
+    descrTest: 'rdu - Число 1',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    rdu: 'yes',
+    descrTest: 'rdu - Строка "yes"',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  {
+    rdu: {},
+    descrTest: 'rdu - Объект',
+    errMessage: 'Поле rdu должно быть true/false.'
+  },
+  //active
+  {
+    active: 'true',
+    descrTest: 'active - Строка "false"',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: 1,
+    descrTest: 'active - Число 1',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: 'yes',
+    descrTest: 'active - Строка "yes"',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+  {
+    active: {},
+    descrTest: 'active - Объект',
+    errMessage: 'Поле active должно быть true/false.'
+  },
+]
