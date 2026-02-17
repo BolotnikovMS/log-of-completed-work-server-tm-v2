@@ -12,6 +12,12 @@ export default class VoltageClassService {
     return voltageClasses
   }
 
+  static async findById(id: number): Promise<VoltageClass> {
+    const voltageClass = await VoltageClass.findOrFail(id)
+
+    return voltageClass
+  }
+
   static async create(data: CreateVoltageClass): Promise<VoltageClass> {
     const voltageClass = await VoltageClass.create(data)
 

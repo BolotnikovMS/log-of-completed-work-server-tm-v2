@@ -18,6 +18,13 @@ export default class VoltageClassesController {
     return response.status(200).json(voltageClasses)
   }
 
+  async getVoltageClassById({ response, params }: HttpContext) {
+    const voltageClassParam = params as Params
+    const voltageClass = await VoltageClassService.findById(voltageClassParam.id)
+
+    return response.status(200).json(voltageClass)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(VoltageClassPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
