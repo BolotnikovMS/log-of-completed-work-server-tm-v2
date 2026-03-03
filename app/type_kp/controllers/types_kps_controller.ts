@@ -18,6 +18,13 @@ export default class TypesKpsController {
     return response.status(200).json(typesKps)
   }
 
+  async getTypeKpById({ response, params }: HttpContext) {
+    const typeKpParams = params as Params
+    const typeKp = await TypeKpService.findById(typeKpParams.id)
+
+    return response.status(200).json(typeKp)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(TypeKpPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })

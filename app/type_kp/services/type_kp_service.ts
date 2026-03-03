@@ -13,6 +13,12 @@ export default class TypeKpService {
     return typesKps
   }
 
+  static async findById(id: number) {
+    const typeKp = await TypeKp.findOrFail(id)
+
+    return typeKp
+  }
+
   static async create(data: CreateTypeKp): Promise<TypeKp> {
     const typeKp = await TypeKp.create(data)
 
