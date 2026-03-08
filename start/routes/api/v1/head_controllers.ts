@@ -5,6 +5,7 @@ import router from "@adonisjs/core/services/router"
 export const headControllersRoutes = router
   .group(() => {
     router.get('/', [HeadsController, 'index'])
+    router.get('/:id', [HeadsController, 'getHeadControllerById'])
     router.post('/', [HeadsController, 'store'])
     router.patch('/:id', [HeadsController, 'update'])
     router.delete('/:id', [HeadsController, 'destroy'])

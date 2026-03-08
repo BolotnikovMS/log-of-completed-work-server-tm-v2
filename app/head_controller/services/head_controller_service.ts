@@ -12,6 +12,12 @@ export class HeadControllersService {
     return headControllers
   }
 
+  static async findById(id: number): Promise<HeadController> {
+    const headController = await HeadController.findOrFail(id)
+
+    return headController
+  }
+
   static async create(data: CreateHeadController): Promise<HeadController> {
     const headController = await HeadController.create(data)
 

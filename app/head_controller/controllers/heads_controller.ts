@@ -17,6 +17,13 @@ export default class HeadsController {
     return response.status(200).json(headControllers)
   }
 
+  async getHeadControllerById({ response, params }: HttpContext) {
+    const headControllerParam = params as Params
+    const headController = await HeadControllersService.findById(headControllerParam.id)
+
+    return response.status(200).json(headController)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(HeadControllerPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })
