@@ -5,6 +5,7 @@ import router from "@adonisjs/core/services/router"
 export const typesWork = router
   .group(() => {
     router.get('/', [TypesWorksController, 'index'])
+    router.get('/:id', [TypesWorksController, 'getTypeWorkById'])
     router.post('/', [TypesWorksController, 'store'])
     router.patch('/:id', [TypesWorksController, 'update'])
     router.delete('/:id', [TypesWorksController, 'destroy'])

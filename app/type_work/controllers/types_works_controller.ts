@@ -19,6 +19,13 @@ export default class TypesWorksController {
     return response.status(200).json(typesWork)
   }
 
+  async getTypeWorkById({ response, params }: HttpContext) {
+    const typeWorkParams = params as Params
+    const typeWork = await TypeWorkService.findById(typeWorkParams.id)
+
+    return response.status(200).json(typeWork)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(TypeWorkPolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })

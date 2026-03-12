@@ -12,6 +12,12 @@ export default class TypeWorkService {
     return typesWork
   }
 
+  static async findById(id: number): Promise<TypeWork> {
+    const typeWork = await TypeWork.findOrFail(id)
+
+    return typeWork
+  }
+
   static async createTypeWork(data: CreateTypeWork): Promise<TypeWork> {
     const typeWork = await TypeWork.create(data)
 
