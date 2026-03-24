@@ -32,10 +32,12 @@ export default class CompletedWork extends BaseModel {
   })
   declare note: string | null
 
-  @column()
-  declare dateCompletion: DateTime
   // @column()
-  // declare dateCompletion: string
+  // declare dateCompletion: DateTime
+  @column({
+    prepare: (value: string): string => DateTime.fromISO(value.split('T')[0]).toFormat('yyyy-MM-dd')
+  })
+  declare dateCompletion: string
 
   @column({
     consume: (value: string): boolean => Boolean(value),
