@@ -187,6 +187,11 @@ export default class FilesServices {
       await unlink(filePath)
     }
   }
+  static async getFileName(id: number) {
+    const file = await File.findOrFail(id)
+
+    return file
+  }
   static async updateNameFile(id: number, data: UpdFileName): Promise<File> {
     const file = await File.findOrFail(id)
     const updFile = await file.merge(data).save()
