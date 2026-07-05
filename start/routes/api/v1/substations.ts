@@ -11,6 +11,7 @@ export const substationsRoutes = router
     router.get('/download-substations-telemechanics-devices-excel', [SubstationsController, 'downloadSubstationsSubstationsTelemechanicsDevicesExcel'])
     router.get('/:id/info', [SubstationsController, 'getSubstationInfo'])
     router.get('/:id', [SubstationsController, 'getSubstation'])
+    router.get('/:id/note', [SubstationsController, 'getSubstationNote'])
     router.patch('/:id', [SubstationsController, 'update'])
     router.patch('/:id/note', [SubstationsController, 'updateNote'])
     router.patch('/:id/add-key-defects', [SubstationsController, 'updateKeyDefectSubstation'])
