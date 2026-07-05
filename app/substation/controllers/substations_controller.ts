@@ -2,7 +2,7 @@ import SubstationPolicy from '#policies/substation_policy'
 import ReportService from '#report/services/report_service'
 import { accessErrorMessages, transliterate } from '#shared/helpers/index'
 import type { Params } from '#shared/interfaces/index'
-import { SubstationDto, SubstationInfoDto, SubstationListDto, SubstationSelectOptionDto } from '#substation/dtos/index'
+import { SubstationDto, SubstationInfoDto, SubstationListDto, SubstationNoteDto, SubstationSelectOptionDto } from '#substation/dtos/index'
 import SubstationService from '#substation/services/substation_service'
 import { createSubstationValidator, queryParamsSubstationsValidator, substationKeyDefectValidator, substationNoteValidator, updateSubstationValidator } from '#substation/validators/index'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -36,6 +36,13 @@ export default class SubstationsController {
     const data = await SubstationService.getInfo(substationParam.id)
 
     return response.status(200).json({ ...new SubstationInfoDto(data.substation), numberCompletedWorks: data.numberCompletedWorks })
+  }
+
+  async getSubstationNote({ params, response }: HttpContext) {
+    const substationParam = params as Params
+    const data = await SubstationService.findById(substationParam.id)
+
+    return response.status(200).json(new SubstationNoteDto(data))
   }
 
   async store({ request, response, auth, bouncer }: HttpContext) {

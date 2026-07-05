@@ -1,3 +1,4 @@
+import FileNameDto from '#file/dtos/file_name'
 import File from '#file/models/file'
 import FilesServices from '#file/services/file_upload_service'
 import { fileSubstationKeyValidator, fileUpdateNameValidator, uploadFileSubstationValidator } from '#file/validators/index'
@@ -15,6 +16,13 @@ export default class FilesController {
     const test = await FilesServices.uploadFile({ ...validatedData, userId: auth.user!.id })
 
     return response.status(201).json(test)
+  }
+
+  async getFileName({ params, response }: HttpContext) {
+    const fileParams = params as Params
+    const fileName = new FileNameDto(await FilesServices.getFileName(fileParams.id))
+
+    return response.status(200).json(fileName)
   }
 
   async download({ response, params }: HttpContext) {
