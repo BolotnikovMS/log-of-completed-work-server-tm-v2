@@ -4,7 +4,8 @@ import SubstationFileListDto from './substation_file_list.js'
 import SubstationInfoDto from './substation_info.js'
 import SubstationListTelemechanicsDevicesDto from './substation_list_telemechanics_devices.js'
 import SubstationListDto from './substation_lists.js'
+import SubstationNoteDto from './substation_note.js'
 import SubstationSelectOptionDto from './substation_select_option.js'
 import SubstationTelemechanicsDevicesDto from './substation_telemechanics_devices.js'
 
-export { SubstationChannelsDto, SubstationDto, SubstationFileListDto, SubstationInfoDto, SubstationListDto, SubstationListTelemechanicsDevicesDto, SubstationSelectOptionDto, SubstationTelemechanicsDevicesDto }
+export { SubstationChannelsDto, SubstationDto, SubstationFileListDto, SubstationInfoDto, SubstationListDto, SubstationListTelemechanicsDevicesDto, SubstationNoteDto, SubstationSelectOptionDto, SubstationTelemechanicsDevicesDto }
