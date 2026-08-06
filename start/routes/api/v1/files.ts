@@ -4,6 +4,7 @@ import router from "@adonisjs/core/services/router"
 
 export const filesRoutes = router
   .group(() => {
+    router.get('/', [FilesController, 'shortList'])
     router.post('/upload', [FilesController, 'upload'])
     router.get('/download/:id', [FilesController, 'download'])
     router.delete('/:id', [FilesController, 'destroy'])
