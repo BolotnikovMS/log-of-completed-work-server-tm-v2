@@ -1,7 +1,8 @@
 import FileNameDto from '#file/dtos/file_name'
+import { FileShortDto } from '#file/dtos/index'
 import File from '#file/models/file'
 import FilesServices from '#file/services/file_upload_service'
-import { fileSubstationKeyValidator, fileUpdateNameValidator, uploadFileSubstationValidator } from '#file/validators/index'
+import { fileSubstationKeyValidator, fileUpdateNameValidator, queryParamsFileValidation, uploadFileSubstationValidator } from '#file/validators/index'
 import FilePolicy from '#policies/file_policy'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { Params } from '#shared/interfaces/index'
@@ -11,6 +12,15 @@ import * as fs from 'node:fs'
 import path from 'node:path'
 
 export default class FilesController {
+  async shortList({ request, response }: HttpContext) {
+    const filters = request.qs()
+    const validatedFilters = await queryParamsFileValidation.validate(filters)
+    const data = await FilesServices.getFiles(validatedFilters)
+    const files = FileShortDto.fromPaginator(data)
+
+    return response.status(200).json(files.data)
+  }
+
   async upload({ request, response, auth }: HttpContext) {
     const validatedData = await request.validateUsing(uploadFileSubstationValidator)
     const test = await FilesServices.uploadFile({ ...validatedData, userId: auth.user!.id })

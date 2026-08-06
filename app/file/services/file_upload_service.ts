@@ -1,5 +1,5 @@
 import File from '#file/models/file'
-import type { FileSubstation, FileSubstationKey, UpdFileName } from '#file/types/file'
+import type { FileSubstation, FileSubstationKey, QueryParamsFile, UpdFileName } from '#file/types/file'
 import { getFileNameWithoutExtension } from '#shared/helpers/get_file_name_without_extension'
 import type { CSVSubstationKeyRow, ErrorParseCSVSubstationKey, ResultParseCSVSubstationKey } from '#substation/interfaces/index'
 import { csvDataSubstationKeyValidator } from '#substation/validators/substation_keys_defect_file'
@@ -35,6 +35,19 @@ export default class FilesServices {
   //       overwrite: true,
   //     })
   //   })
+
+  static async getFiles(filters?: QueryParamsFile) {
+    const files = await File.query()
+      .select('id', 'userId', 'filePath', 'clientName', 'typeFile', 'size', 'createdAt')
+      .if(filters?.substationId, (query) => query.where('substationId', '=', filters?.substationId!))
+      .if(filters?.typeFile, (query) => query.where('type_file', '=', filters?.typeFile!))
+      .preload('author', query => {
+        query.select('id', 'surname', 'name', 'patronymic')
+      })
+      .paginate(filters?.page!, filters?.limit)
+
+    return files
+  }
   static async uploadFile(data: FileSubstation): Promise<string> {
     data?.file.forEach(async (fileItem) => {
       const newFileName = `${cuid()}.${fileItem.extname}`
