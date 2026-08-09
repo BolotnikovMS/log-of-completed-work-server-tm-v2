@@ -75,9 +75,6 @@ export default class SubstationService {
     await substation.load('district')
     await substation.load('voltage_class')
     await substation.loadCount('works', (query) => query.count('*').as('numberCompletedWorks'))
-    await substation.load('files_photos_ps', (query) => query.preload('author').orderBy('createdAt', 'asc'))
-    await substation.load('files_backups', (query) => query.preload('author').orderBy('createdAt', 'desc'))
-    await substation.load('other_files', (query) => query.preload('author').orderBy('createdAt', 'desc'))
     await substation.load('channels', (query) => query.preload('channel_category').preload('channel_type').preload('channel_equipment').preload('gsm_operator').orderBy('channel_category_id', 'asc'))
     await substation.load('object_type')
     await substation.load('telemechanics_device', (query) => {
