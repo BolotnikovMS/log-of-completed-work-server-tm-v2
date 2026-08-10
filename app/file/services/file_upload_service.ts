@@ -38,7 +38,6 @@ export default class FilesServices {
 
   static async getFiles(filters?: QueryParamsFile) {
     const files = await File.query()
-      .select('id', 'userId', 'filePath', 'clientName', 'typeFile', 'size', 'createdAt')
       .if(filters?.substationId, (query) => query.where('substationId', '=', filters?.substationId!))
       .if(filters?.typeFile, (query) => query.where('type_file', '=', filters?.typeFile!))
       .preload('author', query => {
