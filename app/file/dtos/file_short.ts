@@ -6,6 +6,7 @@ export default class FileShortDto extends BaseModelDto {
   declare filePath: string
   declare typeFile: string
   declare clientName: string
+  declare extname: string
   declare size: number
   declare createdAt: string
   declare author: string | null
@@ -19,6 +20,7 @@ export default class FileShortDto extends BaseModelDto {
     this.filePath = file.filePath
     this.typeFile = file.typeFile
     this.clientName = file.clientName
+    this.extname = file.extname
     this.size = file.size
     this.createdAt = file.createdAt.toString()!
     this.author = file.author.shortName
