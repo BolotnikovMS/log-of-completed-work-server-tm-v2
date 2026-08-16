@@ -6,6 +6,7 @@ export default class DashboardService {
   static async getSubstationsTypeKp() {
     const typesKp = await TypeKp.query()
       .withCount('telemechanics_devices')
+      .has('telemechanics_devices', '>', 1)
     const typesKpSerialize = typesKp.map(({ id, name, $extras: { telemechanics_devices_count } }) => ({
       id, name, numberSubstations: telemechanics_devices_count
     }))
