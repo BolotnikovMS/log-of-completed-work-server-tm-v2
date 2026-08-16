@@ -18,7 +18,7 @@ export default class FilesController {
     const data = await FilesServices.getFiles(validatedFilters)
     const files = FileShortDto.fromPaginator(data)
 
-    return response.status(200).json(files.data)
+    return response.status(200).json(files)
   }
 
   async upload({ request, response, auth }: HttpContext) {
