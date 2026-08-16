@@ -7,6 +7,7 @@ import { MultipartFile } from '@adonisjs/core/bodyparser'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
 import db from '@adonisjs/lucid/services/db'
+import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 import csv from 'csv-parser'
 import * as fs from 'node:fs'
 import { unlink } from 'node:fs/promises'
@@ -36,7 +37,7 @@ export default class FilesServices {
   //     })
   //   })
 
-  static async getFiles(filters?: QueryParamsFile) {
+  static async getFiles(filters?: QueryParamsFile): Promise<ModelPaginatorContract<File>> {
     const files = await File.query()
       .if(filters?.substationId, (query) => query.where('substationId', '=', filters?.substationId!))
       .if(filters?.typeFile, (query) => query.where('type_file', '=', filters?.typeFile!))
