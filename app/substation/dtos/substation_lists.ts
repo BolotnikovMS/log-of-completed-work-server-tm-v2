@@ -4,6 +4,7 @@ import SubstationListTelemechanicsDevicesDto from './substation_list_telemechani
 
 export default class SubstationListDto extends BaseModelDto {
   declare id: number
+  declare active: boolean
   declare object_type: string | null
   declare name: string
   declare rdu: boolean
@@ -16,6 +17,7 @@ export default class SubstationListDto extends BaseModelDto {
     if (!substation) return
 
     this.id = substation.id
+    this.active = substation.active
     this.rdu = substation.rdu
     this.fullNameSubstation = substation.fullNameSubstation ?? substation.name
     this.object_type = substation.object_type?.shortName
