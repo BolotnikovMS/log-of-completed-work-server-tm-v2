@@ -1,6 +1,7 @@
 import CompletedWork from '#completed_work/models/completed_work'
 import type { CreateCompletedWork, QueryParamsCompletedWork, UpdateCompletedWork } from '#completed_work/types/index'
 import { OrderByEnums } from '#shared/enums/index'
+import { normalizeToNumberArray } from '#shared/helpers/index'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
 
 export default class CompletedWorkService {
@@ -17,6 +18,7 @@ export default class CompletedWorkService {
       typeWork,
       inControl
     } = filters
+    const typeWorks = normalizeToNumberArray(typeWork)
     const works = await CompletedWork.query()
       .if(dateStart && dateEnd, query =>
         query.whereBetween('dateCompletion', [dateStart!, dateEnd!])
@@ -24,13 +26,7 @@ export default class CompletedWorkService {
       .if(executor, query => query.where('workProducerId', '=', executor!))
       .if(substation, query => query.where('substationId', '=', substation!))
       .if(sort && order, query => query.orderBy(sort, OrderByEnums[order]))
-      .if(typeWork, query => {
-        if (Number.isInteger(+typeWork)) {
-          query.where('typeWorkId', '=', typeWork)
-        } else if (Array.isArray(typeWork)) {
-          query.whereIn('typeWorkId', typeWork)
-        }
-      })
+      .if(typeWorks?.length, query => query.whereIn('typeWorkId', typeWorks!))
       .if(inControl, query => query.where('inControl', Boolean(inControl)))
       .preload('substation', query => {
         query.preload('voltage_class')
