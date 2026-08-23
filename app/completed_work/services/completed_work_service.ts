@@ -18,7 +18,7 @@ export default class CompletedWorkService {
       typeWork,
       inControl
     } = filters
-    const typeWorks = normalizeToNumberArray(typeWork)
+    const typeWorkIds = normalizeToNumberArray(typeWork)
     const works = await CompletedWork.query()
       .if(dateStart && dateEnd, query =>
         query.whereBetween('dateCompletion', [dateStart!, dateEnd!])
@@ -26,7 +26,7 @@ export default class CompletedWorkService {
       .if(executor, query => query.where('workProducerId', '=', executor!))
       .if(substation, query => query.where('substationId', '=', substation!))
       .if(sort && order, query => query.orderBy(sort, OrderByEnums[order]))
-      .if(typeWorks?.length, query => query.whereIn('typeWorkId', typeWorks!))
+      .if(typeWorkIds?.length, query => query.whereIn('typeWorkId', typeWorkIds!))
       .if(inControl, query => query.where('inControl', Boolean(inControl)))
       .preload('substation', query => {
         query.preload('voltage_class')
