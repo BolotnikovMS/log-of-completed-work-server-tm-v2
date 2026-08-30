@@ -17,6 +17,13 @@ export default class ChannelTypesController {
     return response.status(200).json(channelTypes)
   }
 
+  async getChannelTypeById({ response, params }: HttpContext) {
+    const channelTypeParam = params as Params
+    const channelType = await ChannelTypeService.findById(channelTypeParam.id)
+
+    return response.status(200).json(channelType)
+  }
+
   async store({ request, response, auth, bouncer }: HttpContext) {
     if (await bouncer.with(ChannelTypePolicy).denies('create')) {
       return response.status(403).json({ message: accessErrorMessages.create })

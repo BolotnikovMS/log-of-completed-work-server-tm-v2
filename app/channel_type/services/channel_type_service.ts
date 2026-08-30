@@ -13,6 +13,12 @@ export default class ChannelTypeService {
     return channelTypes
   }
 
+  static async findById(id: number): Promise<ChannelType> {
+    const channelType = await ChannelType.findOrFail(id)
+
+    return channelType
+  }
+
   static async create(data: CreateChannelType): Promise<ChannelType> {
     const channelType = await ChannelType.create(data)
 
