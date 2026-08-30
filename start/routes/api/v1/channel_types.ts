@@ -5,6 +5,7 @@ import router from "@adonisjs/core/services/router"
 export const channelTypesRoutes = router
   .group(() => {
     router.get('/', [ChannelTypesController, 'index'])
+    router.get('/:id', [ChannelTypesController, 'getChannelTypeById'])
     router.post('/', [ChannelTypesController, 'store'])
     router.patch('/:id', [ChannelTypesController, 'update'])
     router.delete('/:id', [ChannelTypesController, 'destroy'])
