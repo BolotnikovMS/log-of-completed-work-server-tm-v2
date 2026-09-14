@@ -3,6 +3,6 @@ import vine from '@vinejs/vine'
 
 export const blockUserAccountValidator = vine.compile(
   vine.object({
-    active: booleanCheck
+    active: booleanCheck,
   })
 )
