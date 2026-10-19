@@ -1,3 +1,4 @@
+import { UserProfileDto } from '#user/dtos/index'
 import User from '#user/models/user'
 import UserService from '#user/services/user_service'
 import { changePasswordValidator, loginValidator } from '#user/validators/index'
@@ -12,27 +13,14 @@ export default class AuthController {
       const user = await User.query().whereLike('username', username).firstOrFail()
 
       if (!user.active) return response.status(400).json('Учетная запись заблокирована!')
-
       if (!(await hash.verify(user.password, password))) return response.status(400).json('Неверные учетные данные!')
 
-      await user.load('role')
       await DB.from('auth_access_tokens').where('tokenable_id', user.id).delete()
 
       const token = await User.accessTokens.create(user, ['*'], { expiresIn: '10 days' })
-      const userSerialize = user.serialize({
-        fields: { pick: ['id', 'username', 'fullName', 'shortName', 'email', 'position'] },
-        relations: {
-          role: {
-            fields: {
-              pick: ['name'],
-            },
-          },
-        },
-      })
 
       // response.cookie('access_token', token.value?.release())
       return {
-        user: userSerialize,
         token: {
           type: 'bearer',
           token: token.value?.release(),
@@ -59,18 +47,7 @@ export default class AuthController {
     // const test = request.cookie('access_token')
     // console.log('Cook', test)
 
-    const userSerialize = user.serialize({
-      fields: {
-        omit: ['password', 'updatedAt'],
-      },
-      relations: {
-        role: {
-          fields: {
-            omit: ['createdAt', 'updatedAt'],
-          },
-        },
-      },
-    })
+    const userSerialize = new UserProfileDto(user)
 
     return response.status(200).json(userSerialize)
   }
