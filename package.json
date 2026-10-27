@@ -53,7 +53,8 @@
     "#user/*": "./app/user/*.js",
     "#voltage_class/*": "./app/voltage_class/*.js",
     "#report/*": "./app/report/*.js",
-    "#shared/*": "./app/shared/*.js"
+    "#shared/*": "./app/shared/*.js",
+    "#defect/*": "./app/defect/*.js"
   },
   "devDependencies": {
     "@adonisjs/assembler": "^7.8.2",
