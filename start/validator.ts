@@ -19,6 +19,7 @@ vine.messagesProvider = new SimpleMessagesProvider({
   'min': 'Значение поля {{ field }} должно быть не меньше {{ min }}.',
   'max': 'Значение поля {{ field }} не должно превышать {{ max }}.',
   'enum': 'Допустимые значения {{ field }}: {{ choices }}.',
+  'in': 'Допустимые значения {{ field }}: {{ choices }}',
 
   // Error message for the username field
   'username.required': 'Please choose a username for your account',
