@@ -11,7 +11,7 @@ export default class DefectService {
       .if(category, (query) => query.where('category', '=', category!))
       .preload('substation', (query) => {
         query
-          .select('voltageClassesId', 'objectTypeId', 'name')
+          .select('voltageClassesId', 'objectTypeId', 'name', 'createdAt')
           .preload('object_type', (query) => {
             query.select('shortName')
           })
