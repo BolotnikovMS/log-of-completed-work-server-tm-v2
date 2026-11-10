@@ -61,7 +61,7 @@ export default class DefectsController {
 
     const defectParams = params as Params
     const validatedData = await request.validateUsing(createClosesDefect)
-    const data = await DefectService.createCloses(defectParams.id, { ...validatedData, userId: auth.user?.id!, status: DefectStatus.close })
+    const data = await DefectService.createCloses(defectParams.id, { ...validatedData, userIdResolved: auth.user?.id!, status: DefectStatus.close })
 
     return response.status(200).json(data)
   }
