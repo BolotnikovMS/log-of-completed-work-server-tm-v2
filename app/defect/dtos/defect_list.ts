@@ -4,6 +4,7 @@ import type { DateTime } from 'luxon'
 
 export class DefectListDto extends BaseModelDto {
   declare id: number
+  declare substation: string
   declare status: string
   declare title: string
   declare category: string
@@ -15,6 +16,7 @@ export class DefectListDto extends BaseModelDto {
     if (!defect) return
 
     this.id = defect.id
+    this.substation = defect.substation.fullNameSubstation
     this.status = defect.status
     this.title = defect.title
     this.category = defect.category
