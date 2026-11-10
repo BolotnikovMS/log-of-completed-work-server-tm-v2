@@ -25,7 +25,7 @@ export default class extends BaseSchema {
         .notNullable()
       table.text('category')
         .notNullable()
-        .checkIn(['Дефект', 'Замечание'])
+        .checkIn(['Дефект', 'Замечание', 'Прочее'])
         .defaultTo('Дефект')
       table.string('status', 20)
         .notNullable()
