@@ -17,5 +17,5 @@ export enum DefectStatus {
 
 export type CreateDefect = Infer<typeof createDefect> & { userId: number }
 export type UpdateDefect = Infer<typeof updateDefect> & { userId: number }
-export type CreateClosesDefect = Infer<typeof createClosesDefect> & { userId: number, status: DefectStatus.close }
+export type CreateClosesDefect = Infer<typeof createClosesDefect> & { userIdResolved: number, status: DefectStatus.close }
 export type QueryParamsDefect = Infer<typeof queryParamsDefectValidator>
