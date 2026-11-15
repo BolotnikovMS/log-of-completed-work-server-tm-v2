@@ -3,6 +3,7 @@ import DefectService from '#defect/services/defect_service'
 import { DefectStatus } from '#defect/types/defect_category'
 import { createClosesDefect, createDefect, queryParamsDefectValidator, updateDefect } from '#defect/validators/index'
 import DefectPolicy from '#policies/defect_policy'
+import ReportService from '#report/services/report_service'
 import { accessErrorMessages } from '#shared/helpers/access_error_messages'
 import type { Params } from '#shared/interfaces/params'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -76,5 +77,15 @@ export default class DefectsController {
     await DefectService.delete(substationParam.id)
 
     return response.status(204)
+  }
+
+  async downloadExcel({ request, response }: HttpContext) {
+    const filters = request.qs()
+    const validatedFilters = await queryParamsDefectValidator.validate(filters)
+    const buffer = await ReportService.createExcelDefects(validatedFilters)
+
+    response.header('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response.header('Content-Disposition', 'attachment; filename=defects-report.xlsx')
+    response.send(buffer)
   }
 }
