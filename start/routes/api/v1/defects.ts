@@ -10,6 +10,7 @@ export const defectsRoutes = router
     router.post('/', [DefectsController, 'storeDefect'])
     router.patch('/:id/closes', [DefectsController, 'storeClosesDefect'])
     router.patch('/:id', [DefectsController, 'updateDefect'])
+    router.get('/download-excel', [DefectsController, 'downloadExcel'])
     router.delete('/:id', [DefectsController, 'destroy'])
   })
   .prefix('/defects')
