@@ -4,6 +4,9 @@ import type { QueryParamsChannel } from '#channel/types/query_params_channels'
 import { CompletedWorkInfoDto } from '#completed_work/dtos/index'
 import CompletedWorkService from '#completed_work/services/completed_work_service'
 import type { QueryParamsCompletedWork } from '#completed_work/types/query_params_completed_work'
+import DefectService from '#defect/services/defect_service'
+import type { QueryParamsDefect } from '#defect/types/defect_category'
+import { DefectReportDto } from '#report/dtos/defects_report'
 import { SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#report/dtos/index'
 import SubstationService from '#substation/services/substation_service'
 import type { QueryParamsSubstation } from '#substation/types/qury_params_substations'
@@ -229,6 +232,47 @@ export default class ReportService {
     })
 
     this.#applyStyles(worksheet, ['note'])
+
+    const buffer = await workbook.xlsx.writeBuffer()
+
+    return buffer
+  }
+
+  static async createExcelDefects(filters: QueryParamsDefect): Promise<ExcelJS.Buffer> {
+    const defects = await DefectService.getDefects(filters)
+    const transformData = DefectReportDto.fromPaginator(defects)
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet('Sheet 1')
+
+    worksheet.columns = [
+      { header: 'Объект', key: 'substation', width: 26 },
+      { header: 'Статус', key: 'status', width: 30 },
+      { header: 'Категория', key: 'category', width: 20 },
+      { header: 'Дата добавления', key: 'createdAt', width: 21 },
+      { header: 'Описание', key: 'description', width: 50 },
+      { header: 'Автор', key: 'author', width: 18 },
+      { header: 'Дата устранения', key: 'resolvedAt', width: 21 },
+      { header: 'Результат', key: 'resolution', width: 50 },
+      { header: 'Устранил', key: 'authorResolved', width: 18 },
+    ]
+
+    this.#applyStylesRowTitle(worksheet)
+
+    transformData.data.forEach(defect => {
+      worksheet.addRow({
+        substation: defect.substation,
+        status: defect.status,
+        category: defect.category,
+        createdAt: defect.createdAt,
+        description: defect.description,
+        author: defect.author,
+        resolvedAt: defect.resolvedAt,
+        resolution: defect.resolution,
+        authorResolved: defect.authorResolved
+      })
+    })
+
+    this.#applyStyles(worksheet, ['description', 'resolution'])
 
     const buffer = await workbook.xlsx.writeBuffer()
 
