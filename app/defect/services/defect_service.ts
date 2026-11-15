@@ -6,6 +6,7 @@ export default class DefectService {
   static async getDefects(filters: QueryParamsDefect): Promise<ModelPaginatorContract<Defect>> {
     const { limit, page, substation, status, category } = filters
     const defects = await Defect.query()
+      .orderBy('status', 'desc')
       .if(substation, (query) => query.where('substationId', '=', substation!))
       .if(status, (query) => query.where('status', '=', status!))
       .if(category, (query) => query.where('category', '=', category!))
