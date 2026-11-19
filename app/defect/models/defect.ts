@@ -38,9 +38,7 @@ export default class Defect extends BaseModel {
   @column()
   declare resolution: string | null
 
-  @column({
-    prepare: (value: string): string => DateTime.fromISO(value.split('T')[0]).toFormat('yyyy-MM-dd')
-  })
+  @column()
   declare resolvedAt: string | null
 
   @column.dateTime({
