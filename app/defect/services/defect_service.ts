@@ -20,6 +20,12 @@ export default class DefectService {
             query.select('name')
           })
       })
+      .preload('author', (query) => {
+        query.select('surname', 'name', 'patronymic')
+      })
+      .preload('authorResolved', (query) => {
+        query.select('surname', 'name', 'patronymic')
+      })
       .paginate(page!, limit)
 
     return defects
