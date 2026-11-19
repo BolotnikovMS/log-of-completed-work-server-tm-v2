@@ -6,8 +6,7 @@ import CompletedWorkService from '#completed_work/services/completed_work_servic
 import type { QueryParamsCompletedWork } from '#completed_work/types/query_params_completed_work'
 import DefectService from '#defect/services/defect_service'
 import type { QueryParamsDefect } from '#defect/types/defect_category'
-import { DefectReportDto } from '#report/dtos/defects_report'
-import { SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#report/dtos/index'
+import { DefectReportDto, SubstationsReportDto, SubstationsTelemechanicsDevicesReportDto } from '#report/dtos/index'
 import SubstationService from '#substation/services/substation_service'
 import type { QueryParamsSubstation } from '#substation/types/qury_params_substations'
 import ExcelJS, { type Cell } from 'exceljs'
@@ -248,7 +247,6 @@ export default class ReportService {
       { header: 'Объект', key: 'substation', width: 26 },
       { header: 'Статус', key: 'status', width: 30 },
       { header: 'Категория', key: 'category', width: 20 },
-      { header: 'Дата добавления', key: 'createdAt', width: 21 },
       { header: 'Описание', key: 'description', width: 50 },
       { header: 'Автор', key: 'author', width: 18 },
       { header: 'Дата устранения', key: 'resolvedAt', width: 21 },
@@ -263,7 +261,6 @@ export default class ReportService {
         substation: defect.substation,
         status: defect.status,
         category: defect.category,
-        createdAt: defect.createdAt,
         description: defect.description,
         author: defect.author,
         resolvedAt: defect.resolvedAt,
