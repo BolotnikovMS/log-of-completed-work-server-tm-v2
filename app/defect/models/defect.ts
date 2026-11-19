@@ -43,10 +43,17 @@ export default class Defect extends BaseModel {
   })
   declare resolvedAt: string | null
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({
+    autoCreate: true,
+    prepare: (value: string): string => DateTime.fromISO(value).toFormat('yyyy-MM-dd')
+  })
   declare createdAt: DateTime
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({
+    autoCreate: true,
+    autoUpdate: true,
+    prepare: (value: string): string => DateTime.fromISO(value).toFormat('yyyy-MM-dd')
+  })
   declare updatedAt: DateTime
 
   @belongsTo(() => Substation)
