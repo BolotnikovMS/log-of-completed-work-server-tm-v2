@@ -43,14 +43,14 @@ export default class DefectsController {
     return response.status(200).json(defect)
   }
 
-  async updateDefect({ params, request, response, auth, bouncer }: HttpContext) {
+  async updateDefect({ params, request, response, bouncer }: HttpContext) {
     if (await bouncer.with(DefectPolicy).denies('edit')) {
       return response.status(403).json({ message: accessErrorMessages.edit })
     }
 
     const defectParams = params as Params
     const validatedData = await request.validateUsing(updateDefect)
-    const updDefect = await DefectService.updateDefect(defectParams.id, { ...validatedData, userId: auth.user?.id! })
+    const updDefect = await DefectService.updateDefect(defectParams.id, { ...validatedData })
 
     return response.status(200).json(updDefect)
   }
