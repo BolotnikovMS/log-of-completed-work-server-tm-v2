@@ -1,8 +1,31 @@
 import Defect from '#defect/models/defect'
 import type { CreateClosesDefect, CreateDefect, QueryParamsDefect, UpdateDefect } from '#defect/types/defect_category'
 import type { ModelPaginatorContract } from '@adonisjs/lucid/types/model'
+import { DateTime } from 'luxon'
 
 export default class DefectService {
+  static #parseUserDate(dateString: string): DateTime {
+    let date = DateTime.fromISO(dateString, { zone: 'utc' })
+
+    if (!date.isValid) {
+      date = DateTime.fromFormat(dateString, 'dd.MM.yyyy HH:mm:ss', { zone: 'utc' })
+    }
+
+    if (!date.isValid) {
+      date = DateTime.fromFormat(dateString, 'dd.MM.yyyy HH:mm:ss', { zone: 'utc' })
+    }
+
+    if (!date.isValid) {
+      throw new Error(`Некорректный формат даты: ${dateString}`)
+    }
+
+    if (!dateString.includes(':')) {
+      date = date.startOf('day')
+    }
+
+    return date.setZone('utc', { keepLocalTime: false })
+  }
+
   static async getDefects(filters: QueryParamsDefect): Promise<ModelPaginatorContract<Defect>> {
     const { limit, page, substation, status, category } = filters
     const defects = await Defect.query()
@@ -77,7 +100,13 @@ export default class DefectService {
 
   static async createCloses(id: number, data: CreateClosesDefect): Promise<Defect> {
     const defect = await Defect.findOrFail(id)
-    const updDefect = await defect.merge(data).save()
+    let resolvedAt: DateTime | null = null
+
+    if (data.resolvedAt) {
+      resolvedAt = this.#parseUserDate(data.resolvedAt)
+    }
+
+    const updDefect = await defect.merge({ ...data, resolvedAt: resolvedAt }).save()
 
     return updDefect
   }
