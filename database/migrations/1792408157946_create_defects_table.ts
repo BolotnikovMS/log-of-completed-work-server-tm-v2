@@ -39,11 +39,11 @@ export default class extends BaseSchema {
         .inTable('users')
       table.text('resolution')
         .nullable()
-      table.dateTime('resolved_at')
+      table.dateTime('resolved_at', { useTz: false })
         .nullable()
 
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
+      table.timestamp('created_at', { useTz: false })
+      table.timestamp('updated_at', { useTz: false })
     })
   }
 
