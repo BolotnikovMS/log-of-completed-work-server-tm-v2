@@ -1,5 +1,6 @@
 import type Defect from "#defect/models/defect"
 import { BaseModelDto } from "@adocasts.com/dto/base"
+import type { DateTime } from "luxon"
 
 export default class DefectReportDto extends BaseModelDto {
   declare id: number
@@ -11,6 +12,7 @@ export default class DefectReportDto extends BaseModelDto {
   declare resolvedAt: string | null
   declare resolution: string | null
   declare authorResolved: string | null
+  declare createdAt: DateTime
 
   constructor(defect?: Defect) {
     super()
@@ -26,5 +28,6 @@ export default class DefectReportDto extends BaseModelDto {
     this.resolvedAt = defect?.resolvedAt
     this.resolution = defect?.resolution
     this.authorResolved = defect?.authorResolved?.shortName
+    this.createdAt = defect.createdAt
   }
 }
