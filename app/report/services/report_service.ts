@@ -10,6 +10,7 @@ import { DefectReportDto, SubstationsReportDto, SubstationsTelemechanicsDevicesR
 import SubstationService from '#substation/services/substation_service'
 import type { QueryParamsSubstation } from '#substation/types/qury_params_substations'
 import ExcelJS, { type Cell } from 'exceljs'
+import { DateTime } from 'luxon'
 
 export default class ReportService {
   static #applyStylesRowTitle(worksheet: ExcelJS.Worksheet): void {
@@ -42,6 +43,16 @@ export default class ReportService {
         })
       })
     }
+  }
+
+  static #formatDate(dateString: string): string {
+    const date = DateTime.fromISO(dateString, { zone: 'Asia/Yekaterinburg' })
+
+    if (!date.isValid) {
+      return dateString
+    }
+
+    return date.toFormat('dd.MM.yyyy')
   }
 
   static async createExcelCompletedWorks(filters: QueryParamsCompletedWork): Promise<ExcelJS.Buffer> {
@@ -247,6 +258,7 @@ export default class ReportService {
       { header: 'Объект', key: 'substation', width: 26 },
       { header: 'Статус', key: 'status', width: 30 },
       { header: 'Категория', key: 'category', width: 20 },
+      { header: 'Дата добавления', key: 'createdAt', width: 21 },
       { header: 'Описание', key: 'description', width: 50 },
       { header: 'Автор', key: 'author', width: 18 },
       { header: 'Дата устранения', key: 'resolvedAt', width: 21 },
@@ -261,9 +273,10 @@ export default class ReportService {
         substation: defect.substation,
         status: defect.status,
         category: defect.category,
+        createdAt: defect.createdAt && this.#formatDate(defect.createdAt),
         description: defect.description,
         author: defect.author,
-        resolvedAt: defect.resolvedAt,
+        resolvedAt: defect.resolvedAt && this.#formatDate(defect.resolvedAt),
         resolution: defect.resolution,
         authorResolved: defect.authorResolved
       })
