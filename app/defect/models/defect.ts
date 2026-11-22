@@ -38,18 +38,7 @@ export default class Defect extends BaseModel {
   @column()
   declare resolution: string | null
 
-  @column({
-    prepare: (value: DateTime | null) => {
-      if (!value) return null
-
-      return value.toUTC().toFormat('yyyy-MM-dd HH:mm:ss')
-    },
-    consume: (value: string | null) => {
-      if (!value) return null
-
-      return DateTime.fromFormat(value, 'yyyy-MM-dd HH:mm:ss', { zone: 'UTC' })
-    }
-  })
+  @column.dateTime()
   declare resolvedAt: DateTime | null
 
   @column.dateTime({
