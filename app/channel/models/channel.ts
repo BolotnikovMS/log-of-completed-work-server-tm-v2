@@ -1,4 +1,4 @@
-import ChannelCategory from '#channel_category/models/channel_category'
+import { ChannelCategory } from '#channel_category/index'
 import ChannelType from '#channel_type/models/channel_type'
 import ChannelingEquipment from '#channeling_equipment/models/channeling_equipment'
 import GsmOperator from '#gsm_operator/models/gsm_operator'
