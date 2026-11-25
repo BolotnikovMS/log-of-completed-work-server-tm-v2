@@ -1,6 +1,5 @@
-import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
+import { replacementEscapeSymbols } from '#shared/helpers/index'
 import { BaseModel, column } from '@adonisjs/lucid/orm'
-
 import { DateTime } from 'luxon'
 
 export default class VoltageClass extends BaseModel {

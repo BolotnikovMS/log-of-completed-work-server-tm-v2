@@ -1,5 +1,5 @@
-import { replacementEscapeSymbols } from '#shared/helpers/replacement_escape_symbols'
-import Substation from '#substation/models/substation'
+import { replacementEscapeSymbols } from '#shared/helpers/index'
+import { Substation } from '#substation/index'
 import { BaseModel, column, hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'

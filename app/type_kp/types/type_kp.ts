@@ -2,5 +2,4 @@ import type { createTypeKpValidator, updateTypeKpValidator } from '#type_kp/vali
 import type { Infer } from '@vinejs/vine/types'
 
 export type CreateTypeKp = Infer<typeof createTypeKpValidator> & { userId: number }
-
 export type UpdateTypeKp = Infer<typeof updateTypeKpValidator>

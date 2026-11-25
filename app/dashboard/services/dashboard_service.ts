@@ -1,5 +1,5 @@
-import CompletedWork from "#completed_work/models/completed_work"
-import TypeKp from "#type_kp/models/type_kp"
+import { CompletedWork } from "#completed_work/index"
+import { TypeKp } from "#type_kp/index"
 import db from "@adonisjs/lucid/services/db"
 
 export default class DashboardService {

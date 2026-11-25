@@ -1,5 +1,5 @@
-import Substation from '#substation/models/substation'
-import User from '#user/models/user'
+import { Substation } from '#substation/index'
+import { User } from '#user/index'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'

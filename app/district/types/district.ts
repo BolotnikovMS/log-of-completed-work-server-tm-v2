@@ -2,5 +2,4 @@ import type { createDistrictValidator, updateDistrictValidator } from '#district
 import type { Infer } from '@vinejs/vine/types'
 
 export type CreateDistrict = Infer<typeof createDistrictValidator> & { userId: number }
-
 export type UpdateDistrict = Infer<typeof updateDistrictValidator>

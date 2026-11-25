@@ -2,5 +2,4 @@ import type { createHeadControllerValidator, updateHeadControllerValidator } fro
 import type { Infer } from '@vinejs/vine/types'
 
 export type CreateHeadController = Infer<typeof createHeadControllerValidator> & { userId: number }
-
 export type UpdateHeadController = Infer<typeof updateHeadControllerValidator>

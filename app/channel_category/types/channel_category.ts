@@ -2,5 +2,4 @@ import type { createChannelCategoryValidator, updateChannelCategoryValidator } f
 import type { Infer } from '@vinejs/vine/types'
 
 export type CreateChannelCategory = Infer<typeof createChannelCategoryValidator> & { userId: number }
-
 export type UpdateChannelCategory = Infer<typeof updateChannelCategoryValidator>

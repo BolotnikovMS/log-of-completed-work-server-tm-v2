@@ -1,5 +1,5 @@
 import type { LogAction } from '#log/types/index'
-import User from '#user/models/user'
+import { User } from '#user/index'
 import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
 import type { BelongsTo } from '@adonisjs/lucid/types/relations'
 import { DateTime } from 'luxon'
